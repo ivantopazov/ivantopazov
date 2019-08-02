@@ -1,0 +1,36 @@
+
+<div class="hidden_overflow" style="padding-bottom: 0px;">
+    <div class="container theme-showcase mt10_breadcrump " role="main">
+        
+        <div class="col-xs-12 col-sm-12 col-md-12  col-lg-12 pb30">
+            <ul class="list-inline px16">
+                            
+                {% for br_k, br_n in array %} 
+                    {% if br_k > 0 %}
+                        <li><img src="/{{config_images_path}}/stralka.png"></li>                        
+                    {% endif %}
+                    <li>
+                        <span class="title1 Conv_CRC55 black">
+                            <a href="{{br_n.link}}">
+                            <strong>
+                                {{br_n.name}}
+                            </strong>
+                            </a>
+                        </span> 
+                    </li> 
+                {% endfor %} 
+                
+                <li><img src="/{{config_images_path}}/stralka.png"></li>
+                <li>
+                    <span class="title1 Conv_CRC55 black">
+                        <strong>
+                            {{title}}
+                        </strong>
+                    </span> 
+                </li> 
+                
+            </ul> 
+        </div>
+
+    </div>	
+</div>

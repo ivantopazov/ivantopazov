@@ -1,0 +1,52 @@
+<div class="hidden_overflow" style="padding-bottom: 0px;">
+    <div class="container theme-showcase mt10 " role="main">
+        
+        
+        <div class="col-xs-12">
+            <form static="true" method="get" action="/search">
+                
+                <div class="input-group m-b col-xs-12">
+                    Поиск товаров: <br/>
+                    <input type="text" value="{{textSearch}}" class="form-control input-md col-xs-12" name="t" placeholder="Найти в каталоге">
+                </div>
+                
+            </form>  
+        </div>
+        
+        <div class="col-xs-12 mt40">
+            
+            <div class="mb25 hidden"> 
+                <div class="mb25">
+                    <ul class="list-inline px16" data-parent="filter-option">
+                        <li><span class="title1 Conv_CRC55 black" ><strong>Сортировать:</strong></span> </li>
+                        <li><span class="title1 Conv_CRC55 {% if sort == 'pricemin' %}active{% endif %}" data-filter_option="pricemin"> <a href="#" click="Ev.catalog.setOption_item('pricemin');" >по возрастанию цены</a></span></li>
+                        <li><span class="title1 Conv_CRC55 {% if sort == 'pricemax' %}active{% endif %}" data-filter_option="pricemax"> <a href="#" click="Ev.catalog.setOption_item('pricemax');" >по убыванию цены</a></span></li>
+                        <li><span class="title1 Conv_CRC55 {% if sort == 'pop' %}active{% endif %}"  data-filter_option="pop"> <a href="#" click="Ev.catalog.setOption_item('pop');" >по популярности</a></span></li>
+                        <li><span class="title1 Conv_CRC55 {% if sort == 'new' %}active{% endif %}"  data-filter_option="new"> <a href="#" click="Ev.catalog.setOption_item('new');" >по новинкам</a></span></li>
+                        <li><span class="title1 Conv_CRC55 {% if sort == 'upsells' %}active{% endif %}"  data-filter_option="upsells"><strong> <a href="#" click="Ev.catalog.setOption_item('upsells');" >по скидкам</a></strong></span></li>
+                    </ul>
+                </div>
+            </div>
+                        
+            <div class="mb25"> 
+                <div class=""> 
+                    <h2 class="Conv_Circe-Bold ZAG pb30"><span class="title_line_2">{{header_title}}</span></h2>
+                </div>  
+            </div>
+            
+            <div class="mb25"> 
+                <div class="row"> 
+                    {{products}}
+                </div>  
+            </div>
+            
+            <div class="mb25"> 
+                <div class=" text-center"> 
+                    {{pagination}}
+                </div>  
+            </div>
+                        
+        </div>
+        
+    </div>
+</div>								

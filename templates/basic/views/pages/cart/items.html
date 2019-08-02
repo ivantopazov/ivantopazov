@@ -1,0 +1,45 @@
+{% if items |length > 0 %}
+    {% for item in items %} 
+                
+        <div class="media bot_border">
+            <a class="pull-left" href="#">
+                <img class="media-object" src="/uploads/products/250/{{item.orig.image}}" alt="{{item.title}}" width="143px">
+            </a>
+			
+			<div class="visible-xs clearfix"></div>
+			
+            <div class="media-body pt25">
+                <a href="{{item.orig.link}}" target="_blank"><h4 class="media-heading black text-left Conv_Circe-Bold">{{item.title}}</h4></a>
+                <p class="Conv_CRC55 serebro_black">( арт. {{item.orig.articul}} )</p>
+                
+                <div class="row">
+                    <div class="col-xs-10 col-lg-10"> 
+                        <div class="input-group">
+                            <ul class="list-inline pull-left">
+                                <li>
+                                    <input type="text" value="{{item.qty}}" class="form-control text-center lato fw900 qtyChange" itemid="{{item.id}}" width="50px" size="1" />
+                                </li>
+                                <li class="hidden">
+                                    
+                                    <button class="btn btn-default form-control text-center lato fw900">+</button>
+                                </li>
+                                <li class="hidden">
+                                    <button class="btn btn-default form-control text-center lato fw900">-</button>
+                                </li> 
+                            </ul>
+                            <p class="Conv_Circe-Bold px20 pull-left price_cart">{{ ( ( item.qty * item.price  ) / 100 ) }} р.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-xs-2  col-lg-2 text-right mb15">
+                        <a href="#" click="CART.remove( {{item.id}}, window.MAIN.erectCartList )" ><img src="/templates/basic/images/delet.png"></a>
+                    </div> 
+                    
+                </div>
+            </div>
+            
+        </div>
+        
+    {% endfor %}
+{% endif %}
+

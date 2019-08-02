@@ -1,0 +1,58 @@
+<div class="row">
+    <nav class="navbar-default col-xs-12 " role="navigation">
+        <div class="">
+            <ul class="nav th">
+                <li class="{% if active == 'home' %} active {% endif %}">
+                    <a href="/admin">
+                        <!-- <i class="fa fa-home"></i> -->
+                        <span class="nav-label">Главная</span>
+                    </a>
+                </li>
+                <li class="{% if active == 'catalog' %} active {% endif %}">
+                    <a href="/admin/catalog">
+                        <!-- <i class="fa fa-th-large"></i> -->
+                        <span class="nav-label">Ассортимент</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level collapse in">
+                        <li class=""><a href="/admin/catalog/cats">Категории</a></li>
+                        <li class=""><a href="/admin/catalog/products">Товары</a></li>
+                        <li class=""><a href="/admin/catalog/import_products">Импорт товаров</a></li>
+                        <li class=""><a href="/admin/catalog/update_products">Обновление остатков</a></li>
+                    </ul>
+                </li>
+                <li class="{% if active == 'parser' %} active {% endif %}">
+                    <a href="#">
+                        <!-- <i class="fa fa-th-large"></i> -->
+                        <span class="nav-label">Парсер</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level collapse in">
+                        <li class=""><a href="/admin/parser/sokolov">Сайт соколова</a></li>
+                        <li class=""><a href="/admin/parser/kaborovsky">Прайс коробовского</a></li>
+                        <li class=""><a href="/admin/parser/alcor">Прайс алькора</a></li>
+                        <li class=""><a href="/admin/parser/estet">Выгрузка Эстета</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="/">
+                        <!-- <i class="fa fa-home"></i> -->
+                        <span class="nav-label">Магазин</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/login/logout">
+                        <!-- <i class="fa fa-home"></i> -->
+                        <span class="nav-label">Выход</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<style>
+    .nav.th > li.active {
+        background: #393939 none repeat scroll 0 0;
+    }
+</style>

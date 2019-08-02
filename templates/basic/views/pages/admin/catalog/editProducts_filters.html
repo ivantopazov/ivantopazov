@@ -1,0 +1,29 @@
+<div class="row">
+    {% for item in items %} 
+        {% if item.type == 'checkbox-group' %}
+            <div class="col-xs-4">
+                <div class="row" data-block_name="{{item.variabled}}" >    
+                    <div class="col-xs-12 mt15">
+                        <p><strong> {{item.title}} </strong></p>
+                    </div>        
+                    <div class="col-xs-12 filter_scroll_">
+                        <div class="row">
+                            {% for link in item.data %}
+                            <div class="{% if item.variabled == 'size' %} col-xs-4 {% else %} col-xs-12 {% endif %}">                                  
+                                <div class="pull-left">  
+                                    <div class="pull-right">
+                                        <span class="control-label">
+                                            <input type="checkbox" id="{{link.variabled}}" name="{{link.variabled}}" {% if link.check == 'on' %} checked {% endif %} class="i-checks" />
+                                        </span>
+                                    </div>
+                                </div>
+                                <label class="Conv_CRC55 " for="{{link.variabled}}" title="{{link.title}}" style="margin-left: 15px;">{{link.title}}</label>
+                            </div> 
+                            {% endfor %} 
+                        </div>
+                    </div>        
+                </div>    
+            </div>
+        {% endif %}  
+    {% endfor %}
+</div>

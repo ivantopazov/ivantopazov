@@ -1,0 +1,29 @@
+Новая заявка на сайте {{domen}}
+
+Имя клиента: {{name}}
+Телефон: {{phone}}
+Адресс: {{adress}}
+Тракер: {{traker}}
+Дата: {{date}}
+
+==================================
+{% for val in tovary %}
+
+{{val.title}}
+
+Ссылка: {{http}}{{val.link}}
+
+Внутренний артикул: {{val.id}} 
+{% if val.data %}
+Артикул производителя: {{val.data.articul}} 
+Размер: {{val.data.size}} 
+Магазин: {{val.data.shoop}} 
+Поставщик: {{val.data.postavchik}} 
+{% endif %}
+
+По цене: {{val.price}} руб. х {{val.qty}} ед. = {{val.summa}} руб. 
+
+########################
+{% endfor %}
+
+Общая сумма: {{summa}} руб.

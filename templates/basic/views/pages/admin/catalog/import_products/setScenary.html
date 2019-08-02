@@ -1,0 +1,66 @@
+<div class="col-xs-12 mt20 pt20" style="border-top: 1px dashed #212121;">
+    <div class="row ml0 mr0">
+        {% if list %}
+            <div class="col-xs-12">
+                <div class="row ml0 mr0">
+                     <div class="col-xs-12"> 
+                        <div class="row ml0 mr0">
+                            <div class="col-xs-6 blue-bg">
+                                <p class="text-center fw100 px15 mb0 pt5 pb5">Параметр в БД </p>
+                            </div>
+                            <div class="col-xs-6 yellow-bg">
+                                <p class="text-center fw100 px15 mb0 pt5 pb5">Установка</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+            </div>
+            <div class="col-xs-12 mt20 import-select-all"  style="overflow: auto; max-height: 350px;">
+                {% for item_list in list %}
+                    
+                    <div class="row ml0 mr0 import-select-item" style="background: rgba(0, 0, 100, 0.21) none repeat scroll 0% 0%;">
+                         <div class="col-xs-12"> 
+                            <div class="row ml0 mr0 d-f-row">
+                                <div class="col-xs-6 d-f-coll">
+                                    <p class="fw100 px14 mb0 pt5 pb5">{{item_list.header.string}} </p>
+                                </div>
+                                <div class="col-xs-6 d-f-coll">
+                                    <p class="fw100 px14 mb0 pt5 pb5">{{item_list.header.value}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                    {% for item in item_list.changes %}
+                        
+                        <div class="row ml0 mr0 import-select-item">
+                             <div class="col-xs-12"> 
+                                <div class="row ml0 mr0 d-f-row">
+                                    <div class="col-xs-6 d-f-coll">
+                                        <p class="fw100 px14 mb0 pt5 pb5">{{item.string}} </p>
+                                    </div>
+                                    <div class="col-xs-6 d-f-coll">
+                                        <p class="fw100 px14 mb0 pt5 pb5">{{item.value}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                        
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="row ml0 mr0">
+        <div class="col-xs-12 m-t px16">
+            <span class="pull-left mr20"><small id="pack_pr" class="text-danger fw100"> Прогресс:  <b>0</b>  </small></span>
+            <span class="pull-left mr20"><small id="pack_succ" class="text-success fw100"> Успешно:  <b>0</b>  </small></span>
+            <span class="pull-left mr20"><small id="pack_err" class="text-danger fw100"> Пакетов с ошибкой:  <b>0</b>  </small></span>
+        </div>
+        <div class="col-xs-12 m-t">
+            <div class="form-group col-xs-12 mb0 pl0">
+                <a click="Ev.products_import.run_import()" href="#" class="btn btn-sm btn-primary"> ЗАПУСК </a>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,11 @@
+{% for val in items %}
+    <div class="col-lg-2 col-md-3 col-sm-6 col-xs-4 bord h50 mar0000 mar00rr">
+        {% if val.image %}
+            <p class="text-center"><a href="/catalog/{{val.aliase}}"><img width="100%" src="/uploads/cats/{{val.image}}" alt="{{val.name}}" ></a></p>
+           <!--  <p class="text-center"><img width="100%" src="/uploads/no-photo.png"></p>-->
+        {% else %}
+            <p class="text-center"><a href="/catalog/{{val.aliase}}"><img width="100%" src="/uploads/no-photo.png"></a></p>
+        {% endif %}
+            <p class="text-center"><a href="/catalog/{{val.aliase}}">{{val.name}}</a>   </p>
+    </div>
+{% endfor %}

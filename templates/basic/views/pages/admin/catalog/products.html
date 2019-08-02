@@ -1,0 +1,74 @@
+<div class="row ml0 mr0 mt20">
+    <div class="col-sm-3 ">
+        <a href="/admin/catalog/products/edit/0"> <button class="btn btn-sm btn-primary" type="button">Добавить товар</button></a>
+    </div>
+    <div class="col-sm-6">
+        <form action="/admin/catalog/products" method="get" static="true" >
+            <input type="text" name="t" class="form-control input-sm m-b-xs" placeholder="Поиск в списке [артикул, алиас, название, слово]" value="{{textSearch}}">
+        </form>
+    </div>
+    <div class="col-sm-3 ">		
+    </div> 		
+</div> 	  
+ 
+<div class="row ml0 mr0">       
+   
+    <table class="fooTabled table table-striped" data-page-size="8" data-filter='#filter'>
+        <thead class="bord">
+            <tr>
+                <th class="w50"><b>ID</b></th>
+                <th align="center"  class="w50"><b>Фото</b></th>
+                <th class="hidden" align="center"  class="w50"><b>Парсинг</a></th>
+                <td align="center" class="w100">Поставщик</td>  
+                <td align="center" class="w100">Артикул</td>  
+                <th><b>Наименование</b></th>
+                <th class="w100"><b>Цена</b></th>
+                <th class="w80"><b>Наличие</b></th>                    
+                <!--<th align="center"><b>Опции</b></th>-->
+            </tr>
+        </thead>
+        <tbody class="bord">
+            {% for item in products %}
+                <tr class="gradeU">
+                    <td>{{item.id}}</td>
+                    <td align="center" class="px13">
+                        {% if item.modules.photos |length > 0 %}
+                            {% for item_photo in item.modules.photos %}
+                                {% if item_photo.define > 0 %}
+                                    <div class="d-f-center-center"><img src="/uploads/products/100/{{item_photo.photo_name}}" width="29px" /></div>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            нет фото
+                        {% endif %}
+                    </td>
+                    <td class="hidden"><a class="btn btn-sm btn-primary" href="#" click="Ev.products_list.parseItem({{item.articul}});">Парсинг</a></td>  
+                    <td align="center">{{item.postavchik}}</td>  
+                    <td align="center">{{item.articul}}</td>  
+                    <td><a href="/admin/catalog/products/edit/{{item.id}}">{{item.title}}</a></td>                
+                    <td  align="center">
+                    {% if item.modules.price_actual.cop > 0 %}
+                    {{item.modules.price_actual.format}} 
+                    {% else %}                       
+                        <p class="px14 text-prise-no">Нет цены</p>                        
+                    {% endif %}	
+                    </td>
+                    <td>{{item.qty}}</td>                        
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5">
+                    <ul class="pagination pull-right"></ul>
+                </td>
+            </tr>
+        </tfoot>
+    </table>        
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        {{pag}}
+    </div>
+</div>

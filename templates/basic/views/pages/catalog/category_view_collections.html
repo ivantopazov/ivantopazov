@@ -1,0 +1,7 @@
+{% if items |length > 0 %}
+    
+    {% for item in items %} 
+<p class="text-center"><a href="/collections/{{item.aliase}}">{{item.title}}</a></p>
+    {% endfor %}
+    
+{% endif %}

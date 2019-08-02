@@ -1,0 +1,84 @@
+<div class="text-left cart_line container" id="cart">	
+    
+    <div class="col-lg-12 cartBlock hidden1">	
+        
+        <div class="clearfix">
+            <h3 class="ZAG pull-left">Ваша корзина</h3>                    
+            <a href="#" click="CART.removeAll( MAIN.cartPages );" title="Очистить корзину">
+                <img src="/templates/basic/images/close.png" class="pull-right mt15">
+            </a>
+        </div>
+        
+        <div unload="MAIN.cartPages()" class="cartList" ></div>
+        
+        <div class="col-xs-12 col-sm-12 col-xs-md col-lg-12 clearfix">
+            <div class="Conv_CRC25 row plm15" style="background: #282828;">
+                <div id="navbar3" class="navbar-collapse collapse visible-xs visible-sm visible-md visible-lg">                    
+                    <ul class="nav navbar-nav pt10 pb10 white pull-left">
+					<li>Итого: <span class="Conv_Circe-Bold px20 white" id="itog"></span></li>                            
+                    </ul>                        
+                    <ul class="nav navbar-nav pull-right hidden">
+                        <li>
+                            <a href="#"  class="Conv_Circe-Bold white">
+                            <u>Оформить заказ</u> 
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>  
+        </div>
+        
+    </div> 
+    
+    <div class="hidden mt40" id="emptyCart">    
+        <div class="clearfix">
+            <h3 class="ZAG pull-left" style="margin-left: 13px;">Ваша корзина</h3>
+        </div>        
+        <div class="col-xs-12 pl15">  
+            В вашей корзине заказов нет
+        </div>
+    </div>
+    
+    <p id="DeliverInfo" class="hidden text-left mt10 col-xs-12"></p>
+    
+    
+    <div class="rows ml0 mr0 mt30 hidden" id="order_info">
+        <div class="col-xs-12 pl15 mt30">
+            
+            <form action="/cart/order" method="post" requare="MAIN.FORM.requare" before="MAIN.FORM.before" success="MAIN.FORM.success" data_type="json">
+                <div class="row">
+				
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                        <p class="mb5"><input style="width: 100%;" class="form-control text-left  lato" name="fio" placeholder="Имя" type="text"></p>
+						
+						<p class="mb5"><input style="width: 100%;" class="form-control text-left phone-mask lato" name="phone" placeholder="Телефон в формате +7ХХХХХХХХХХ" type="text"></p>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 hidden">
+                        <p class="mb5"><input style="width: 100%;" class="form-control text-left  lato" name="email" placeholder="Ваш E-mail" type="text"></p>
+                    </div> 
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                        <p class="mb5">
+                            <textarea style="width: 100%;    min-height: 79px;" name="adress" class="input-style-2 h150 form-control" placeholder="Адрес для доставки или комментарий к заказу"></textarea>
+                        </p>
+                       
+                    </div>
+					
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                         <p class="px15 ff-osw mb10 fw100">С условиями  <a href="/wiki/publichnaia-oferta" target="_blank">договора оферты</a> соглашаюсь</p>
+                        
+                         {{utmLabels}}
+                        <p> 
+                            <button type="submit" class="btn-event Conv_Circe-Bold ZAG mt13" href="#">Отправить заявку</button>
+                        </p>
+                       
+                    </div>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+    
+    
+    
+    
+</div> 

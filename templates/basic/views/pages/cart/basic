@@ -1,0 +1,65 @@
+
+<div class="min-h500 hidden">
+    <div class="container theme-showcase mt10 " role="main">
+        
+
+        <div class="row ml0 mr0" id="cart" >
+            <div class="col-xs-12">
+                <table class="cartBlock hidden" width="100%">
+                    <thead> 
+                        <th>
+                            <td><p class="text-left fw500 ff-roboto italic px14 text-primary">Наименование</p></td>
+                            <td><p class="text-center fw500 ff-roboto italic px14 text-primary">Колличество</p></td>
+                            <td><p class="text-left fw500 ff-roboto italic px14 text-primary">Цена</p></td>
+                            <td><p class="text-left fw500 ff-roboto italic px14 text-primary">Сумма</p></td>
+                        </th>
+                    </thead>
+                    <tbody unload="MAIN.cartPages()"></tbody>
+                    <tfoot class="mt10">
+                        <th>
+                            <td class="pt6"> <a href="#" click="CART.removeAll( MAIN.cartPages );" class="color-red" > Очистить корзину </a> </td>
+                            <td> &nbsp; </td>
+                            <td> &nbsp; </td>
+                            <td id="itog" class="fw600 pt6"></td>
+                        </th>
+                    </tfoot>
+                </table>         
+            </div>
+        </div>
+
+        <div class="row ml0 mr0" id="emptyCart">
+            <div class="col-xs-12 pl15">  
+                В вашей корзине заказов нет
+            </div>
+        </div>
+        
+        <div class="row ml0 mr0 mt30" id="order_info">
+            <div class="col-xs-8 pl15">
+                
+                <form action="/cart/order" method="post" requare="MAIN.FORM.requare" before="MAIN.FORM.before" success="MAIN.FORM.success" data_type="json">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <p class="mb5"><input style="width: 100%;" class="input-style-2" name="fio" placeholder="Имя" type="text"></p>
+                        </div>
+                        <div class="col-xs-6 hidden">
+                            <p class="mb5"><input style="width: 100%;" class="input-style-2" name="email" placeholder="Ваш E-mail" type="text"></p>
+                        </div>
+                        <div class="col-xs-6">
+                            <p class="mb5"><input style="width: 100%;" class="input-style-2" name="phone" placeholder="Телефон в формате 8ХХХХХХХХХХ" type="text"></p>
+                        </div>
+                        <div class="col-xs-12">
+                            <p class="mb5">
+                                <textarea style="width: 100%;" name="adress" class="input-style-2 h150" placeholder="Адрес для доставки или комментарий к заказу"></textarea>
+                            </p>
+                            <p class="px15 ff-osw mb10 fw100">Размещая заказ на нашем сайте Вы соглашаетесь с условиями <a href="/wiki/DogovorOferty" target="_blank">Договора Оферты</a></p>
+                            
+                            <p><input class="btn btn-primary" value="Отправить заявку" type="submit"></p>
+                        </div>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+        
+    </div>
+</div>

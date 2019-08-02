@@ -1,0 +1,32 @@
+<div class="container theme-showcase" >    
+    <div class="col-xs-12">
+		
+		
+		
+		
+		
+        <div class="row">
+            <div class="col-xs-12 mb25">
+                <h1>{{item.title}}</h1>
+			</div>
+		</div>
+		
+		{% if item.menu %}		
+		{{item.menu}} 
+		{% else %}
+		 
+		{% endif %}
+		
+        <div class="row">
+            {{products}}
+		</div>
+        <div class="row text-center">
+            {{item.modules.Products.option.pag}}
+		</div>
+        <div class="row">
+            {{item.content}}
+		</div>
+	</div>
+</div>
+
+

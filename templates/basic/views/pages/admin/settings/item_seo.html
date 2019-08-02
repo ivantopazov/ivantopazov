@@ -1,0 +1,63 @@
+<div id="tab-seo" class="tab-pane {{active}}">
+    <div class="mb20">
+    <h3>Продвижение, SEO</h3><hr>
+        <form class="mr10" id="blockInfo"
+                action="/admin/settings/home/actSetBlockSeo" 
+                method="post" 
+                success="Ev.stores_sett.FORM.set_seo_params.success" 
+                data_type="json" >
+                
+            <div class="form-group blok pad5555">
+                <div class="row">
+                    <div class="col-xs-3 txr"><label class="control-label fon18lh">Вкладка на главной странице:</label></div>
+                    <div class="col-xs-5">
+                        <input type="text" class="form-control" placeholder="Вкладка на главной странице" name="seo_title" style="border-left: 1px solid red;" value="{{store.seo_title}}">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group blok pad5555">
+                <div class="row">
+                    <div class="col-xs-3 txr"><label class="control-label fon18lh">Ключевые слова:</label></div>
+                    <div class="col-xs-5">
+                        <input type="text" class="form-control" placeholder="Поисковые запросы [слова-ключи]" name="seo_keys" style="border-left: 1px solid red;" value="{{store.seo_keys}}">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group blok pad5555">
+                <div class="row">
+                    <div class="col-xs-3"><label class="control-label fon18lh">Описание магазина для Яндекс:</label></div>
+                    <div class="col-xs-5">
+                        <textarea class="form-control" placeholder="Описание магазина"  name="seo_desc"  value="{{store.seo_desc}}" ></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group blok pad5555">
+                <div class="row">
+                    <div class="col-xs-3 txr"><label class="control-label fon18lh">Номер счётчика Яндекс.Метрики:</label></div>
+                    <div class="col-xs-5">
+                        <input type="text" class="form-control" placeholder="Номер счётчика Яндекс" name="yaMetricaID"  value="{{store.yaMetricaID}}">
+                    </div>
+                </div>
+            </div>        
+            <div class="form-group blok pad10101010">
+                <div class="row">
+                    <div class="col-xs-3 txr"><label class="control-label fon18lh">Подтверждение прав на сайт через тег в HEAD:</label></div>
+                    <div class="col-xs-5">
+                        <input type="text" class="form-control" placeholder="Значение атрибута content" name="metta_content"  value="{{store.metta_content}}">
+                    </div>
+                </div>
+            </div>				
+            
+            <input type="hidden" name="store_id" value="{{store.id}}" />
+            
+            <div class="row form-group pt10 pb10">
+				<label class="mt10 col-sm-3 control-label">&nbsp;</label>
+				<div class="mt10 col-sm-5">
+					<button type="submit" class="btn btn-sm btn-success mr10 mb10">Сохранить</button>
+					<button type="reset" class="btn btn-sm  mr10 mb10">Сброс</button>
+				</div>						
+			</div> 
+        </form>
+        
+    </div>
+</div>

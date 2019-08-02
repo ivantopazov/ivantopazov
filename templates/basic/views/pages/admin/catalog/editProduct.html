@@ -1,0 +1,428 @@
+<div class="tabs-container">
+    <div class="mb20">    
+    
+        <ul class="nav nav-tabs">
+            <li class=" active ">
+                <a href="#tab-info" data-toggle="tab" aria-expanded="true"> 
+                    Описание <!--<i class="fa px14 fa-paper-plane-o"></i>-->
+                </a> 
+            </li>
+            <li class="{% if good.id == '0' %}hidden{% endif %}">
+                <a href="#tab-money" data-toggle="tab" aria-expanded="false">
+                    Цена <!--<i class="fa fa-money"></i>-->
+                </a>
+            </li>
+            <li class="{% if good.id == '0' %}hidden{% endif %}">
+                <a href="#tab-seo" data-toggle="tab" aria-expanded="false">
+                    Продвижение <!--<i class="fa px14 fa-google"></i>-->
+                </a>
+            </li>
+            <li class="{% if good.id == '0' %}hidden{% endif %}">
+                <a href="#tab-params" data-toggle="tab" aria-expanded="false">
+                    Параметры <!--<i class="fa px14 fa-google"></i>-->
+                </a>
+            </li>
+            <li class="{% if good.id == '0' %}hidden{% endif %}">
+                <a href="#tab-filters" data-toggle="tab" aria-expanded="false">
+                    Фильтр <!--<i class="fa px14 fa-google"></i>-->
+                </a>
+            </li>
+            <li class="{% if good.id == '0' %}hidden{% endif %}">
+                <a href="#tab-photos" data-toggle="tab" aria-expanded="false">
+                    Фото <!--<i class="fa px14 fa-camera"></i>-->
+                </a>
+            </li>
+        </ul>   
+    
+        <div class="tab-content">
+          
+            <div id="tab-info" class="tab-pane active">
+                <div class="panel-body">
+                    
+                    <form class="row mt10 mb10" id="blockInfo"
+                            action="/admin/catalog/products/actEditProductInfo" 
+                            method="post" 
+                            before="Ev.products_edit.FORM.set_info.before" 
+                            success="Ev.products_edit.FORM.set_info.success" 
+                            data_type="json" >
+                        <div class="form-group blok pad5555">
+                            <div class="row">
+                                <div class="col-xs-3 txr"><label class="control-label fon18lh">Артикул:</label></div>
+                                <div class="col-xs-5">
+                                    <input type="text" class="form-control" value="{{good.articul}}" placeholder="000000" name="articul">
+                                </div>
+                            </div>	
+                        </div>
+                        <div class="form-group blok pad5555">
+                            <div class="row">
+                                <div class="col-xs-3 txr"><label class="control-label fon18lh">Название:</label></div>
+                                <div class="col-xs-5">
+                                    <input type="text" class="form-control" placeholder="Название" name="title" value="{{good.title}}">
+                                </div>
+                            </div>	
+                        </div>
+                        <div class="form-group blok pad5555">
+                            <div class="row">
+                                <div class="col-xs-3 txr"><label class="control-label fon18lh">Описание:</label></div>
+                                <div class="col-xs-5">
+                                    <div class="summernote">
+                                        {{good.description}}
+                                    </div>
+                                    <textarea class="form-control hidden" placeholder="Описание товара"  name="description"  value="{{good.description}}" ></textarea>
+                                </div>
+                            </div>	
+                        </div>
+                        <input type="hidden" name="product_id" value="{{good.id}}" />
+                        <div class="form-group blok pad5555">
+                            <div class="row">
+                                <div class="col-xs-3 txr"><label class="control-label fon18lh">Категория магазина:</label></div>
+                                <div class="col-xs-5">
+                                    <select class="form-control" name="shop_category" data-placeholder="Выберите группы для товара" style="border-left: 1px solid red;" >   
+                                        <option class="pa5 px15" value="0" {% if item_cat.active == '0' %} selected="1" {% endif %} ><i>-- Не указана --</i></option>
+                                        {% if allCats |length > 0 %}
+                                            {% for item_cat in allCats %} 
+                                                <option class="pa5 px15 {% if item_cat.data.parent_id == '0' %} fw600 {% endif %}" value="{{item_cat.data.id}}" {% if item_cat.active == '1' %} selected="1" {% endif %} >{{item_cat.level}}{{item_cat.data.name}}</option>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>	
+                        </div>		
+                        <div class="form-group blok pad5555">
+                            <div class="row">
+                                <div class="col-xs-3 txr"><label class="control-label fon18lh">Наличие:</label></div>
+                                <div class="col-xs-5">
+                                    <input type="text" class="form-control" placeholder="Колличество"  value="{{good.qty}}" name="qty"  style="border-left: 1px solid red;">
+                                </div>
+                            </div>	
+                        </div>
+                        <div class="form-group blok pad5555">
+                            <div class="row">
+                                <div class="col-xs-3 txr"><label class="control-label fon18lh">Если нет в наличии:</label></div>
+                                <div class="col-xs-5">
+                                    <select class="form-control" name="qty_empty_status">
+                                        {% for val in qty_empty_status %} 
+                                            <option value="{{val.id}}" {% if good.qty_empty == val.id %} selected="1" {% endif %} >{{val.title}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>	
+                        <div class="form-group blok pad5555">
+                            <div class="row">
+                                <div class="col-xs-3 txr"><label class="control-label fon18lh">Отобразить:</label></div>
+                                <div class="col-xs-5">
+                                    <select class="form-control"  name="view">
+                                        <option value="1" {% if good.view == '1' %} selected="1" {% endif %} >Отобразить</option>
+                                        <option value="0" {% if good.view == '0' %} selected="1" {% endif %} >Скрыть</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>		
+
+                        <div class="form-group blok pad5555">
+                            <div class="row">
+                                <div class="col-xs-3 txr"><label class="control-label fon18lh">Размер:</label></div>
+                                <div class="col-xs-5">
+                                    <input type="text" class="form-control" placeholder="Размер" name="size" value="{{good.size}}">
+                                </div>
+                            </div>	
+                        </div>
+                        
+                        <div class="form-group blok pad5555">
+                            <div class="row">
+                                <div class="col-xs-3 txr"><label class="control-label fon18lh">Вес, гр:</label></div>
+                                <div class="col-xs-5">
+                                    <input type="text" class="form-control" placeholder="Вес" name="weight" value="{{good.weight}}">
+                                </div>
+                            </div>	
+                        </div> 
+                        
+                        
+                        <div class="form-group blok pad5555">
+                            <div class="row">
+                                <div class="col-xs-3 txr"><label class="control-label fon18lh">Поставщик:</label></div>
+                                <div class="col-xs-5">
+                                    <select class="form-control"  name="postavchik">
+                                        <option value="1" {% if good.postavchik == '' %} selected="1" {% endif %} >Не указан/Другой</option>
+                                        <option value="0" {% if good.postavchik == 'sokolov' %} selected="1" {% endif %} >Соколов</option>
+                                        <option value="0" {% if good.postavchik == 'Alcor' %} selected="1" {% endif %} >Alcor</option>
+                                        <option value="0" {% if good.postavchik == 'Kaborovsky' %} selected="1" {% endif %} >Kaborovsky</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>	
+                        
+                        
+                        <div class="form-group blok pad5555">
+                            <div class="row">
+                                <div class="col-xs-3 txr"><label class="control-label fon18lh">Парсер:</label></div>
+                                <div class="col-xs-5">
+                                    <select class="form-control"  name="parser">
+                                        <option value="1" {% if good.parser == '' %} selected="1" {% endif %} >Не указан/Другой</option>
+                                        <option value="0" {% if good.parser == 'sokolov' %} selected="1" {% endif %} >Соколов</option>
+                                        <option value="0" {% if good.postavchik == 'Alcor' %} selected="1" {% endif %} >Alcor</option>
+                                        <option value="0" {% if good.postavchik == 'Kaborovsky' %} selected="1" {% endif %} >Kaborovsky</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>	
+                        
+                        
+                        <div class="form-group blok pad5555">
+                            <div class="row">
+                                <div class="col-xs-3 txr"><label class="control-label fon18lh">Проба:</label></div>
+                                <div class="col-xs-5">
+                                    <input type="text" class="form-control" placeholder="Проба" name="proba" value="{{good.proba}}">
+                                </div>
+                            </div>	
+                        </div>
+                        
+                        <div class="form-group blok pad5555">
+                            <div class="row">
+                                <div class="col-xs-3 txr"><label class="control-label fon18lh">Для кого:</label></div>
+                                <div class="col-xs-5">
+                                    <select class="form-control"  name="sex">
+                                        <option value="woman" {% if good.sex == 'woman' %} selected="1" {% endif %} >Для женщин</option>
+                                        <option value="men" {% if good.sex == 'men' %} selected="1" {% endif %} >Для мужчин</option>
+                                        <option value="man,woman" {% if good.sex == 'man,woman' %} selected="1" {% endif %} >Унисекс</option>
+                                        <option value="kids" {% if good.sex == 'kids' %} selected="1" {% endif %} >Для детей</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>		
+                        
+                         <div class="form-group blok pt10 pb10">
+                            <div class="row">
+                                <label class="mt10 col-sm-3 control-label">&nbsp;</label>
+                                <div class="mt10 col-sm-5">
+                                    <button type="submit" class="btn btn-sm btn-success mr10 mb10">Сохранить</button>
+                                    <button type="reset" class="btn btn-sm  mr10 mb10 hidden">Сброс</button>
+                                </div>
+                            </div>
+                        </div>                                   
+                    </form>                               
+                </div>
+            </div>
+            
+            <div id="tab-seo" class="tab-pane {% if good.id == '0' %}hidden{% endif %}">
+                <div class="panel-body">
+                    
+                    <form class="row mt15 mb15"  id="blockSeo"
+                            action="/admin/catalog/products/actEditProductSeo" 
+                            method="post"
+                            success="Ev.products_edit.FORM.set_seo.success" 
+                            data_type="json">
+                    <div class="form-group blok pad5555">
+                        <div class="row">
+                            <div class="col-xs-3 txr"><label class="control-label fon18lh">Вкладка Title:</label></div>
+                            <div class="col-xs-5">
+                                <input type="text" class="form-control" placeholder="Название товара во вкладке " name="seo_title" value="{{good.seo_title}}">	
+                            </div>
+                        </div>	
+                    </div>
+                    <div class="form-group blok pad5555">
+                        <div class="row">
+                            <div class="col-xs-3 txr"><label class="control-label fon18lh">Ключевые запросы:</label></div>
+                            <div class="col-xs-5">
+                                <input type="text" class="form-control" placeholder="Ключивые слова для поиковых систем"  name="seo_keys"  value="{{good.seo_keys}}" >		
+                            </div>
+                        </div>	
+                    </div>
+                    <div class="form-group blok pad5555">
+                        <div class="row">
+                            <div class="col-xs-3 txr"><label class="control-label fon18lh">Описание для ПС:</label></div>
+                            <div class="col-xs-5">
+                                <textarea class="form-control" placeholder="Подробное описание товара для поисковых систем"  name="seo_desc"  >{{good.seo_desc}}</textarea>			
+                            </div>
+                        </div>	
+                    </div>                             
+                    <input type="hidden" name="product_id" value="{{good.id}}" />
+                     <div class="form-group blok pt10 pb10">
+                        <div class="row">
+                            <label class="mt10 col-sm-3 control-label">&nbsp;</label>
+                            <div class="mt10 col-sm-5">
+                                <button type="submit" class="btn btn-sm btn-success mr10 mb10">Сохранить</button>
+                                <button type="reset" class="btn btn-sm  mr10 mb10 hidden">Сброс</button>
+                            </div>
+                        </div>
+                    </div>
+                    </form>
+                    
+                </div>
+            </div>
+            
+            <div id="tab-money" class="tab-pane {% if good.id == '0' %}hidden{% endif %}">
+                <div class="panel-body">
+                    
+                    <form class="row mt10 mb10" id="blockPrices"
+                            action="/admin/catalog/products/actEditProductPrices" 
+                            method="post" 
+                            before="Ev.products_edit.FORM.set_prices.before" 
+                            success="Ev.products_edit.FORM.set_prices.success" 
+                            data_type="json">
+                            
+                            
+                            <div class="form-group blok pad5555">
+                                <div class="row">
+                                    <div class="col-xs-3 txr"><label class="control-label fon18lh">Закупочная стоимость:</label></div>
+                                    <div class="col-xs-5">
+                                        <input class="form-control" placeholder="" name="price_zac" value="{{good.modules.price_actual.zac.number}}" type="text">		
+                                    </div>
+                                </div>	
+                            </div>	
+                            
+                            <div class="form-group blok pad5555">
+                                <div class="row">
+                                    <div class="col-xs-3 txr"><label class="control-label fon18lh">Розничная стоимость:</label></div>
+                                    <div class="col-xs-5">
+                                        <input class="form-control" placeholder="" name="price_roz" value="{{good.modules.price_actual.number}}" type="text">		
+                                    </div>
+                                </div>	
+                            </div>	
+                            
+                                
+                            <div class="form-group blok pad5555">
+                                <div class="row">
+                                    <div class="col-xs-3 txr"><label class="control-label fon18lh">Процентов скидка( 1-100 ):</label></div>
+                                    <div class="col-xs-5">
+                                        <input type="text" class="form-control" placeholder="27" name="salle_procent" value="{{good.salle_procent}}">
+                                    </div>
+                                </div>	
+                            </div>
+                             
+                                      
+                        
+                        <input type="hidden" name="product_id" value="{{good.id}}" />                        
+                        
+                        <div class="form-group blok pad5555">
+							<div class="row">
+								<div class="col-xs-3 txr"><label class="control-label fon18lh">Отобразить если цена не указана:</label></div>
+								<div class="col-xs-5">
+									<select class="form-control" name="prices_empty">
+										{% for val in prices_empty_list %} 
+											<option value="{{val.id}}" {% if good.prices_empty == val.id %} selected="1" {% endif %} >{{val.title}}</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="form-group blok pt10 pb10">
+							<div class="row">
+								<label class="mt10 col-sm-3 control-label">&nbsp;</label>
+								<div class="mt10 col-sm-5">
+									<button type="submit" class="btn btn-sm btn-success mr10 mb10">Сохранить</button>
+									<button type="reset" class="btn btn-sm  mr10 mb10 hidden">Сброс</button>
+								</div>
+							</div>
+						</div>
+                    </form>             
+                </div>
+            </div>
+            
+            <div id="tab-params" class="tab-pane {% if good.id == '0' %}hidden{% endif %}">
+                <div class="panel-body">
+                   
+                    <form class="row mt10 mb10" id="blockParams"
+                            action="/admin/catalog/products/actEditProductParams" 
+                            method="post"  
+                            success="Ev.products_edit.FORM.set_params.success" 
+                            data_type="json" >
+                            
+                        
+                        <div class="form-group blok pad5555">
+                            <div class="row">
+                                <div class="col-xs-12 txr"><label class="control-label fon18lh fw600 mb30">Шаблон параметров:</label></div>
+                                <div class="col-xs-12">                                
+                                    {% for param in good.modules.paramsView %} 
+                                        <div class="form-group blok pad5555">
+                                            <div class="row">
+                                                <div class="col-xs-3 txr"><label class="control-label fon18lh">{{param.t}}:</label></div>
+                                                <div class="col-xs-5">
+                                                    <input type="text" class="form-control" placeholder="{{param.t}}" name="setParamsList[{{param.i}}]" value="{{param.v}}">
+                                                </div>
+                                            </div>	
+                                        </div>
+                                    {% endfor %}                                    
+                                </div>
+                            </div>
+                        </div>	
+                        <input type="hidden" name="product_id" value="{{good.id}}" /> 
+                        
+                        <div class="form-group blok pt10 pb10">
+                            <div class="row">
+                                <label class="mt10 col-sm-3 control-label">&nbsp;</label>
+                                <div class="mt10 col-sm-5">
+                                    <button type="submit" class="btn btn-sm btn-success mr10 mb10">Сохранить</button>
+                                    <button type="reset" class="btn btn-sm  mr10 mb10 hidden">Сброс</button>
+                                </div>
+                            </div>
+                        </div>   
+                        
+                    </form>  
+                    
+                </div>
+            </div>
+             
+            
+            <div id="tab-photos" class="tab-pane {% if good.id == '0' %}hidden{% endif %}">
+                <div class="panel-body">
+                    <div class="form-group blok pad5555" id="fileUploads">
+                        <div class="row mt15 mb15">
+                            <div class="col-xs-3 txr"><label class="control-label fon18lh">Фото:</label></div>
+                            <div class="col-xs-5">
+                                <div class="uploadfile">Выбрать фото</div>
+                            </div>										
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3 txr"></div>
+                            <div class="col-xs-9">
+                                <div class="mt30 ev-photo_list">{{images}}</div>
+                            </div>										
+                        </div>
+                        <input type="hidden" name="product_id" value="{{good.id}}" />     
+                    </div>                   
+                    
+                </div>
+            </div>
+            
+            <div id="tab-filters" class="tab-pane {% if good.id == '0' %}hidden{% endif %}">
+                <div class="panel-body">
+                   
+                    <form class="row mt10 mb10" id="blockFilters"
+                            action="/admin/catalog/products/actEditProductFilters" 
+                            method="post"  
+                            requare="Ev.products_edit.FORM.set_filters.requare"
+                            success="Ev.products_edit.FORM.set_filters.success" 
+                            data_type="json" >
+                            
+                        
+                        <div class="form-group blok pad5555">
+                            <div class="row">
+                                <div class="col-xs-12 txr"><label class="control-label fon18lh fw600 mb30">Установка фильтра:</label></div>
+                                <div class="col-xs-12">                                
+                                    {{filters}}                                  
+                                </div>
+                            </div>
+                        </div>	
+                        <input type="hidden" name="product_id" value="{{good.id}}" /> 
+                        
+                        <div class="form-group blok pt10 pb10">
+                            <div class="row">
+                                <label class="mt10 col-sm-3 control-label">&nbsp;</label>
+                                <div class="mt10 col-sm-5">
+                                    <button type="submit" class="btn btn-sm btn-success mr10 mb10">Сохранить</button>
+                                    <button type="reset" class="btn btn-sm  mr10 mb10 hidden">Сброс</button>
+                                </div>
+                            </div>
+                        </div>   
+                        
+                    </form>  
+                    
+                </div>
+            </div>           
+            
+        </div>
+        
+    </div>
+</div>

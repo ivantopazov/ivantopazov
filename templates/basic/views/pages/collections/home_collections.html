@@ -1,0 +1,27 @@
+<div class="container theme-showcase" >    
+    <div class="col-xs-12">
+        <div class="row">
+            <div class="col-xs-12 mb25">
+                <h1>Коллекции</h1>
+            </div>
+        </div>
+		
+		
+		
+        <div class="row">
+
+            {% for val in items %}
+            <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12 bord h50 mar0000 mar00rr">
+                {% if val.image %}
+                    <!-- <p class="text-center"><img width="100%" src="/uploads/cats/{{val.image}}"></p>-->
+                    <p class="text-center"><img width="100%" src="/uploads/no-photo.png"></p>
+                {% else %}
+                    <p class="text-center"><img width="100%" src="/uploads/no-photo.png"></p>
+                {% endif %}
+                    <p class="text-center"><a href="/collections/{{val.aliase}}">{{val.title}}</a>   </p>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>

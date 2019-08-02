@@ -1,0 +1,27 @@
+<section>
+    <div class="container content">
+		<div class="row"> 
+			<div class="col-xs-3"> 
+                <div class="row">
+					<div class="col-xs-12">
+						<div class="mb16">{{left_bar}}</div>
+						<div class="mb16">{{baners_setCat}}</div>
+						<div class="mb16">{{baners_list}}</div>
+					</div>
+                </div>  
+            </div>  
+            <div class="col-xs-9">  
+                <div class="row">
+                    <div class="col-xs-12">
+						{% if podcat %}						
+								{{podcat}}							
+						{% endif %}
+					</div>
+				</div>
+				<div class="row">
+					{{products}}
+				</div>                
+            </div>  
+		</div>
+   </div>
+</section>

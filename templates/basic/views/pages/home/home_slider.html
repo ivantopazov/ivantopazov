@@ -1,0 +1,27 @@
+{% if items |length > 0 %}
+    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+    
+        <ol class="carousel-indicators">
+            {% set foo = "active" %}
+            {% for key, item in items %}
+                <li data-target="#carousel-example-generic" data-slide-to="{{key}}" class="{{foo}} hidden-xs hidden-sm "></li>
+                {% set foo = "" %}
+            {% endfor %}
+        </ol>
+        
+        <div class="carousel-inner" role="listbox">
+            {% set foo = "active" %}
+            {% for item in items %}
+                <div class="item {{foo}}">
+				
+                    <a href="{{item.link}}" target="_blank"  class="visible-xs visible-sm"> <img src="/uploads/baners/m_{{item.image}}" data-src="holder.js/1920x516/auto/#666:#444/text:IVANTOPAZOV Ювелирный магазин"></a>
+					
+                    <a href="{{item.link}}" target="_blank" class="hidden-xs hidden-sm"> <img src="/uploads/baners/{{item.image}}" data-src="holder.js/1920x516/auto/#666:#444/text:IVANTOPAZOV Ювелирный магазин"></a>
+                </div>
+				 
+                {% set foo = "" %}
+            {% endfor %}
+        </div>
+        
+    </div>
+{% endif %}

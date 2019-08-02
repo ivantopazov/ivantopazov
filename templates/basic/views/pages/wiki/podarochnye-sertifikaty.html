@@ -1,0 +1,79 @@
+<div class="row">
+	
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<p>Подарочные сертификаты позволяют сделать приятный сюрприз для ваших близких, в виде ювелирной продукции, без риска ошибочного подбора размера украшения с возможностью сделать самостоятельный выбор без вашего участия.</p>
+		
+		<p>Стоимость сертификата, может быть индивидуально подобрана под ваши потребности от 5&nbsp;000 до 1&nbsp;000&nbsp;000 рублей.&nbsp;</p>
+		
+		<p>Срок обмена сертификата на продукцию нашей компании 1 год, с момента заказа.</p>
+		
+		<p>Сертификат доставляется курьером по заданному вами адресу.</p>
+		
+	</div>
+	<div class="clearfix">&nbsp;</div>
+    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3 mb25">
+        <div class="text_shad">
+            <div class="">
+                <a href="#"><img src="/uploads/wiki/sertPay/5000_2.jpg" width="100%"></a>
+			</div>
+            <a href="#" data-toggle="modal" data-target="#modalPayCert"  class="btn-cart Conv_CRC55 btn-block text-center ZAG cart-anim1" click="Ev.wiki.certificated.setType('5000', 'Сертификат на сумму 5000 рублей.');">Заказать</a>
+		</div>
+	</div>
+    
+    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3 mb25">
+        <div class="text_shad">
+            <div class="">
+                <a href="#"><img src="/uploads/wiki/sertPay/1000_2.jpg" width="100%"></a>
+			</div>
+            <a href="#" data-toggle="modal" data-target="#modalPayCert"   class="btn-cart Conv_CRC55 btn-block text-center ZAG cart-anim1"  click="Ev.wiki.certificated.setType('10000', 'Сертификат на сумму 10000 рублей.');" >Заказать</a>
+		</div>
+	</div>
+    
+    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3 mb25">
+        <div class="text_shad">
+            <div class="">
+                <a href="#"><img src="/uploads/wiki/sertPay/30000_2.jpg" width="100%"></a>
+			</div>
+            <a href="#" data-toggle="modal" data-target="#modalPayCert"   class="btn-cart Conv_CRC55 btn-block text-center ZAG cart-anim1" click="Ev.wiki.certificated.setType('30000', 'Сертификат на сумму 30000 рублей.');" >Заказать</a>
+		</div>
+	</div>
+    
+    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3 mb25">
+        <div class="text_shad">
+            <div class="">
+                <a href="#"><img src="/uploads/wiki/sertPay/50000_2.jpg" width="100%"></a>
+			</div>
+            <a href="#" data-toggle="modal" data-target="#modalPayCert"   class="btn-cart Conv_CRC55 btn-block text-center ZAG cart-anim1"  click="Ev.wiki.certificated.setType('50000', 'Сертификат на сумму 50000 рублей.');">Заказать</a>
+		</div>
+	</div>
+    
+    <div aria-hidden="true" role="dialog" tabindex="-1" id="modalPayCert" class="modal inmodal fade">
+        <div class="modal-dialog modal-xs">
+            <div class="modal-content">
+				
+				<form action="/wiki/act_certificatePay" role="form" method="POST" data_type="json"  requare_error="false">
+					<div class="modal-header">
+						<button data-dismiss="modal" class="close" type="button">
+							<span aria-hidden="true">×</span><span class="sr-only">Close</span>
+						</button>
+						<h4 class="modal-title">Заказать сертификат на сумму <span id="certSetSumma"></span> рублей</h4>
+					</div>
+					<div class="modal-body ev-modal_data">                                
+                        <div class="row form-group borbot pt20 pr20 pb20 pl20 ml3 bagav">
+                            <div class="col-lg-12 col-md-7 col-sm-7 col-xs-12">
+                                <input type="phone" name="phone" required autocomplete="true" class="form-control phone-mask" placeholder="Ваш контактный телефон">
+							</div>					
+						</div>
+                        <input type="hidden" id="sertSetType" name="type" value="Подарочный сертификан на сумму 3000 рублей">
+					</div>
+					<div class="modal-footer">
+						<button class="btn-event Conv_Circe-Bold button hover-shadows" type="submit">Отправить завяку</button>
+						 
+					</div>            
+					
+				</form>
+			</div>
+		</div>
+	</div>
+    
+</div>	

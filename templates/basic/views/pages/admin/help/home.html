@@ -1,0 +1,141 @@
+<section>
+	<div class="container content">  
+		<div class="row">
+			<div class="col-xs-3">				
+				<ul class="bord mb10">
+					<li class="active blok borb3 pt5 pr5 pb5 pl5">
+						<a href="#tab-support" data-toggle="tab" aria-expanded="true">Помощь</a>
+					</li>	
+					<li class="blok borb3 pt5 pr5 pb5 pl5">
+						<a href="#tab-help" data-toggle="tab" aria-expanded="true">Справка</a>
+					</li>							
+					<li class="blok borb3 pt5 pr5 pb5 pl5"> 
+						<a href="#tab-offer" data-toggle="tab" aria-expanded="true">Спецпредложения</a>
+					</li>
+					<li class="blok pt5 pr5 pb5 pl5"> 
+						<a href="#tab-app" data-toggle="tab" aria-expanded="true">Приложения</a>
+					</li>						
+				</ul>				
+			</div>
+			<div class="col-xs-9 mb20">
+				<div class="tab-content">
+					<div id="tab-support" class="tab-pane active">
+						<div class="row">
+							<div class="col-xs-12">
+								<h3>Помощь</h3>
+								<div class="">
+								Если вам нужно решить текущие, не срочные вопросы, написать отзыв, предложения или пожелания вы можете воспользоваться данной формой обратной связи. Если это будет необходимо мы обязательно вам ответим.Для более быстрого ответа или оперативной связи просим вас воспользоваться телефонами представленными на сайте.
+								</div><hr>	
+							</div>
+						</div>
+						<div class="row">						
+							<div class="col-xs-6">
+																						
+								<h3>Форма обратной связи</h3>
+									<form id="supportBack" method="post" action="/admin/help/home/actSupportBack" data_type="json" success="Ev.stores_help.FORM.supportBack.success">
+										<div class="row form-group">
+											<div class="col-xs-12">				
+											<div class="mar0000 blok pad5555">
+												<textarea name="text" autocomplete="true" class="form-control" placeholder="Содержание" rows="5" cols="50" ></textarea>
+											</div>											
+												<input class="btn btn-sm btn-success mt10 mb20 ml5 pull-left" value="Отправить" type="submit">	
+											</div>					
+										</div>
+									</form>
+								
+							</div>
+							<div class="col-xs-6">
+															
+								<h3>Обратный звонок</h3>
+									<form id="callBack" method="post" action="/admin/help/home/actCallBack" data_type="json" before="Ev.stores_help.FORM.callBack.before" success="Ev.stores_help.FORM.callBack.success">
+										<div class="row form-group ">
+										
+											<div class="col-xs-8">								
+											<div class="blok pad5555">
+												<input name="phone" autocomplete="true" class="form-control" placeholder="Ваш телефон" type="text">
+											</div>										
+											</div>	
+											<div class="col-xs-4">											
+												<input class="btn btn-sm btn-success pull-left mt5" value="Отправить" type="submit">	
+											</div>	
+										
+										</div>
+									</form>
+								<div class="mt10 mb10">
+								<h3>Технический отдел</h3>
+								Используйте данный телефон для консультаций, предложений, а так же по вопросом работы сайта.
+								<h4 class="mt5">+7(920)722 45 82</h4>
+								<hr>
+								<h3>Отдел по работе с клиентами</h3>
+								Воспользуйтесь данным номером для предложений, консультаций, по вопросом сотрудничества, открытия магазина и прочим вопросом.
+								<h4 class="mt5">+7(977)329 68 29</h4>
+								<hr>
+								</div>
+								
+							</div>
+						</div>
+					</div>
+                    <div id="tab-help" class="tab-pane">
+						<div class="row">
+							<div class="col-xs-12">
+								<h3>Справка</h3>
+								<div class="">
+								В данном разделе вы найдёте не только ответы на интересующие вас вопросы, но и так же советы по управлению сайта, полезные статьи и видео про продвижению и рекламированию своих товаров и услуг.
+								</div><hr>	
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-4">
+							<h3>Товары и разделы</h3>
+								<ul class="mb10">
+									<li class="fon20lh"><a href="#">Как добавить новый товар</a></li>
+									<li class="fon20lh"><a href="#">Редактирование товара</a></li>
+									<li class="fon20lh"><a href="#">Работа с ценами</a></li>
+									<li class="fon20lh"><a href="#">Как правильно добавить фото товара</a></li>
+									<li class="fon20lh"><a href="#">Почему так важно присваивать артикул товару</a></li>
+									<li class="fon20lh"><a href="#">Как правильно добавить раздел</a></li>
+									<li class="fon20lh"><a href="#">Что нужно знать что бы товар показывался в нужном месте на площядке 4612</a></li>
+								</ul> 
+							</div>
+							<div class="col-xs-4">
+							<h3>Управление и настройки</h3>
+								<ul class="mb10">
+									<li class="fon20lh"><a href="#">Как правильно настроить Промо-банер</a></li>
+									<li class="fon20lh"><a href="#">Как добавить фон в магазин</a></li>
+									<li class="fon20lh"><a href="#">Создаём, настраиваем и добавляем иконку на сайт</a></li>
+								</ul> 
+							</div>
+							<div class="col-xs-4">
+							<h3>Маркетинг</h3>
+								<ul class="mb10">
+									<li class="fon20lh"><a href="#">Способы продвижения товара</a></li>		
+								</ul> 
+							</div>
+						</div>
+					</div>					
+					
+					<div id="tab-offer" class="tab-pane">
+						<div class="row">
+							<div class="col-xs-12">
+								<h3>Спецпредложения</h3>
+								<div class="">
+								На данный момент отсутствует :(
+								</div><hr>	
+							</div>
+						</div>
+					</div>
+					<div id="tab-app" class="tab-pane">
+						<div class="row">
+							<div class="col-xs-12">
+								<h3>Приложение</h3>
+								<div class="">
+								На данный момент отсутствует :(
+								</div><hr>	
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

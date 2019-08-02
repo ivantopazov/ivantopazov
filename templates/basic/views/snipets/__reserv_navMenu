@@ -1,0 +1,15 @@
+{% for item in itemsTree %} 
+                    <li>
+                        {% if item.parents |length > 0 %}
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{item.name}} <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{item.link}}">Показать всё</a></li>
+                                {% for item_parent in item.parents %} 
+                                    <li><a href="{{item_parent.link}}">{{item_parent.name}}</a></li>
+                                {% endfor %}                                    
+                            </ul>
+                        {% else %}
+                            <a href="{{item.link}}">{{item.name}}</a>
+                        {% endif %}                        
+                    </li>
+                {% endfor %}

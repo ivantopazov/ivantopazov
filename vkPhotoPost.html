@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+	<head>		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>			
+		<script>
+			$(function(){	
+			
+				var parseItem = function(){                
+					console.log("Картинка добавлена в группу вк");
+					
+					$.ajax({
+						type: "post",
+						url: "https://ivantopazov.ru/smm/listVkPosting",
+						dataType : 'json',
+						success: function( e ){
+							if( e.err < 1 ){
+								parseItem();
+								} else {        
+								console.log("Ошибка нет товара / Парсинг завершён");
+								parseItem();
+							}
+						} 
+					});			
+				};	
+				
+				
+				var parseItem_m = function(){                
+					console.log("Картинка добавлена в группу вк");
+					
+					$.ajax({
+						type: "post",
+						url: "https://ivantopazov.ru/smm/listVkMarket",
+						dataType : 'json',
+						success: function( e ){
+							if( e.err < 1 ){
+								parseItem_m();
+								} else {        
+								console.log("Ошибка нет товара / Парсинг завершён");
+								parseItem_m();
+							}
+						} 
+					});			
+				};	
+				
+				
+				$('#goooo').click(function (){ 
+				
+				parseItem();	
+				
+				});		
+				
+				$('#goooo_m').click(function (){ 
+				
+				parseItem_m();	
+				
+				});					
+								 	
+							
+			});  
+		</script>         
+	</head>	
+	<body>
+		<button id="goooo">Клик</button><br><div class="status"></div>	
+		<br>
+		<button id="goooo_m">Клик Макрет</button><br><div class="status"></div>		        
+	</body>
+</html>	

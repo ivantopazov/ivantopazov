@@ -1,0 +1,36 @@
+<div id="tab-domains" class="tab-pane {{active}}">
+    <div class="mb20">
+    <h3>Доменное имя</h3><hr>                               
+        <form class="mr10" id="blockGenSettings"
+                action="/admin/settings/home/actStoreEditName" 
+                method="post" 
+                before="Ev.stores_sett.FORM.set_store_aliace.before" 
+                success="Ev.stores_sett.FORM.set_store_aliace.success" 
+                data_type="json" >
+        
+        <div class="form-group blok pad5555">
+			<div class="row">
+				<div class="col-xs-3 txr"><label class="control-label">Имя поддомена:</label></div>
+				<div class="col-sm-8">
+					<div class="row">
+						<div class="col-sm-1">http://</div>
+						<div class="col-sm-5">
+							<input class="form-control" value="{{store.aliace}}" placeholder="abcdef" name="aliace" type="text">
+						</div>
+						<div class="col-sm-2">.4612.ru/</div>
+					</div>
+				</div>
+			</div>
+			<div class="row mt10 mb10 ">
+				<div class="col-sm-3">
+					<label class="control-label">&nbsp;</label>
+				</div>
+				<div class="col-sm-5">
+					<button type="submit" class="btn btn-sm btn-success mr10 mb10">Сохранить</button>
+					<button type="reset" class="btn btn-sm  mr10 mb10">Сброс</button>
+				</div>
+			</div>		
+        </div>                                  
+        </form>                                
+    </div>
+</div>

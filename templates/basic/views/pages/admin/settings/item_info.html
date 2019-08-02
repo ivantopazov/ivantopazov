@@ -1,0 +1,46 @@
+<div id="tab-info" class="tab-pane {{active}}">                        
+   <div class="mb20">
+    <h3>Описание магазина</h3><hr>
+        <form class="" id="blockInfo"
+                action="/admin/settings/home/setBlockInfo" 
+                method="post" 
+                before="Ev.stores_sett.FORM.set_info.before" 
+                success="Ev.stores_sett.FORM.set_info.success" 
+                data_type="json" >					
+            <div class="form-group blok pad5555">
+                <div class="row">
+                    <div class="col-xs-3 txr"><label class="control-label fon18lh">Наименование магазина:</label></div>
+                    <div class="col-xs-5">
+                        <input type="text" class="form-control" placeholder="Название" name="title" style="border-left: 1px solid red;" value="{{store.name}}">
+                    </div>
+                </div>	
+            </div>
+            <div class="form-group blok pad5555">
+                <div class="row">
+                    <div class="col-xs-3 txr"><label class="control-label fon18lh">Описание магазина:</label></div>
+                    <div class="col-xs-5">
+                        <textarea class="form-control" placeholder="Описание товара"  name="description"  value=	"{{store.description}}" >{{store.description}}														
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group blok pad5555">
+                <div class="row">
+                    <div class="col-xs-3 txr"><label class="control-label fon18lh">Режим работы:</label></div>
+                    <div class="col-xs-5">
+                        <textarea class="form-control" placeholder="Режим работы"  name="rejim_raboty" > {{store.range_work}} </textarea>
+                    </div>
+                </div>
+            </div>                         			  
+            <div class="form-group blok pt10 pb10">
+				<div class="row">
+					<label class="mt10 col-sm-3 control-label">&nbsp;</label>
+					<div class="mt10 col-sm-5">
+						<button type="submit" class="btn btn-sm btn-success mr10 mb10">Сохранить</button>
+						<button type="reset" class="btn btn-sm  mr10 mb10">Сброс</button>
+					</div>
+				</div>
+			</div>			
+        </form>									
+    </div>
+</div>	

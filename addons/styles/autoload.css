@@ -1,0 +1,10 @@
+@import url("reset.min.css"); /* Сброс параметров */
+@import url("bootstrap.css"); /* Загрузка инструментария */
+@import url("bootstrap-theme.css"); /* Загрузка инструментария */
+@import url("plugins/iCheck/custom.css"); /* Загрузка инструментария */
+@import url("fonts.css"); /* Загрузка шрифтов*/
+@import url("eva-ui.css"); /* Загрузка инструментария */
+@import url("in_style.css"); /* Установка стилей темы  */
+@import url("in_animate.css"); /* Установка стилей темы  */
+@import url("font-awesome.css"); /* Установка стилей темы  */
+@import url("spy.css"); /* Установка стилей конкретно для страницы главная  */

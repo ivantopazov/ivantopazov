@@ -1,0 +1,67 @@
+<div id="tab-kontakn" class="tab-pane {{active}}">
+    <div class="mb20">
+    <h3>Контактные данные</h3><hr>
+        <form class="" id="blockContactsSettings"
+			action="/admin/settings/home/actSetContactsShoop" 
+			method="post" 
+			success="Ev.stores_sett.FORM.set_contacts.success" 
+			data_type="json" >
+                   
+		
+		<div class="form-group blok pad5555">
+			<div class="row">
+				<div class="col-xs-3 txr"><label class="control-label fon18lh">Адрес магазина:</label></div>
+				<div class="col-xs-5">
+					<input type="text" class="form-control" placeholder="г.Курск ул.Демидова дом.17 пав.456" name="city_gorod" style="" value="{{store.city_gorod}}">
+				</div>
+			</div>	
+		</div>
+		
+		<div class="form-group blok pad5555">
+			<div class="row">
+				<div class="col-xs-3 txr"><label class="control-label fon18lh">Как добратся:</label></div>
+				<div class="col-xs-5">
+					<textarea class="form-control" placeholder="Подробно опишите как до вас добраться"  name="address_map"  value="{{store.address_map}}" ></textarea>
+				</div>
+			</div>	
+		</div>
+		
+        <div class="form-group blok pad5555">
+			<div class="row">
+				<div class="col-xs-3 txr"><label class="control-label fon18lh">Код яндекс карты:</label></div>
+				<div class="col-xs-5">
+					<textarea class="form-control" placeholder="Код"  name="address_map"  value="{{store.address_map}}" ></textarea>
+				</div>
+			</div>	
+		</div>
+        
+		<div class="form-group blok pad5555">
+			<div class="row">
+				<div class="col-xs-3 txr"><label class="control-label fon18lh">Телефон для заказов:</label></div>
+				<div class="col-xs-5">
+					<input type="text" class="form-control" placeholder="+х ( ххх ) ххх-хх-хх" name="phone_view" style="" value="{{store.phone_view}}">
+				</div>
+			</div>	
+		</div>
+        
+		<div class="form-group blok pad5555">
+			<div class="row">
+				<div class="col-xs-3 txr"><label class="control-label fon18lh">Email для клиентов:</label></div>
+				<div class="col-xs-5">
+					<input type="text" class="form-control" placeholder="xxx@xxx.xxx" name="admin_email" style="" value="{{store.admin_email}}">
+				</div>
+			</div>	
+		</div>
+        
+        <input type="hidden" name="store_id" value="{{store.id}}" />
+        
+		<div class="row form-group pt10 pb10">
+			<label class="mt10 col-sm-3 control-label">&nbsp;</label>
+			<div class="mt10 col-sm-5">
+				<button type="submit" class="btn btn-sm btn-success mr10 mb10">Сохранить</button>
+				<button type="reset" class="btn btn-sm  mr10 mb10">Сброс</button>
+			</div>						
+		</div> 
+        </form>
+    </div>
+</div>

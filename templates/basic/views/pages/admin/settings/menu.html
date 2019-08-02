@@ -1,0 +1,26 @@
+<ul class="bord mb10">	
+    <li class="{% if active == 'tab-info' %} active {% endif %} blok borb3 pt5 pr5 pb5 pl5">
+        <a href="#tab-info" click="FNC._set_url( '/admin/settings?item=tab-info' );" data-toggle="tab" aria-expanded="{% if active == 'tab-info' %}true{% else %}false{% endif %}">Описание магазина</a>
+    </li>
+    <li class="{% if active == 'tab-ilan' %} active {% endif %} blok borb3 pt5 pr5 pb5 pl5">
+        <a href="#tab-ilan" click="FNC._set_url( '/admin/settings?item=tab-ilan' );" data-toggle="tab" aria-expanded="{% if active == 'tab-ilan' %}true{% else %}false{% endif %}">Интерфейс магазина</a><!--фон и прочее в этом духе-->
+    </li>
+    <li class="{% if active == 'tab-domains' %} active {% endif %} blok borb3 pt5 pr5 pb5 pl5"> 
+        <a href="#tab-domains" click="FNC._set_url( '/admin/settings?item=tab-domains' );" data-toggle="tab" aria-expanded="{% if active == 'tab-domains' %}true{% else %}false{% endif %}">Доменное имя</a>
+    </li>
+    <li class="{% if active == 'tab-baners' %} active {% endif %} blok borb3 pt5 pr5 pb5 pl5"> 
+        <a href="#tab-baners" click="FNC._set_url( '/admin/settings?item=tab-baners' );" data-toggle="tab" aria-expanded="{% if active == 'tab-baners' %}true{% else %}false{% endif %}">Промо-Банер</a><!--Банер на главную страницу, если загруженно одно фото то работает как просто фото а если несколько то как баннер-->
+    </li>
+    <li class="{% if active == 'tab-kontakn' %} active {% endif %} blok borb3 pt5 pr5 pb5 pl5">
+        <a href="#tab-kontakn" click="FNC._set_url( '/admin/settings?item=tab-kontakn' );" data-toggle="tab" aria-expanded="{% if active == 'tab-kontakn' %}true{% else %}false{% endif %}">Контактные данные магазина</a>
+    </li>
+    <li class="hidden {% if active == 'tab-vladelec' %} active {% endif %} blok borb3 pt5 pr5 pb5 pl5">
+        <a href="#tab-vladelec" click="FNC._set_url( '/admin/settings?item=tab-vladelec' );" data-toggle="tab" aria-expanded="{% if active == 'tab-vladelec' %}true{% else %}false{% endif %}">Владелец магазина</a>
+    </li>	
+    <li class="hidden {% if active == 'tab-account' %} active {% endif %}  blok borb3 pt5 pr5 pb5 pl5"> 
+        <a href="#tab-account" click="FNC._set_url( '/admin/settings?item=tab-account' );" data-toggle="tab" aria-expanded="{% if active == 'tab-account' %}true{% else %}false{% endif %}">Аккаунт</a>
+    </li>
+    <li class=" {% if active == 'tab-seo' %} active {% endif %} blok pt5 pr5 pb5 pl5"> 
+        <a href="#tab-seo" click="FNC._set_url( '/admin/settings?item=tab-seo' );" data-toggle="tab" aria-expanded="{% if active == 'tab-seo' %}true{% else %}false{% endif %}">Продвижение, SEO</a>
+    </li>
+</ul>

@@ -1,0 +1,150 @@
+<div id="tab-vladelec" class="tab-pane {{active}}">
+<h3>Владелец магазина</h3><hr>
+	<ul class="nav nav-tabs">
+		<li class="">
+			<a href="#tab-fi" data-toggle="tab" aria-expanded="true">Часное лицо</a>
+		</li>
+		<li class="active">
+			<a href="#tab-ip" data-toggle="tab" aria-expanded="true">Индивидуальный предпрениматель</a>
+		</li>
+		<li class="">
+			<a href="#tab-ur" data-toggle="tab" aria-expanded="true">Юридическое лицо</a>
+		</li>		
+	</ul> 
+	<div class="tab-content">
+		<div id="tab-fi" class="tab-pane">
+			<div class="panel-body">
+				<form class="" id="blockGenSettings"
+					action="/admin/settings/home/actStoreEditName" 
+					method="post" 
+					before="Ev.stores_sett.FORM.set_store_aliace.before" 
+					success="Ev.stores_sett.FORM.set_store_aliace.success" 
+					data_type="json" >
+					<div class="form-group blok pad5555">
+						<div class="row">
+							<div class="col-xs-3 txr"><label class="control-label fon18lh">ФИО:</label></div>
+							<div class="col-xs-5">
+								<input type="text" class="form-control" value="{{good.articul}}" placeholder="ФИО" name="articul">
+							</div>
+						</div>	
+					</div>
+					<div class="row form-group pt10 pb10">
+						<label class="mt10 col-sm-3 control-label">&nbsp;</label>
+						<div class="mt10 col-sm-5">
+							<button type="submit" class="btn btn-sm btn-success mr10 mb10">Сохранить</button>
+							<button type="reset" class="btn btn-sm  mr10 mb10">Сброс</button>
+						</div>						
+					</div>
+				</form>
+			</div>
+		</div>
+		<div id="tab-ip" class="tab-pane active">
+			<div class="panel-body">
+				<form class="" id="blockGenSettings"
+					action="/admin/settings/home/actStoreEditName" 
+					method="post" 
+					before="Ev.stores_sett.FORM.set_store_aliace.before" 
+					success="Ev.stores_sett.FORM.set_store_aliace.success" 
+					data_type="json" >
+					<div class="form-group blok pad5555">
+						<div class="row">
+							<div class="col-xs-3 txr"><label class="control-label fon18lh">ФИО:</label></div>
+							<div class="col-xs-5">
+								<input type="text" class="form-control" value="{{good.articul}}" placeholder="ФИО" name="articul">
+							</div>
+						</div>	
+					</div>
+					<div class="form-group blok pad5555">
+						<div class="row">
+							<div class="col-xs-3 txr"><label class="control-label fon18lh">Название организации:</label></div>
+							<div class="col-xs-5">
+								<input type="text" class="form-control" value="{{good.articul}}" placeholder="ИП ФИО" name="articul">
+							</div>
+						</div>	
+					</div>
+					<div class="form-group blok pad5555">
+						<div class="row">
+							<div class="col-xs-3 txr"><label class="control-label fon18lh">ИНН:</label></div>
+							<div class="col-xs-5">
+								<input type="text" class="form-control" value="{{good.articul}}" placeholder="ИНН" name="articul">
+							</div>
+						</div>	
+					</div>
+					<div class="form-group blok pad5555">
+						<div class="row">
+							<div class="col-xs-3 txr"><label class="control-label fon18lh">ОГРН:</label></div>
+							<div class="col-xs-5">
+								<input type="text" class="form-control" value="{{good.articul}}" placeholder="ОГРН" name="articul">
+							</div>
+						</div>	
+					</div>
+					<div class="form-group blok pad5555">
+						<div class="row">
+							<div class="col-xs-3 txr"><label class="control-label fon18lh">Адрес:</label></div>
+							<div class="col-xs-5">
+								<textarea class="form-control" placeholder="Юридический адрес"  name="seo_desc" ></textarea>
+							</div>
+						</div>	
+					</div>
+					<div class="row form-group pt10 pb10">
+						<label class="mt10 col-sm-3 control-label">&nbsp;</label>
+						<div class="mt10 col-sm-5">
+							<button type="submit" class="btn btn-sm btn-success mr10 mb10">Сохранить</button>
+							<button type="reset" class="btn btn-sm  mr10 mb10">Сброс</button>
+						</div>						
+					</div>
+				</form>
+			</div>
+		</div>
+		<div id="tab-ur" class="tab-pane">
+			<div class="panel-body">
+				<form class="" id="blockGenSettings"
+					action="/admin/settings/home/actStoreEditName" 
+					method="post" 
+					before="Ev.stores_sett.FORM.set_store_aliace.before" 
+					success="Ev.stores_sett.FORM.set_store_aliace.success" 
+					data_type="json" >
+					<div class="form-group blok pad5555">
+						<div class="row">
+							<div class="col-xs-3 txr"><label class="control-label fon18lh">Название организации:</label></div>
+							<div class="col-xs-5">
+								<input type="text" class="form-control" value="{{good.articul}}" placeholder="Название организации" name="articul">
+							</div>
+						</div>	
+					</div>
+					<div class="form-group blok pad5555">
+						<div class="row">
+							<div class="col-xs-3 txr"><label class="control-label fon18lh">ИНН:</label></div>
+							<div class="col-xs-5">
+								<input type="text" class="form-control" value="{{good.articul}}" placeholder="ИНН" name="articul">
+							</div>
+						</div>	
+					</div>
+					<div class="form-group blok pad5555">
+						<div class="row">
+							<div class="col-xs-3 txr"><label class="control-label fon18lh">ОГРН:</label></div>
+							<div class="col-xs-5">
+								<input type="text" class="form-control" value="{{good.articul}}" placeholder="ОГРН" name="articul">
+							</div>
+						</div>	
+					</div>
+					<div class="form-group blok pad5555">
+						<div class="row">
+							<div class="col-xs-3 txr"><label class="control-label fon18lh">Адрес:</label></div>
+							<div class="col-xs-5">
+								<textarea class="form-control" placeholder="Юридический адрес"  name="seo_desc" ></textarea>
+							</div>
+						</div>	
+					</div>
+					<div class="row form-group pt10 pb10">
+						<label class="mt10 col-sm-3 control-label">&nbsp;</label>
+						<div class="mt10 col-sm-5">
+							<button type="submit" class="btn btn-sm btn-success mr10 mb10">Сохранить</button>
+							<button type="reset" class="btn btn-sm  mr10 mb10">Сброс</button>
+						</div>						
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

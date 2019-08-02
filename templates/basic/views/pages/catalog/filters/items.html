@@ -1,0 +1,61 @@
+{% for item in items %} 
+<div class="row" data-block_name="{{item.variabled}}" >    
+	<div class="col-xs-12 mt15">
+		<p><strong> {{item.title}} </strong></p>
+	</div>        
+	<div class="col-xs-12 filter_scroll_">
+        
+		{% if item.type == 'range-values' %}
+		<div class="row" style="margin-bottom: 20px;">
+			{% for kk, link in item.data %}
+			<div class="col-xs-6">  
+				<div class="row">
+					<label class="col-xs-12" for="{{link.variabled}}" title="{{link.title}}">{{link.title}}</label>    
+					<div class="col-xs-12">  
+						<div class="pull-right">
+							<span class="control-label">
+								<input type="text" id="{{link.variabled}}" name="{{link.variabled}}" class="form-control" value="{{cena[kk]}}" placeholder="{{link.title}}" />
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>  
+			{% endfor %}
+		</div>
+		{% endif %}
+		
+		
+		{% if item.type == 'checkbox-group' %}
+		
+		{% if item.data |length > 8 %}<div class="slideHide" data-item="{{item.variabled}}" data-status="hide">{% endif %}
+			
+			<div class="row">
+				{% for link in item.data %}
+				<div class="{% if item.variabled == 'size' %} col-xs-4 {% else %} col-xs-12 {% endif %}">  
+					
+					<div class="pull-left">  
+						<div class="pull-right">
+							<span class="control-label">
+								<input type="checkbox" id="{{link.variabled}}" name="{{link.variabled}}" {% if link.check == 'on' %} checked {% endif %} class="i-checks" />
+							</span>
+						</div>
+					</div>
+					<label class="Conv_CRC55 " for="{{link.variabled}}" title="{{link.title}}" style="margin-left: 15px;">{{link.title}}</label>    
+					
+				</div> 
+				{% endfor %} 
+			</div>
+			
+		{% if item.data |length > 8 %}</div>{% endif %}
+		
+		{% if item.data |length > 8 %}
+		<p><a class="btn btn-default btn-block mt15" href="#" click="Ev.catalog.viewHide('{{item.variabled}}');" >Показать больше / Скрыть</a></p>
+		{% endif %}
+		
+		{% endif %}
+		
+		
+		
+	</div>        
+</div>
+{% endfor %}

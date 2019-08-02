@@ -1,0 +1,229 @@
+<div class="row">
+    <div class="col-xs-12">
+        <div class="tabs-container">
+            <div class="mb20">
+                <h3>Категории</h3><hr>
+                <ul class="nav nav-tabs">
+                    <li class="">
+                        <a data-toggle="tab" href="#tab-1" aria-expanded="false">Добавить
+                        <!--<i class="fa fa-plus text-primary" aria-hidden="true"></i>-->
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a data-toggle="tab" href="#tab-2" aria-expanded="true">Редактировать
+                        <!--<i class="fa fa-pencil-square-o text-success" aria-hidden="true"></i>-->
+                        </a>
+                    </li>
+                    <li class="">
+                        <a data-toggle="tab" href="#tab-3" aria-expanded="false">Удалить
+                        <!--<i class="fa fa-trash text-danger" aria-hidden="true"></i>-->
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                
+                    <div class="form-group blok pad5555 mt20">
+                        <div class="row">
+                            <div class="col-xs-3 txr"><label class="control-label fon18lh">Категории:</label></div>
+                            <div class="col-xs-5">
+                                <div class="col-xs-12 h300 bg-gray ovauto" id="treeCats"></div>
+                            </div>
+                        </div>	
+                    </div>
+                
+                
+                    <div id="tab-1" class="tab-pane">
+                        <div class="">
+                            <form id="addChild" method="post" action="/admin/catalog/cats/addChild" data_type="json" before="Ev.cats_treeList.catAdd.form_before" requare="Ev.cats_treeList.catAdd.form_requare"  success="Ev.cats_treeList.catAdd.form_success">	
+                            <div class="form-group blok pad5555">
+                                <div class="row">
+                                    <div class="col-xs-3 txr"><label class="control-label fon18lh">Имя категории:</label></div>
+                                    <div class="col-xs-5">
+                                        <input name="name" autocomplete="true" class="form-control" style="border-left: 1px solid red;" placeholder="Имя категории" type="text">
+                                    </div>
+                                </div>	
+                            </div>
+                            <div class="form-group blok pad5555">
+                                <div class="row">
+                                    <div class="col-xs-3 txr"><label class="control-label fon18lh">Имя категории на транслите:</label></div>
+                                    <div class="col-xs-5">
+                                        <input name="aliase" autocomplete="true" class="form-control" style="border-left: 1px solid red;" placeholder="Имя категории на транслите без пробелов" type="text">
+                                    </div>
+                                </div>	
+                            </div>
+                            <div class="form-group blok pad5555">
+                                <div class="row">
+                                    <div class="col-xs-3 txr"><label class="control-label fon18lh">Описание:</label></div>
+                                    <div class="col-xs-5">
+                                        <textarea name="desription" autocomplete="true" class="form-control" placeholder="Описание категории" rows="5" cols="50" onkeyup="limiter('text', 4000)"></textarea>
+                                    </div>
+                                </div>	
+                            </div>
+                            <div class="form-group blok pad5555">
+                                <div class="row">
+                                    <div class="col-xs-3 txr"><label class="control-label fon18lh">Имя категории в вкладке:</label></div>
+                                    <div class="col-xs-5">
+                                        <input name="seo_title" autocomplete="true" class="form-control" placeholder="Имя категории в вкладке" type="text">
+                                    </div>
+                                </div>	
+                            </div>
+                            <div class="form-group blok pad5555">
+                                <div class="row">
+                                    <div class="col-xs-3 txr">
+                                        <label class="control-label fon18lh">Изображение категории:</label>
+                                    </div>
+                                    <div class="col-xs-5">     
+                                        <div class="row"> 
+                                            <div class="col-xs-12">
+                                                <div class="uploadfile_add_cats">Выбрать фото</div>
+                                            </div>
+                                        </div>	
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <div class="ev-uploadfile_add_cats_list"></div>
+                                            </div>
+                                        </div>
+                                    </div>                             
+                                </div>
+                            </div>
+                            <div class="form-group blok pad5555 hidden">
+                                <div class="row">
+                                    <div class="col-xs-3 txr"><label class="control-label fon18lh">Как ищут в яндексе:</label></div>
+                                    <div class="col-xs-5">
+                                        <input name="seo_keys" autocomplete="true" class="form-control" placeholder="Как ищут в яндексе" type="text">
+                                    </div>
+                                </div>	
+                            </div>
+                            <div class="form-group blok pad5555 hidden">
+                                <div class="row">
+                                    <div class="col-xs-3 txr"><label class="control-label fon18lh">Описание снипета:</label></div>
+                                    <div class="col-xs-5">
+                                        <input type="hidden" name="parent_id" value="0" />
+                                        <textarea name="seo_desc" autocomplete="true" class="form-control" placeholder="Описание снипета в яндексе" rows="5" cols="50" onkeyup="limiter('text', 4000)"></textarea>
+                                    </div>
+                                </div>	
+                            </div>
+                            <div class="form-group blok pt10 pb10">
+                                <div class="row">
+                                    <label class="mt10 col-sm-3 control-label">&nbsp;</label>
+                                    <div class="mt10 col-sm-5">
+                                        <button type="submit" class="btn btn-sm btn-success mr10 mb10">Сохранить</button>
+                                        <button type="reset" class="btn btn-sm  mr10 mb10">Сброс</button>
+                                    </div>
+                                </div>
+                            </div>				
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div id="tab-2" class="tab-pane active">
+                        <div class="">
+                            <form id="editChild" method="post" action="/admin/catalog/cats/editChild" data_type="json"  requare="Ev.cats_treeList.catEdit.form_requare"  before="Ev.cats_treeList.catEdit.form_before" success="Ev.cats_treeList.catEdit.form_success">				
+                            <div class="form-group blok pad5555">
+                                <div class="row">
+                                    <div class="col-xs-3 txr"><label class="control-label fon18lh">Имя категории:</label></div>
+                                    <div class="col-xs-5">
+                                        <input name="name" autocomplete="true" class="form-control" style="border-left: 1px solid red;" placeholder="Имя категории" type="text">
+                                    </div>
+                                </div>	
+                            </div>
+                            <div class="form-group blok pad5555">
+                                <div class="row">
+                                    <div class="col-xs-3 txr"><label class="control-label fon18lh">Имя категории на транслите:</label></div>
+                                    <div class="col-xs-5">
+                                        <input name="aliase" autocomplete="true" class="form-control" style="border-left: 1px solid red;" placeholder="Имя категории на транслите без пробелов" type="text">
+                                    </div>
+                                </div>	
+                            </div>
+                            <div class="form-group blok pad5555">
+                                <div class="row">
+                                    <div class="col-xs-3 txr"><label class="control-label fon18lh">Описание:</label></div>
+                                    <div class="col-xs-5">
+                                        <textarea name="desription" autocomplete="true" class="form-control" placeholder="Описание категории" rows="5" cols="50" onkeyup="limiter('text', 4000)"></textarea>
+                                    </div>
+                                </div>	
+                            </div>
+                            <div class="form-group blok pad5555">
+                                <div class="row">
+                                    <div class="col-xs-3 txr"><label class="control-label fon18lh">Имя категории в вкладке:</label></div>
+                                    <div class="col-xs-5">
+                                        <input name="seo_title" autocomplete="true" class="form-control" placeholder="Имя категории в вкладке" type="text">
+                                    </div>
+                                </div>	
+                            </div>
+                            <div class="form-group blok pad5555">
+                                <div class="row">
+                                    <div class="col-xs-3 txr">
+                                        <label class="control-label fon18lh">Изображение категории:</label>
+                                    </div>
+                                    <div class="col-xs-5">     
+                                        <div class="row"> 
+                                            <div class="col-xs-12">
+                                                <div class="uploadfile_edit_cats">Выбрать фото</div>
+                                            </div>
+                                        </div>	
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <div class="ev-uploadfile_edit_cats_list"></div>
+                                            </div>
+                                        </div>
+                                    </div>                             
+                                </div>
+                            </div>
+                            <div class="form-group blok pad5555 hidden">
+                                <div class="row">
+                                    <div class="col-xs-3 txr"><label class="control-label fon18lh">Как ищут в яндексе:</label></div>
+                                    <div class="col-xs-5">
+                                        <input name="seo_keys" autocomplete="true" class="form-control mb5" placeholder="Как ищут в яндексе" type="text">
+                                    </div>
+                                </div>	
+                            </div>
+                            <div class="form-group blok pad5555 hidden">
+                                <div class="row">
+                                    <div class="col-xs-3 txr"><label class="control-label fon18lh">Описание снипета:</label></div>
+                                    <div class="col-xs-5">
+                                        <input type="hidden" name="parent_id" value="0" />
+                                        <input type="hidden" name="cid" value="0" />
+                                        <textarea name="seo_desc" autocomplete="true" class="form-control mb5" placeholder="Описание снипета в яндексе" rows="5" cols="50" onkeyup="limiter('text', 4000)"></textarea>
+                                    </div>
+                                </div>	
+                            </div>
+                            <div class="form-group blok pt10 pb10">
+                                <div class="row">
+                                    <label class="mt10 col-sm-3 control-label">&nbsp;</label>
+                                    <div class="mt10 col-sm-5">
+                                        <button type="submit" class="btn btn-sm btn-success mr10 mb10">Сохранить</button>
+                                        <button type="reset" class="btn btn-sm  mr10 mb10">Сброс</button>
+                                    </div>
+                                </div>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div id="tab-3" class="tab-pane">
+                        <div class="">
+                            <form id="removeChild" method="post" action="/admin/catalog/cats/removeChild" data_type="json" success="Ev.cats_treeList.catEdit.form_success">
+                            <div class="form-group blok pt10 pb10">
+                                <div class="row">
+                                    <label class="mt10 col-sm-3 control-label">&nbsp;</label>
+                                    <div class="mt10 col-sm-5">
+                                        <input type="hidden" name="cid" value="0" />
+                                        <button type="submit" class="btn btn-sm btn-danger mr10 mb10">Удалить</button>
+                                    </div>
+                                </div>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>	
+        </div>
+ 
+        <div class="row">
+            <div class="col-xs-12" id="treeItemSelected"></div>
+        </div>
+        
+    </div>
+</div>

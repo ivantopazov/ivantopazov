@@ -1,0 +1,187 @@
+
+.d-f-center-top{
+	display: flex;
+	display: -webkit-box; /* Android 4.3-, Safari без оптимизации */
+	display: -webkit-flex; /* оптимизация для Safari */
+	
+	-webkit-box-pack: center; /* Android 4.3-, Safari без оптимизации */
+	-webkit-justify-content: flex-start; /* оптимизация для Safari */
+	
+	-webkit-box-direction: row;/* */
+	/*-webkit-box-align: center; /* */
+	
+	flex-direction: row;
+	justify-content: center;
+	
+	display: -ms-flexbox;
+	-ms-flex-align: stretch;
+	-ms-flex-pack: center;
+}
+
+.d-f-center-center{
+	display: flex;
+	display: -webkit-box; /* Android 4.3-, Safari без оптимизации */
+	display: -webkit-flex; /* оптимизация для Safari */
+	
+	-webkit-box-pack: center; /* Android 4.3-, Safari без оптимизации */
+	-webkit-justify-content: flex-start; /* оптимизация для Safari */
+	
+	-webkit-box-direction: row;/* */
+	-webkit-box-align: center; /* */
+	
+	flex-direction: row;
+	justify-content: center;
+	
+	display: -ms-flexbox;
+	-ms-flex-align: center;
+	-ms-flex-pack: center;
+	
+	align-items: center;
+}
+
+.d-f-center-bottom{
+	display: flex;
+	display: -webkit-box; /* Android 4.3-, Safari без оптимизации */
+	display: -webkit-flex; /* оптимизация для Safari */
+	
+	-webkit-box-pack: center; /* Android 4.3-, Safari без оптимизации */
+	-webkit-justify-content: flex-start; /* оптимизация для Safari */
+	
+	-webkit-box-direction: row;/* */
+	-webkit-box-align: end; /* */
+	
+	flex-direction: row;
+	justify-content: center;
+	
+	display: -ms-flexbox;
+	-ms-flex-align: end;
+	-ms-flex-pack: center;
+	
+	align-items: flex-end ;
+}
+
+.d-f-right-top{
+	display: flex;
+	display: -webkit-box; /* Android 4.3-, Safari без оптимизации */
+	display: -webkit-flex; /* оптимизация для Safari */
+	
+	-webkit-box-pack: end; /* Android 4.3-, Safari без оптимизации */
+	-webkit-justify-content:  flex-end ; /* оптимизация для Safari */
+	
+	-webkit-box-direction: row;/* */
+	/*-webkit-box-align: center; /* */
+	
+	flex-direction: row;
+	justify-content:  flex-end ;
+	
+	display: -ms-flexbox;
+	-ms-flex-align: stretch;
+	-ms-flex-pack: end;
+	
+	align-items:  flex-start ;
+}
+
+.d-f-right-center{
+	display: flex;
+	display: -webkit-box; /* Android 4.3-, Safari без оптимизации */
+	display: -webkit-flex; /* оптимизация для Safari */
+	
+	-webkit-box-pack: end; /* Android 4.3-, Safari без оптимизации */
+	-webkit-justify-content:  flex-start ; /* оптимизация для Safari */
+	
+	-webkit-box-direction: row;/* */
+	-webkit-box-align: center; /* */
+	
+	flex-direction: row;
+	justify-content:   flex-end  ;
+	
+	display: -ms-flexbox;
+	-ms-flex-align: center;
+	-ms-flex-pack: end;
+	
+	align-items:  center ;
+}
+
+.d-f-right-bottom{
+	display: flex;
+	display: -webkit-box; /* Android 4.3-, Safari без оптимизации */
+	display: -webkit-flex; /* оптимизация для Safari */
+	
+	-webkit-box-pack: end; /* Android 4.3-, Safari без оптимизации */
+	-webkit-justify-content:  flex-end ; /* оптимизация для Safari */
+	
+	-webkit-box-direction: row;/* */
+	-webkit-box-align: end; /* */
+	
+	flex-direction: row;
+	justify-content:  flex-end ;
+	
+	display: -ms-flexbox;
+	-ms-flex-align: end;
+	-ms-flex-pack: end;
+	
+	align-items:  baseline ;
+}
+
+
+.d-f-left-top{
+	display: flex;
+	display: -webkit-box; /* Android 4.3-, Safari без оптимизации */
+	display: -webkit-flex; /* оптимизация для Safari */
+	
+	-webkit-box-pack: start; /* Android 4.3-, Safari без оптимизации */
+	-webkit-justify-content:  flex-start ; /* оптимизация для Safari */
+	
+	-webkit-box-direction: row;/* */
+	/*-webkit-box-align: flex-start; /* */
+	
+	flex-direction: row;
+	justify-content:   flex-start ;
+	
+	display: -ms-flexbox;
+	-ms-flex-align: start;
+	-ms-flex-pack: start;
+	
+	align-items: flex-start;
+}
+
+.d-f-left-center{
+	display: flex;
+	display: -webkit-box; /* Android 4.3-, Safari без оптимизации */
+	display: -webkit-flex; /* оптимизация для Safari */
+	
+	-webkit-box-pack: start; /* Android 4.3-, Safari без оптимизации */
+	-webkit-justify-content:  flex-start ; /* оптимизация для Safari */
+	
+	-webkit-box-direction: row;/* */
+	-webkit-box-align: center; /* */
+	
+	flex-direction: row;
+	justify-content:   flex-start ;
+	
+	display: -ms-flexbox;
+	-ms-flex-align: center;
+	-ms-flex-pack: start;
+	
+	align-items: center;
+}
+.d-f-left-bottom{
+	display: flex;
+	display: -webkit-box; /* Android 4.3-, Safari без оптимизации */
+	display: -webkit-flex; /* оптимизация для Safari */
+	
+	-webkit-box-pack: start; /* Android 4.3-, Safari без оптимизации */
+	-webkit-justify-content:  flex-start ; /* оптимизация для Safari */
+	
+	-webkit-box-direction: row;/* */
+	-webkit-box-align: end; /* */
+	
+	flex-direction: row;
+	justify-content:   flex-start ;
+	
+	display: -ms-flexbox;
+	-ms-flex-align: end;
+	-ms-flex-pack: start;
+	
+	align-items: flex-end;
+}

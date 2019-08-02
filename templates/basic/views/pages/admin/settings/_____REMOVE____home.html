@@ -1,0 +1,334 @@
+<section>
+    <div class="container content">    
+		<div class="row tabs-container">
+			<div class="col-xs-3">				
+				<ul class="bord mb10">					
+					<li class="active blok borb3 pt5 pr5 pb5 pl5">
+						<a href="#tab-info" data-toggle="tab" aria-expanded="true">Описание магазина</a>
+					</li>
+					<li class=" blok borb3 pt5 pr5 pb5 pl5">
+						<a href="#tab-ilan" data-toggle="tab" aria-expanded="true">Интерфейс магазина</a><!--фон и прочее в этом духе-->
+					</li>
+					<li class="blok borb3 pt5 pr5 pb5 pl5"> 
+						<a href="#tab-domains" data-toggle="tab" aria-expanded="true">Общие настройки</a>
+					</li>
+					<li class="blok borb3 pt5 pr5 pb5 pl5"> 
+						<a href="#" data-toggle="tab" aria-expanded="true">Промо-Банер</a><!--Банер на главную страницу, если загруженно одно фото то работает как просто фото а если несколько то как баннер-->
+					</li>
+					<li class="blok borb3 pt5 pr5 pb5 pl5">
+						<a href="#tab-kontakn" data-toggle="tab" aria-expanded="false">Контактные данные</a>
+					</li>
+					<li class="blok borb3 pt5 pr5 pb5 pl5">
+						<a href="#" data-toggle="tab" aria-expanded="false">Владелец магазина</a>
+					</li>	
+					<li class="blok borb3 pt5 pr5 pb5 pl5"> 
+						<a href="#"     data-toggle="tab" aria-expanded="false">Аккаунт</a>
+					</li>
+					<li class="blok pt5 pr5 pb5 pl5"> 
+						<a href="#tab-seo"     data-toggle="tab" aria-expanded="false">Продвижение, SEO</a>
+					</li>
+				</ul>			
+			</div>
+            <div class="col-xs-9">           
+                <div class="tab-content"> 				
+                    <div id="tab-info" class="tab-pane active">
+                        
+                        <div class="">
+                            <form class="mr10" id="blockInfo"
+                                    action="/admin/settings/home/setBlockInfo" 
+                                    method="post" 
+                                    before="Ev.stores_sett.FORM.set_info.before" 
+                                    success="Ev.stores_sett.FORM.set_info.success" 
+                                    data_type="json" >					
+								<div class="form-group bord blok pad10101010">
+									<div class="row">
+										<div class="col-xs-4 "><label class="control-label fon20lh">Наименование магазина:</label></div>
+										<div class="col-xs-8">
+											<input type="text" class="form-control" placeholder="Название" name="title" style="border-left: 1px solid red;" value="{{store.name}}">
+										</div>
+									</div>	
+								</div>
+								<div class="form-group bord blok pad10101010">
+									<div class="row">
+										<div class="col-xs-4"><label class="control-label fon20lh">Описание магазина:</label></div>
+										<div class="col-xs-8">
+											<textarea class="form-control" placeholder="Описание товара"  name="description"  value=	"{{store.description}}" >{{store.description}}														
+											</textarea>
+										</div>
+									</div>
+								</div>
+								<div class="form-group bord blok pad10101010">
+									<div class="row">
+										<div class="col-xs-4 "><label class="control-label fon20lh">Режим работы:</label></div>
+										<div class="col-xs-8">
+											<textarea class="form-control" placeholder="Режим работы"  name="rejim_raboty" > {{store.range_work}} </textarea>
+										</div>
+									</div>
+								</div>                         			  
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-xs-4">
+                                            <label class="control-label">&nbsp;</label>
+                                        </div>
+                                        <div class="mt10 mb10 col-xs-8">
+                                            <button type="submit" class="btn btn-success">Сохранить</button>
+                                        </div>
+                                    </div>                                        
+                                </div>			
+                            </form>									
+                        </div>
+					</div>	
+					<!------------------------>	                        
+					
+					
+					<div id="tab-ilan" class="tab-pane">                                        
+                        
+                           <div class="form-group bord blok pad10101010">
+								<div class="row">
+									<div class="col-xs-4">
+										<label class="control-label fon20lh">Иконка магазина:</label>
+									</div>
+									<div class="mt10 col-xs-8">                                
+										<div class="row">
+											<div class="col-xs-1">
+												<div class="mt10 ev-photo_list1">
+													{% if store.favicon %}
+														<img src="/uploads/favicons/{{store.favicon}}" width="24" />
+													{% else %}
+														[ Стандартная иконка ]
+													{% endif %}                                                    
+												</div>
+											</div>
+											<div class="col-xs-8">												
+												<div class="uploadfile1">Выбрать фото</div>												
+											</div>
+											<div class="mt8 col-xs-3">                                            
+												<button class="btn btn-danger" type="button">Удалить</button>                                     
+											</div>
+										</div>		
+                                   </div> 
+                                </div>
+                            </div>
+                             
+                            <div class="form-group bord blok pad10101010">
+								<div class="row">
+									<div class="col-xs-4">
+										<label class="control-label fon20lh">Фоновая картинка магазина:</label>
+									</div>
+									<div class="col-xs-8">
+										<div class="row mb10">
+											<div class="col-xs-12">
+												<div class="ev-photo_list2 bord ">
+													{% if store.fon %}
+														<img src="/uploads/fons/{{store.fon}}" width="100%"/>
+													{% else %}
+														[ Стандартный фон ] 
+													{% endif %}                                                    
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-xs-9">
+												<div class="uploadfile2">Выбрать фото</div>
+											</div>
+											<div class="mt8 col-xs-3">                                            
+												<button class="btn btn-danger" type="button">Удалить</button>                                     
+											</div>
+										</div>	
+									</div>                             
+                                </div>
+                            </div>
+							<div class="h30"></div>
+                                
+                        
+                    </div>
+					
+					
+				<!------------------------>		
+					
+                    <div id="tab-domains" class="tab-pane">
+                        <div class="">                                
+                            <form class="mr10" id="blockGenSettings"
+                                    action="/admin/settings/home/actStoreEditName" 
+                                    method="post" 
+                                    before="Ev.stores_sett.FORM.set_store_aliace.before" 
+                                    success="Ev.stores_sett.FORM.set_store_aliace.success" 
+                                    data_type="json" >
+                            
+                            <div class="form-group">
+                                <div class="mt10 col-sm-4 "><label class="control-label">Имя поддомена:</label></div>
+                                <div class="mt10 col-sm-8">
+                                    <div class="row">
+                                        <div class="col-sm-1">http://</div>
+                                        <div class="col-sm-3">
+                                            <input class="form-control" value="{{store.aliace}}" placeholder="abcdef" name="aliace" type="text">
+                                        </div>
+                                        <div class="col-sm-2">.4612.ru/</div>
+                                    </div>
+                                </div>                                
+                            </div>				                  
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <label class="control-label">&nbsp;</label>
+                                        </div>
+                                        <div class="mt10 mb10 col-sm-8">
+                                            <button type="submit" class="btn btn-success">Сохранить</button>
+                                        </div>
+                                    </div>                                        
+                                </div>                                   
+                            </form>                                
+                        </div>
+                    </div>
+						
+				<!------------------------>			
+                        
+                        <div id="tab-kontakn" class="tab-pane">
+                            <div class="">
+                            
+                                <form class="mr10" id="blockInfo"
+                                        action="/admin/settings/setBlockInfo" 
+                                        method="post" 
+                                        before="Ev.products_edit.FORM.set_info.before" 
+                                        success="Ev.products_edit.FORM.set_info.success" 
+                                        data_type="json" >
+										
+									<div class="form-group bord blok pad10101010">
+										<div class="row">
+											<div class="col-xs-4"><label class="control-label fon20lh">Населённый пункт:</label></div>
+											<div class="col-xs-8">
+												<input type="text" class="form-control" placeholder="Название" name="title" style="border-left: 1px solid red;" value="">
+											</div>
+										</div>	
+									</div>
+									<div class="form-group bord blok pad10101010">
+										<div class="row">
+											<div class="col-xs-4 "><label class="control-label fon20lh">Адрес:</label></div>
+											<div class="col-xs-8">
+												<input type="text" class="form-control" placeholder="Адрес" name="title"  value="">
+											</div>
+										</div>	
+									</div>
+									<div class="form-group bord blok pad10101010">
+										<div class="row">
+											<div class="col-xs-4 "><label class="control-label fon20lh">Телефон:</label></div>
+											<div class="col-xs-8">
+												<input type="text" class="form-control" placeholder="Телефон" name="title"  value="">
+											</div>
+										</div>	
+									</div>
+									<div class="form-group bord blok pad10101010">
+										<div class="row">
+											<div class="col-xs-4 "><label class="control-label fon20lh">Сотовый телефон:</label></div>
+											<div class="col-xs-8">
+												<input type="text" class="form-control" placeholder="Сотовый телефон" name="title"  value="">
+											</div>
+										</div>	
+									</div>
+									<div class="form-group bord blok pad10101010">
+										<div class="row">
+											<div class="col-xs-4"><label class="control-label fon20lh">Контактный email:</label></div>
+											<div class="col-xs-8">
+												<input type="text" class="form-control" placeholder="Контактный email" name="title"  style="border-left: 1px solid red;" value="">
+											</div>
+										</div>	
+									</div>
+                                                                
+                                    <input type="hidden" name="store_id" value="{{store.id}}" />
+                                              
+                                    <div class="form-group">
+										<div class="row">
+											<div class="col-xs-4">
+												<label class="control-label">&nbsp;</label>
+											</div>
+											<div class="mt10 mb10 col-xs-8">
+												<button type="submit" class="btn btn-success">Сохранить</button>
+											</div>
+										</div>                                        
+                                    </div>               
+                                    
+                                </form>
+                                
+                            </div>
+                        </div>
+						
+			<!------------------------>				
+                        
+                        <div id="tab-seo" class="tab-pane">
+                            <div class="">
+                                
+                                <form class="mr10" id="blockInfo"
+                                        action="/admin/settings/setBlockInfo" 
+                                        method="post" 
+                                        before="Ev.products_edit.FORM.set_info.before" 
+                                        success="Ev.products_edit.FORM.set_info.success" 
+                                        data_type="json" >
+										
+										<div class="form-group bord blok pad10101010">
+											<div class="row">
+												<div class="col-xs-4 "><label class="control-label fon20lh">Вкладка на главной странице:</label></div>
+												<div class="col-xs-8">
+													<input type="text" class="form-control" placeholder="Вкладка на главной странице" name="seo_title" style="border-left: 1px solid red;" value="{{store.seo_title}}">
+												</div>
+											</div>
+										</div>
+										<div class="form-group bord blok pad10101010">
+											<div class="row">
+												<div class="col-xs-4"><label class="control-label fon20lh">Ключевые слова:</label></div>
+												<div class="col-xs-8">
+													<input type="text" class="form-control" placeholder="Поисковые запросы [слова-ключи]" name="seo_keys" style="border-left: 1px solid red;" value="{{store.seo_keys}}">
+												</div>
+											</div>
+										</div>
+										<div class="form-group bord blok pad10101010">
+											<div class="row">
+												<div class="col-xs-4"><label class="control-label fon20lh">Описание магазина для Яндекс:</label></div>
+												<div class="col-xs-8">
+													<textarea class="form-control" placeholder="Описание товара"  name="seo_desc"  value="{{store.seo_desc}}" ></textarea>
+												</div>
+											</div>
+										</div>
+                                        <!----------> 
+                                        <div class="form-group bord blok pad10101010">
+											<div class="row">
+												<div class="col-xs-4"><label class="control-label fon20lh">Номер счётчика Яндекс.Метрики:</label></div>
+												<div class="col-xs-8">
+													<input type="text" class="form-control" placeholder="Номер счётчика Яндекс.Метрики:" name="yaMetricaID"  value="{{store.yaMetricaID}}">
+												</div>
+											</div>
+                                        </div>	  
+                                        
+                                        <div class="form-group bord blok pad10101010">
+											<div class="row">
+												<div class="col-xs-4 "><label class="control-label fon20lh">Подтверждение прав на сайт через тег в HEAD:</label></div>
+												<div class="col-xs-8">
+													<input type="text" class="form-control" placeholder="Значение атрибута content" name="yaAccessHeadContent"  value="{{store.yaAccessHeadContent}}">
+												</div>
+											</div>
+                                        </div>				
+                                        
+										
+                                    <input type="hidden" name="store_id" value="{{store.id}}" />
+                                              
+                                    <div class="form-group">
+										<div class="row">
+											<div class="col-xs-4">
+												<label class="control-label">&nbsp;</label>
+											</div>
+											<div class="mt10 mb10 col-xs-8">
+												<button type="submit" class="btn btn-success">Сохранить</button>
+											</div>
+										</div>                                        
+                                    </div>              
+                                    
+                                </form>
+                                
+                            </div>
+                        </div>
+                  <!------------------------>	      
+                        
+				</div>           
+			</div>
+		</div>        
+	</div>
+</section>

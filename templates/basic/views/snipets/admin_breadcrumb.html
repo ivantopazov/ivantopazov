@@ -1,0 +1,15 @@
+<div class="row white-bg">
+    <div class="col-xs-12">
+        <div class="row pl10 pt6 pb15 pl28 bg-page">
+            <!-- <h2>{{title}}</h2> -->
+			<div id="crumbs">
+				<ul>
+					{% for br_n in array %} 
+						<li><a href="{{br_n.link}}" class="hover_underline1">{{br_n.name}}</a> </li>
+					{% endfor %} 
+						<li><strong>{{title}}</strong></li>
+				</ul>
+			</div>
+        </div>
+    </div>
+</div>

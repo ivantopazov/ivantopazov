@@ -1,0 +1,262 @@
+<div id="tab-baners" class="tab-pane {{active}}">
+	<div class="mb20">
+	<h3>Промо-Банер</h3><hr>	
+		<div class="row">
+			<div class="col-xs-3">
+				<ul class="mb10">
+					{% for baner in allBaners %} 
+						<li class="mb2 mr2 pad0505 display px11 text-center" style="border: 1px solid #008AF1;" >
+							<a href="#" click="Ev.stores_sett.RUN.moduleBaner.selectItem({{baner.id}});"  class="text-success"> {{baner.title}} </a>
+						</li>
+					{% endfor %}
+				</ul>
+				<a href="#" click="Ev.stores_sett.RUN.moduleBaner.setView('add');" class="text-primary mb10">
+					<button class="btn btn-sm btn-primary" type="button">Добавить</button>
+				</a>
+			</div>
+			<div class="col-xs-9">
+        
+            <div class="row" id="addNewBaner">
+                <div class="col-xs-12" >
+                    
+            
+                    <form class="mr10" id="blockBanersSettings_add"                        
+                        action="/admin/settings/home/actStoreAddBaner" 
+                        method="post" 
+                        requare="Ev.stores_sett.FORM.setBaners.add.requare"
+                        before="Ev.stores_sett.FORM.setBaners.add.before"
+                        success="Ev.stores_sett.FORM.setBaners.add.success"
+                        data_type="json"
+                    >                            
+                        
+						<div class="form-group blok pad5555">
+							<div class="row">
+								<div class="col-xs-3 txr"><label class="control-label fon18lh">Условное название:</label></div>
+								<div class="col-xs-6">
+									<input class="form-control" value="" placeholder="Банер в слайдере на главной" name="title" type="text">
+								</div>
+							</div>	
+						</div>
+						<div class="form-groupblok pad5555">
+                            <div class="row">
+                                <div class="col-xs-3 txr">
+                                    <label class="control-label">Позиция банера:</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <select class="form-control" name="position">
+                                        <option value="top">Вверх сайта [ 20х1200 ]</option>
+                                        <option value="homeSlider">Слайдер на главной [846x423]</option>
+                                        <option value="homeLeftBar">Левый бар[354x470]</option>
+                                        <option value="catalogLeftBar">Левый бар в списке разделов [354x470]</option>
+                                        <option value="categoryLeftBar">Левый бар в указанной категории [354x470]</option>
+                                    </select>
+                                </div>
+                            </div>                                        
+                        </div>
+						<div class="form-group blok pad5555 hidden" id="showBanerSelectBlock">
+                            <div class="row">
+                                <div class="col-xs-3 txr"><label class="control-label fon18lh">Укажите категорию:</label></div>
+                                <div class="col-xs-6">
+                                    <select class="form-control" name="cat" data-placeholder="Выберите группы для товара" style="border-left: 1px solid red;" >   
+                                    <option class="pa5 px14" value="0" {% if item_cat.active == '0' %} selected="1" {% endif %} ><i>-- Не указана --</i></option>
+                                    {% if allCats |length > 0 %}
+                                        {% for item_cat in allCats %} 
+                                            <option class="pa5 px14 {% if item_cat.data.parent_id == '0' %} fw600 {% endif %}" value="{{item_cat.data.id}}" >{{item_cat.level}}{{item_cat.data.name}}</option>
+                                        {% endfor %}
+                                    {% endif %}
+                                    </select>
+                                </div>
+                            </div>	
+                        </div>
+                        <div class="form-group blok pad5555">
+                            <div class="row">
+                                <div class="col-xs-3 txr">
+                                    <label class="control-label fon18lh">Изображение банера:</label>
+                                </div>
+                                <div class="col-xs-6">     
+                                    <div class="row"> 
+                                        <div class="col-xs-12">
+                                            <div class="uploadfile_baner_add">Выбрать фото</div>
+                                        </div>
+                                    </div>	
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="ev-photo_baner_add"></div>
+                                        </div>
+                                    </div>
+                                </div>                             
+                            </div>
+                        </div>                       
+						<div class="form-group blok pad5555">
+							<div class="row">
+								<div class="col-xs-3 txr"><label class="control-label fon18lh">Ссылка:</label></div>
+								<div class="col-xs-6">
+									<input class="form-control" value="" placeholder="#" name="link" type="text">
+								</div>
+							</div>	
+						</div>                   
+						<div class="form-group blok pad5555">
+							<div class="row">
+								<div class="col-xs-3 txr"><label class="control-label fon18lh">Вес(сортировка):</label></div>
+								<div class="col-xs-6">
+									<input class="form-control" value="" placeholder="0" name="wes" type="text">
+								</div>
+							</div>	
+						</div>
+                        <div class="form-group blok pad5555" >
+                            <div class="row">
+                                <div class="col-xs-3 txr"><label class="control-label fon18lh">Видимость:</label></div>
+                                <div class="col-xs-6">
+                                    <select class="form-control" name="view" >   
+                                        <option class="pa5 px14" value="1">Отображать</option>     
+                                        <option class="pa5 px14" value="0">Скрыт</option>                               
+                                    </select>
+                                </div>
+                            </div>	
+                        </div>                        
+                        <input type="hidden" name="date_start" value="0" />
+                        <input type="hidden" name="date_end" value="0" />                        
+                        <div class="row form-group pt10 pb10">
+							<label class="mt10 col-sm-3 control-label">&nbsp;</label>
+							<div class="mt10 col-sm-5">
+								<button type="submit" class="btn btn-sm btn-success mr10 mb10">Сохранить</button>
+								<button type="reset" class="btn btn-sm  mr10 mb10">Сброс</button>
+							</div>						
+						</div>                                   
+                    </form>  
+                </div>
+            </div>
+            
+            <div class="row hidden" id="editNewBaner">
+                <div class="col-xs-12" >
+                               
+                    <form class="mr10" 
+                        id="blockBanersSettings_edit"                        
+                        action="/admin/settings/home/actStoreEditBaner" 
+                        method="post" 
+                        requare="Ev.stores_sett.FORM.setBaners.edit.requare"
+                        before="Ev.stores_sett.FORM.setBaners.edit.before"
+                        success="Ev.stores_sett.FORM.setBaners.edit.success"
+                        data_type="json" >
+                        
+						<div class="form-group blok pad5555">
+							<div class="row">
+								<div class="col-xs-3 txr"><label class="control-label fon18lh">Условное название:</label></div>
+								<div class="col-xs-6">
+									<input class="form-control" value="" placeholder="Банер в слайдере на главной" name="title" type="text">
+								</div>
+							</div>	
+						</div>
+
+						<div class="form-group blok pad5555">
+                            <div class="row">
+                                <div class="col-xs-3 txr">
+                                    <label class="control-label">Позиция банера:</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <select class="form-control" name="position">
+                                        <option value="top">Вверх сайта [ 20х1200 ]</option>
+                                        <option value="homeSlider">Слайдер на главной [846x423]</option>
+                                        <option value="homeLeftBar">Левый бар[354x470]</option>
+                                        <option value="catalogLeftBar">Левый бар в списке разделов [354x470]</option>
+                                        <option value="categoryLeftBar">Левый бар в указанной категории [354x470]</option>
+                                    </select>
+                                </div>
+                            </div>                                        
+                        </div>
+						
+						<div class="form-group blok pad5555 hidden" id="showBanerSelectBlock">
+                            <div class="row">
+                                <div class="col-xs-3 txr"><label class="control-label fon18lh">Уажите категорию:</label></div>
+                                <div class="col-xs-6">
+                                    <select class="form-control" name="cat" data-placeholder="Выберите группы для товара" style="border-left: 1px solid red;" >   
+                                    <option class="pa5 px14" value="0" {% if item_cat.active == '0' %} selected="1" {% endif %} ><i>-- Не указана --</i></option>
+                                    {% if allCats |length > 0 %}
+                                        {% for item_cat in allCats %} 
+                                            <option class="pa5 px14 {% if item_cat.data.parent_id == '0' %} fw600 {% endif %}" value="{{item_cat.data.id}}" >{{item_cat.level}}{{item_cat.data.name}}</option>
+                                        {% endfor %}
+                                    {% endif %}
+                                    </select>
+                                </div>
+                            </div>	
+                        </div>
+                        
+                        <div class="form-group blok pad5555">
+                            <div class="row">
+                                <div class="col-xs-3 txr">
+                                    <label class="control-label fon18lh">Изображение банера:</label>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="uploadfile_baner_edit">Выбрать фото</div>
+                                        </div>
+                                        <div class="mt3 col-xs-3 hidden">                                            
+                                            <button class="btn btn-sm btn-danger" type="button">Удалить</button>
+                                        </div>
+                                    </div>	
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="ev-photo_baner-edit">
+                                                {% if store.fon %}
+                                                    <img src="/uploads/fons/{{store.fon}}" width="100%"/>
+                                                {% else %}
+                                                    [ Стандартный фон ] 
+                                                {% endif %}                                                    
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>                             
+                            </div>
+                        </div>                  
+                        	
+                        <div class="form-group blok pad5555">
+							<div class="row">
+								<div class="col-xs-3 txr"><label class="control-label fon18lh">Ссылка:</label></div>
+								<div class="col-xs-6">
+									<input class="form-control" value="" placeholder="#" name="link" type="text">
+								</div>
+							</div>	
+						</div>    
+                        
+						<div class="form-group blok pad5555">
+							<div class="row">
+								<div class="col-xs-3 txr"><label class="control-label fon18lh">Вес(сортировка):</label></div>
+								<div class="col-xs-6">
+									<input class="form-control" value="" placeholder="0" name="wes" type="text">
+								</div>
+							</div>	
+						</div>
+						
+                        <div class="form-group blok pad5555" >
+                            <div class="row">
+                                <div class="col-xs-3 txr"><label class="control-label fon18lh">Видимость:</label></div>
+                                <div class="col-xs-6">
+                                    <select class="form-control" name="view" >   
+                                        <option class="pa5 px14" value="1" >Отображать</option>     
+                                        <option class="pa5 px14" value="0" >Скрыт</option>                               
+                                    </select>
+                                </div>
+                            </div>	
+                        </div>                        
+                        <input type="hidden" name="date_start" value="0" />
+                        <input type="hidden" name="date_end" value="0" />
+                        
+                        <input class="form-control" value="" name="baner_id" type="hidden">
+						
+						<div class="row form-group pt10 pb10">
+							<label class="mt10 col-sm-3 control-label">&nbsp;</label>
+							<div class="mt10 col-sm-5">
+								<button type="submit" class="btn btn-sm btn-success mr10 mb10">Сохранить</button>
+								<button type="reset" class="btn btn-sm  mr10 mb10">Сброс</button>
+								<a class="btn btn-sm  mr10 mb10 btn-danger" href="#" click="Ev.stores_sett.FORM.setBaners.remove( this );">Удалить</a>
+							</div>						
+						</div>
+						                                  
+                    </form>                    
+                </div>
+            </div>        
+        </div>
+		</div>  
+    </div>
+</div>

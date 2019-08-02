@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+	<head>		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>			
+		<script>
+			$(function(){	
+			
+				var parseItem = function(){                
+					console.log("Товар обнавлен");
+					
+					$.ajax({
+						type: "post",
+						url: "https://ivantopazov.ru/smm/updateVkMarketPrices",
+						dataType : 'json',
+						success: function( e ){
+							if( e.err < 1 ){
+								parseItem();
+								} else {        
+								console.log("Ошибка нет товара / Парсинг завершён");
+								parseItem();
+							}
+						} 
+					});			
+				};	
+				
+				
+				
+				
+				$('#goooo').click(function (){ 
+				
+				parseItem();	
+				
+				});		
+							
+								 	
+							
+			});  
+		</script>         
+	</head>	
+	<body>
+		<button id="goooo">Обнавлений цен товарам вк</button><br><div class="status"></div>	
+			        
+	</body>
+</html>	

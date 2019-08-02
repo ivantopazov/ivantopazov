@@ -1,0 +1,44 @@
+<section class="pad200200 ">
+	<div class="container pb50">
+		<div class="row bg-page">
+			<div class=" col-lg-6 col-md-6 col-sm-9 col-xs-12"> 
+				<h2 class="fon23s fon26lh pt0 pb30">Востановление доступа</h2>
+				
+				<form class="form-horizontal" method="POST" ID="REQOVERY" action="/login/reqovery_password" success="Ev.login_reqovery.form_success" before="Ev.login_reqovery.form_before" data_type="json" >
+				
+					
+					<div class="row form-group borbot pt20 pr20 pb20 pl20 ml3 bagav">
+						<div class=" col-lg-3 col-md-3 col-sm-3 col-xs-12">
+							<label class="control-label pt0 col444">Ваш Email<tred>*</tred></label>
+						</div>
+						<div class=" col-lg-7 col-md-7 col-sm-7 col-xs-12">
+							<input type="email" name="email"  autocomplete="true" class="form-control" placeholder="Email для восстановления доступа">
+						</div>					
+					</div>
+					
+					<div class="row form-group borbot pt20 pr20 pb20 pl20 ml3 bagav">
+						<div class=" col-lg-3 col-md-3 col-sm-3 col-xs-12">
+							<label class="control-label pt0 col444">Антиспам<tred>*</tred></label>
+						</div>
+						<div class=" col-lg-9 col-md-7 col-sm-7 col-xs-12">
+							<span class="inline mr5"> <input required="" type="text" name="captcha" class="form-control" placeholder="Цифры с картинки"> 
+							</span>
+							<span class="inline ">
+							<img height="34" src="#" unload="FNC.captcha( this );" alt="Кликните, что бы загрузить картинку" class="pointer">
+							</span>
+						</div>					
+					</div>
+					
+					<button type="submit" class="btn btn-primary block full-width pt10 pr20 pb10 pl20 mb20 mt20 ml5">Продолжить</button>
+				</form>											
+			</div>
+		</div>	
+		<div class="row">   
+			<div class="col-lg-6"> 
+				<p>
+					<a class="hover_underline" href="/login"> Страница авторизации </a>
+				</p>
+			</div>
+		</div>
+	</div>
+</section>	

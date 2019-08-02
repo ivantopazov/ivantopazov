@@ -1,0 +1,16 @@
+<tr>
+            <td> <a href="#" class="color-red" click="CART.remove( {{item.id}}, window.MAIN.erectCartList )"> Х </a> </td>
+            <td> <img src="/uploads/products/100/{{item.orig.image}}" width="23" /> {{item.orig.articul}} - <a href="{{item.orig.link}}" target="_blank">{{item.title}}</a></td>
+            <td> <p class="text-center"><input type="text" value="{{item.qty}}" class="qtyChange w50 h30 text-center" itemid="{{item.id}}" /></p> </td>
+            <td>{{item.price / 100}} руб.</td>
+            
+            <td>{{ ( ( item.qty * item.price  ) / 100 ) }} руб. </td>
+        </tr>
+        <tr>
+            <td> <a href="#" class="color-red" click="CART.remove( {{item.id}}, window.MAIN.erectCartList )"> Х </a> </td>
+            <td> <img src="/uploads/products/100/{{item.orig.image}}" width="23" /> {{item.orig.articul}} - <a href="{{item.orig.link}}" target="_blank">{{item.title}}</a></td>
+            <td> <p class="text-center"><input type="text" value="{{item.qty}}" class="qtyChange w50 h30 text-center" itemid="{{item.id}}" /></p> </td>
+            <td>{{item.price / 100}} руб.</td>
+            
+            <td>{{ ( ( item.qty * item.price  ) / 100 ) }} руб. </td>
+        </tr>
