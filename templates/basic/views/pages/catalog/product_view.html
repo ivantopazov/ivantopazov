@@ -1,3 +1,49 @@
+<style>
+    #webpage{
+	/* Contains the webpage screenshot */
+	width:499px;
+	height:283px;
+	position:absolute;
+	top:50%;
+	left:50%;
+	margin:-141px 0 0 -249px;
+}
+
+#retina{
+	/* The Retina effect */
+	background:url('img/webpage.png') no-repeat center center white;
+	border:2px solid white;
+
+	/* Positioned absolutely, so we can move it around */
+	position:absolute;
+	height:180px;
+	width:180px;
+
+	/* Hidden by default */
+	display:none;
+
+	/* A blank cursor, notice the default fallback */
+	cursor:url('img/blank.cur'),default;
+
+	/* CSS3 Box Shadow */
+	-moz-box-shadow:0 0 5px #777, 0 0 10px #aaa inset;
+	-webkit-box-shadow:0 0 5px #777;
+	box-shadow:0 0 5px #777, 0 0 10px #aaa inset;
+
+	/* CSS3 rounded corners */
+	-moz-border-radius:90px;
+	-webkit-border-radius:90px;
+	border-radius:90px;
+}
+
+#retina.chrome{
+	/* A special chrome version of the cursor */
+	cursor:url('img/blank_google_chrome.cur'),default;
+}
+
+
+</style>
+
 <section class="hidden_overflow">
     <div class="container content">
         <div class="bg-page">
@@ -12,10 +58,13 @@
 
 
                     {% for photo in product.modules.photos %}
-					{% if photo.define == '1' %}
-					<img style="max-width: 100%;" alt="{{product.title}}" src="/uploads/products/500/{{photo.photo_name}}">
-					{% endif %}
+    					{% if photo.define == '1' %}
+                            <a href="/uploads/products/500/{{photo.photo_name}}" data-fancybox="gallery">
+        					    <img style="max-width: 100%;" alt="{{product.title}}" src="/uploads/products/500/{{photo.photo_name}}">
+                            </a>
+    					{% endif %}
                     {% endfor %}
+
 				</div>
                 <div style="text-align: right; margin-bottom: 10px">
                     {% for photo in product.modules.photos %}

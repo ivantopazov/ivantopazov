@@ -10,7 +10,7 @@ $(function(){
         });
 
 		window.Ev.catalog_product = {
-
+            
             runCounter : function( timeCount ){
 
                 //console.log('......');
