@@ -1,2 +1,7 @@
-/uploads/*
-/application/logs/*
+uploads/*
+application/logs/*
+application/config/database.php
+http.htaccess
+https.htaccess
+.htaccess
+.gitignore
