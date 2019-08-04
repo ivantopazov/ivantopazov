@@ -11,7 +11,8 @@ class Kaborovsky extends CI_Controller {
     protected $post = array();
     protected $get = array();
 
-    public function __construct() {
+    public function __construct()
+    {
 
         parent::__construct();
 
@@ -28,8 +29,9 @@ class Kaborovsky extends CI_Controller {
     }
 
     // Защита прямых соединений
-	public function access_static(){
-		if( $this->user_info !== false ){
+	public function access_static()
+    {
+        if( $this->user_info !== false ){
             if( $this->user_info['admin_access'] < 1 ){
                 redirect( '/login' );
             }
@@ -37,16 +39,20 @@ class Kaborovsky extends CI_Controller {
 	}
 
     // Защита динамических соединений
-	public function access_dynamic(){
-		if( $this->user_info !== false ){
-            if( $this->user_info['admin_access'] < 1 ){
+	public function access_dynamic()
+    {
+        if( $this->user_info !== false )
+        {
+            if( $this->user_info['admin_access'] < 1 )
+            {
                 exit('{"err":"1","mess":"Нет доступа"}');
             }
         }
 	}
 
     // Показать страницу по умолчанию
-    public function index(){
+    public function index()
+    {
 
         $this->access_static();
 
@@ -277,7 +283,11 @@ class Kaborovsky extends CI_Controller {
 
         if( count( $IDS ) > 0 )
         {
+            // Обновление цен
             $this->prices_update( $IDS );
+
+            // Обновление ДРАГ-Камней
+            $this->getDragValues( $IDS );
         }
 
         echo json_encode([
@@ -292,18 +302,14 @@ class Kaborovsky extends CI_Controller {
     // Обновить стоимость по всей БД
     public function prices_update( $pids = [] )
     {
-
         $r = [];
-
         if( count( $pids ) > 0 )
         {
             $this->db->where_in( 'id', $pids );
             $r = $this->db->get( 'products' )->result_array();
         }
-
         if( count( $r ) > 0 )
         {
-
             $upd = [];
             foreach ( $r as $v )
             {
@@ -322,69 +328,10 @@ class Kaborovsky extends CI_Controller {
                     ];
                 }
             }
-
             if( count( $upd ) > 0 )
             {
                 $this->db->update_batch( 'products', $upd, 'id' );
             }
-
-            //$v = $r[0];
-            //
-
-            // $res = $this->mdl_product->getProductPrice([
-            // ]);
-
-            // echo "<pre>";
-            // print_r( $upd );
-            // echo "</pre>";
-
-            //$offset = (int)$offset + 10;
-            //redirect('/admin/parser/kaborovsky/test2/' . $offset);
-
-
-        }
-        // foreach( $ALL as $k => $v )
-        // {
-        //
-        //     $this->db->insert('products', $v['product'] );
-        //     $insID = $this->db->insert_id();
-        //
-        //     $v['price']['product_id'] = $insID;
-        //
-        //     //$this->db->insert( 'products_prices', $v['price'] );
-        //
-        //     $updProd2 = [
-        //         'qty' => '1',
-        //         'price_zac' => $v['price']['price_item']
-        //     ];
-        //
-        //     $ret = $this->mdl_product->getRozCena( $insID );
-        //     if( $ret['price_r'] !== 'МИНУС' ){
-        //         $end = $ret['price_r'] * 100;
-        //         $updProd2['price_roz'] = $end;
-        //         $updProd2['salle_procent'] = $ret['procSkidca'];
-        //     }
-        //
-        //     $this->mdl_db->_update_db( "products", "id", $insID, $updProd2 );
-        //
-        // }
-
-    }
-
-    public function test3()
-    {
-        $mystring = 'Бриллиант с топазом';
-        $findme   = 'риыллиан';
-        $pos = mb_strpos($mystring, $findme);
-
-        // Оператор !== также можно использовать.  Использование != не даст верного
-        // результата, так как 'a' находится в нулевой позиции. Выражение (0 != false) приводится
-        // к false.
-        if ($pos !== false) {
-             echo "Строка '$findme' найдена в строке '$mystring'";
-                 echo " в позиции $pos";
-        } else {
-             echo "Строка '$findme' не найдена в строке '$mystring'";
         }
     }
 
@@ -413,15 +360,6 @@ class Kaborovsky extends CI_Controller {
                 $grozz = "./uploads/products/500/";
                 $this->getImage( $path.$image, $grozz, $nameProduct.".jpg" );
 
-                //$this->images->imageresize( $grozz.$nameProduct.'.jpg', $path.$image, 100, "max", 100 );
-
-
-                //$this->images->imageresize( $prew.$nameProduct.'.jpg', $path.$image, 500, 500, 100 );
-
-                //$this->images->resize_jpeg( $itemFile, $path, $prew, $nameProduct, 100, 100, 100);
-                ///$this->images->resize_jpeg( $itemFile, $path, $prew2, $nameProduct, 100, 250, 250);
-                //$this->images->resize_jpeg( $itemFile, $path, $grozz, $nameProduct, 100, 1000, 500);
-
                 $r = true;
             }
 
@@ -431,30 +369,16 @@ class Kaborovsky extends CI_Controller {
 
     }
 
-    public function isp_2(){
-
-            $this->load->library('images');
-        $nameProduct = 'xxxy';
-
-        $image = '16-0587.jpg';
-        $path = './uploads/products/temp/';
-
-        //$itemFile = $this->images->file_item( $path . $image, $nameProduct.'.jpg' );
-
-        $prew2 = "./";
-        //$this->images->imageresize( $itemFile, $path, $prew2, $nameProduct, 100, 500, 100);
-
-        $this->images->imageresize("./".$nameProduct.'.jpg',$path . $image,400,400,100);
-    }
-
     // Сохранить пхото как...
-    public function getImage( $src = false, $path = './', $newName = '1.jpg' ){
+    public function getImage( $src = false, $path = './', $newName = '1.jpg' )
+    {
         $t = file_get_contents( $src );
         file_put_contents( $path . $newName, $t );
     }
 
     // Получение данных из прайса - готовых для заливки в БД
-    public function getRenderKaborovsky( $item = false ){
+    public function getRenderKaborovsky( $item = false )
+    {
        if( $item !== false ){
 
             $cat_ids = [
@@ -677,137 +601,101 @@ class Kaborovsky extends CI_Controller {
                 ];
             }
 
-
-            /*
-            [articul] => 3-0341
-            [title] => Подвеска
-            [cat] => 3-0341 №5-16
-            [size] =>
-            [optionLabel] => 3 Бриллиант Кр 17    200-400 0,011 2/3А^
-            [seo_title] => Золото
-            [proba] => 585
-            [seo_desc] => Красное
-            [seo_keys] => 11-0341,3-0341,12-0341,1-0341,
-            [qty] => 1
-            [weight] => 0,85
-            [price] => 3390,00
-            photo
-            */
-
-
-
             return $r;
-
 
        }
     }
 
-
     // Извлечение драг камней
-    public function getDragValues (){
-
-
-        $Kaborovsky = $this->mdl_product->queryData([
-            'return_type' => 'ARR2',
-            'where' => [
-                'method' => 'AND',
-                'set' => [[
-                    'item' => 'postavchik',
-                    'value' => 'Kaborovsky'
-                ]]
-            ],
-            /* 'limit' => 100,
-            'order_by' => [
-                'item' => 'id',
-                'value' => 'DESC'
-            ], */
-            'labels' => ['id', 'title', 'optionLabel']
-        ]);
-
-        foreach( $Kaborovsky as $key_prod => $value_prod ){
-
-            $_1 = json_decode( $value_prod['optionLabel'], true );
-            $_2 = explode( '^', $_1['options']);
-            foreach( $_2 as $_2k => $_2v ){
-                $_2[$_2k] = trim( $_2v );
-            }
-            $_2 = array_diff( $_2, [''] );
-
-            foreach( $_2 as $_2k => $_2v ){
-                $__a = explode( ' ', $_2v );
-                $_2[$_2k] = array_diff( $__a, [''] );
-            }
-
-
-            $kl = ['сапфир','изумруд','бриллиант','рубин'];
-            $kl_index = [2,2,1,2];
-            $_for = [
-                'Бриллиант' => [    'Кол-во камней', 'Камень',      'Форма огранки',    'Кол-во граней',    '-', 'Вес, Ct.'],
-                'Сапфир' => [       'Кол-во камней', 'Вес, Ct.',    'Камень',           '-',                '-', '-'],
-                'Рубин' => [        'Кол-во камней', 'Вес, Ct.',    'Камень',           '-',                '-', '-'],
-                'Изумруд' => [      'Кол-во камней', 'Вес, Ct.',    'Камень',           '-',                '-', '-']
-            ];
-
-            $_3 = [];
-            foreach( $_2 as $_2k => $_2v ){
-                foreach( $_2v as $_2v_v ){
-                    $__v = mb_strtolower( $_2v_v );
-                    if( in_array( $__v, $kl ) ){
-                        $__k = array_search( $__v, $kl );
-
-                        $__r = []; $__rk = 0;
-                        foreach( $_2v as $_2v_v_v ){
-                            $__r[$__rk] = $_2v_v_v;
-                            $__rk++;
-                        }
-                        $_2v = $__r;
-
-                        $___e = [
-                            'kamen' => $_2v[$kl_index[$__k]],
-                            'data' => []
-                        ];
-                        $__1 = $_for[$_2v[$kl_index[$__k]]];
-                        foreach( $__1 as $__1k => $__1v ){
-
-                            if( !isset( $_2v[$__1k] ) ) echo $value_prod['id'];
-
-                            $___e['data'][] = [
-                                'name' => $__1v,
-                                'value' => ( !isset( $_2v[$__1k] ) ) ? '-' : $_2v[$__1k]
-                            ];
-                        }
-                        $_3[] = $___e;
-                    }
-                }
-            }
-
-            $Kaborovsky[$key_prod]['drag'] = $_3;
-
+    public function getDragValues ( $pids = [] )
+    {
+        $pids = [13456, 13699, 13457];
+        $r = [];
+        if( count( $pids ) > 0 )
+        {
+            $this->db->where_in( 'id', $pids );
+            $r = $this->db->get( 'products' )->result_array();
         }
 
+        if( count( $r ) > 0 )
+        {
+            $upd = [];
 
-        /*
-        echo "<pre>";
-        print_r( $Kaborovsky );
-        echo "</pre>";
-        */
+            foreach( $r as $key_prod => $value_prod )
+            {
 
-        foreach( $Kaborovsky as $v ){
-            $this->mdl_db->_update_db( "products", "id", $v['id'], [
-                'drag' => json_encode( $v['drag'] )
-            ]);
+                $_1 = json_decode( $value_prod['optionLabel'], true );
+                $_2 = explode( '^', $_1['options']);
+                foreach( $_2 as $_2k => $_2v )
+                {
+                    $_2[$_2k] = trim( $_2v );
+                }
+                $_2 = array_diff( $_2, [''] );
+
+                foreach( $_2 as $_2k => $_2v )
+                {
+                    $__a = explode( ' ', $_2v );
+                    $_2[$_2k] = array_diff( $__a, [''] );
+                }
+
+                $kl = ['сапфир','изумруд','бриллиант','рубин'];
+                $kl_index = [2,2,1,2];
+                $_for = [
+                    'Бриллиант' => [    'Кол-во камней', 'Камень',      'Форма огранки',    'Кол-во граней',    '-', 'Вес, Ct.'],
+                    'Сапфир' => [       'Кол-во камней', 'Вес, Ct.',    'Камень',           '-',                '-', '-'],
+                    'Рубин' => [        'Кол-во камней', 'Вес, Ct.',    'Камень',           '-',                '-', '-'],
+                    'Изумруд' => [      'Кол-во камней', 'Вес, Ct.',    'Камень',           '-',                '-', '-']
+                ];
+
+                $_3 = [];
+                foreach( $_2 as $_2k => $_2v )
+                {
+                    foreach( $_2v as $_2v_v )
+                    {
+                        $__v = mb_strtolower( $_2v_v );
+                        if( in_array( $__v, $kl ) )
+                        {
+                            $__k = array_search( $__v, $kl );
+
+                            $__r = []; $__rk = 0;
+                            foreach( $_2v as $_2v_v_v )
+                            {
+                                $__r[$__rk] = $_2v_v_v;
+                                $__rk++;
+                            }
+                            $_2v = $__r;
+
+                            $___e = [
+                                'kamen' => $_2v[$kl_index[$__k]],
+                                'data' => []
+                            ];
+                            $__1 = $_for[$_2v[$kl_index[$__k]]];
+                            foreach( $__1 as $__1k => $__1v )
+                            {
+                                if( !isset( $_2v[$__1k] ) ) echo $value_prod['id'];
+                                $___e['data'][] = [
+                                    'name' => $__1v,
+                                    'value' => ( !isset( $_2v[$__1k] ) ) ? '-' : $_2v[$__1k]
+                                ];
+                            }
+                            $_3[] = $___e;
+                        }
+                    }
+                }
+
+                $upd[] = [
+                    'id' => $value_prod['id'],
+                    'drag' => json_encode( $_3 )
+                ];
+
+            }
+
+            if( count( $upd ) > 0 )
+            {
+                $this->db->update_batch( 'products', $upd, 'id' );
+            }
         }
 
     }
 
-     public function setPrice(){
-
-
-         $ret = $this->mdl_product->getRozCena( 19894 );
-
-         echo "<pre>";
-        print_r( $ret );
-        echo "</pre>";
-
-     }
 }
