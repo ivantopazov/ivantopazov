@@ -261,14 +261,6 @@ class Alcor extends CI_Controller
     public function parseAlcor ()
     {
 
-        //echo "string";
-
-        //echo json_encode($this->post);
-
-
-        error_reporting(-1);
-        ini_set('display_errors', 1);
-
         // Первоначальная прочистка остатков
         if( isset( $this->post['clear'] ) && (int)$this->post['clear'] === '1' )
         {
@@ -347,176 +339,142 @@ class Alcor extends CI_Controller
             }
         }
 
-        if( count( $packs ) > 0 )
-        {
-            foreach( $packs as $v )
-            {
-                $art = trim(mb_strtolower($v['seria']));
-                if( !isset( $listArtsIsset[$art] ) )
-                {
-                    $INSERT[] = $this->getRenderAlcor( $v );
-                }
-                else
-                {
-                    $UPDATE[] = [
-                        'ID' => $listArtsIsset[$art],
-                        'data' => $this->getRenderAlcor( $v )
-                    ];
-                }
-            }
-        }
+        //
+        // $PACK = [];
+        // if( count( $packs ) > 0 )
+        // {
+        //     foreach( $packs as $v )
+        //     {
+        //         $size_list = explode( ',', $v['size'] );
+        //         if( count( $size_list ) > 0 )
+        //         {
+        //             foreach( $size_list as $sl )
+        //             {
+        //                 $v['size'] = $sl;
+        //                 $PACK[] = $this->getRenderAlcor( $v );
+        //             }
+        //         }
+        //         else
+        //         {
+        //             $PACK[] = $this->getRenderAlcor( $v );
+        //         }
+        //     }
+        // }
+        //
+        // foreach( $PACK as $v )
+        // {
+        //
+        //     $option = [
+        //         'return_type' => 'ARR1',
+        //         'where' => [
+        //             'method' => 'AND',
+        //             'set' => [[
+        //                 'item' => 'articul',
+        //                 'value' => $v['product']['articul']
+        //             ],[
+        //                 'item' => 'postavchik',
+        //                 'value' => 'Alcor'
+        //             ]]
+        //         ],
+        //         'labels' => ['id', 'aliase', 'title', 'articul', 'size']
+        //     ];
+        //
+        //     if( isset( $v['product']['size'] ) )
+        //     {
+        //         $option['where']['set'][] = [
+        //             'item' => 'size',
+        //             'value' => $v['product']['size']
+        //         ];
+        //     }
+        //
+        //     $issetProducts = $this->mdl_product->queryData( $option );
+        //
+        //     if( !$issetProducts )
+        //     {
+        //
+        //         // !! INSERT
+        //         //echo 'INSERT <br />';
+        //
+        //         $this->db->insert('products', $v['product'] );
+        //         $insID = $this->db->insert_id();
+        //
+        //         $aliase = $this->mdl_product->aliase_translite( $v['product']['title'] ) . '_' . trim( $v['product']['articul']) . '_' . $insID;
+        //         $updProd = [
+        //             'aliase' => $aliase,
+        //             'moderate' => 0
+        //         ];
+        //
+        //         $r = $this->saveImages( $v['photos']['photo_name'], $aliase );
+        //
+        //         if( $r !== false ){
+        //             $v['photos']['product_id'] = $insID;
+        //             $v['photos']['photo_name'] = $aliase.'.jpg';
+        //             $this->db->insert( 'products_photos', $v['photos'] );
+        //             $updProd['moderate'] = 2;
+        //         }
+        //
+        //         $ret = $this->mdl_product->getRozCena( $insID );
+        //         if( $ret['price_r'] !== 'МИНУС' ){
+        //             $end = $ret['price_r'] * 100;
+        //             $updProd['price_roz'] = $end;
+        //             $updProd['salle_procent'] = $ret['procSkidca'];
+        //         }
+        //
+        //         $this->mdl_db->_update_db( "products", "id", $insID, $updProd );
+        //
+        //     }
+        //     else
+        //     {
+        //
+        //         // !!! UPDATE
+        //
+        //         //echo 'update <br />';
+        //
+        //         $PID = $issetProducts['id'];
+        //         $updProd = [
+        //             'qty' => $v['product']['qty'],
+        //             'price_zac' => $v['product']['price_zac']
+        //         ];
+        //
+        //         $ret = $this->mdl_product->getRozCena( $PID );
+        //         if( $ret['price_r'] !== 'МИНУС' ){
+        //             $end = $ret['price_r'] * 100;
+        //             $updProd['price_roz'] = $end;
+        //             $updProd['salle_procent'] = $ret['procSkidca'];
+        //         }
+        //
+        //         $this->mdl_db->_update_db( "products", "id", $PID, $updProd );
+        //
+        //     }
+        // }
+        //
+        // echo json_encode([
+        //     'err' => 0,
+        //     'mess' => 'success'
+        // ]);
 
-        $IDS = [];
-        if( count( $UPDATE ) > 0 )
-        {
-            $upd_bh = [];
-            foreach( $UPDATE as $k => $v )
-            {
-                $upd_bh[] = [
-                    'id' => $v['ID'],
-                    'qty' => '1',
-                    'price_zac' => $v['data']['product']['price_zac']
-                ];
-                if( !in_array( $v['ID'], $IDS ))
-                {
-                    $IDS[] = $v['ID'];
-                }
-            }
-            if( count( $upd_bh ) > 0 )
-            {
-                $this->db->update_batch( 'products', $upd_bh, 'id' );
-            }
-        }
-
-        if( count( $INSERT ) > 0 )
-        {
-            $insert_ok = [];
-            foreach( $INSERT as $k => $v )
-            {
-                $art = $v['product']['seria'];
-                if( in_array( $art, $insert_ok ) )
-                {
-                    continue;
-                }
-                $this->db->insert('products', $v['product'] );
-                $insID = $this->db->insert_id();
-                if( !in_array( $insID, $IDS ))
-                {
-                    $IDS[] = $insID;
-                }
-                $aliase = $this->mdl_product->aliase_translite( $v['product']['title'] ) . '_' . trim( $v['product']['articul'] ) . '_' . $insID;
-                $updProd = [
-                    'aliase' => $aliase,
-                    'moderate' => 0
-                ];
-                if( isset( $v['photos'] ) )
-                {
-                    $r = $this->saveImages( $v['photos']['photo_name'], $aliase );
-                }
-                else
-                {
-                    $r = false;
-                }
-                if( $r !== false )
-                {
-                    $v['photos']['product_id'] = $insID;
-                    $v['photos']['photo_name'] = $aliase.'.jpg';
-                    $this->db->insert( 'products_photos', $v['photos'] );
-                    $updProd['moderate'] = 2;
-                }
-                if( !empty( $v['price']['price_item'] ))
-                {
-                    $updProd['price_zac'] = $v['price']['price_item'];
-                }
-                $this->mdl_db->_update_db( "products", "id", $insID, $updProd );
-            }
-        }
-
-        if( count( $IDS ) > 0 )
-        {
-            // Обновление цен
-            $this->prices_update( $IDS );
-
-            // Обновление ДРАГ-Камней
-            $this->getDragValues( $IDS );
-        }
-
-        echo json_encode([
-            'err' => 0,
-            'mess' => 'success'
-        ]);
-
-    }
-
-    // Обновить стоимость по всей БД
-    public function prices_update( $pids = [] )
-    {
-        $r = [];
-        if( count( $pids ) > 0 )
-        {
-            $this->db->where_in( 'id', $pids );
-            $r = $this->db->get( 'products' )->result_array();
-        }
-        if( count( $r ) > 0 )
-        {
-            $upd = [];
-            foreach ( $r as $v )
-            {
-                $_title = json_decode( $v['optionLabel'], true );
-                $__title = $_title['seria'];
-                $res = $this->mdl_product->getProductPrice(array(
-                    'id' => $v['id'],
-                    'title' => $__title,
-                    'price_zac' => $v['price_zac']
-                ));
-                if( isset( $res['price_r'] ) > 0 && (int)$res['price_r'] > 0 && $res['price_r'] !== 'МИНУС' )
-                {
-                    $end = intval( $res['price_r'] * 100 );
-                    $upd[] = [
-                        'id' => $v['id'],
-                        'price_roz' => $end,
-                        'salle_procent' => $res['procSkidca']
-                    ];
-                }
-            }
-            if( count( $upd ) > 0 )
-            {
-                $this->db->update_batch( 'products', $upd, 'id' );
-            }
-        }
     }
 
     // Сохранение картинок
     public function saveImages ( $image = false, $nameProduct = false )
     {
-
         $r = false;
-
-        if( $image !== false && $nameProduct !== false )
-        {
-
+        if( $image !== false && $nameProduct !== false ){
             $this->load->library('images');
             $path = "./uploads/products/alcor/";
-
-            if ( file_exists( $path.$image ) )
-            {
-
-                //$itemFile = $this->images->file_item( $path . $image, $nameProduct.'.jpg' );
-
+            if ( file_exists( $path.$image ) ) {
+                $itemFile = $this->images->file_item( $path . $image, $nameProduct.'.jpg' );
                 $prew = "./uploads/products/100/";
-                $this->images->imageresize( $prew.$nameProduct.'.jpg', $path.$image, 100, 100, 100 );
-
                 $prew2 = "./uploads/products/250/";
-                $this->images->imageresize( $prew2.$nameProduct.'.jpg', $path.$image, 250, 250, 100 );
-
                 $grozz = "./uploads/products/500/";
-                $this->getImage( $path.$image, $grozz, $nameProduct.".jpg" );
 
-
+                $this->images->imageresize( $prew.$nameProduct.'.jpg', $path.$image, 100, 100, 100 );
+                $this->images->imageresize( $prew2.$nameProduct.'.jpg', $path.$image, 250, 250, 100 );
                 //$this->images->imageresize( $prew.$nameProduct.'.jpg', $path.$image, 500, 500, 100 );
 
                 //$this->images->resize_jpeg( $itemFile, $path, $prew, $nameProduct, 100, 100, 100);
                 ///$this->images->resize_jpeg( $itemFile, $path, $prew2, $nameProduct, 100, 250, 250);
+                $this->getImage( $path.$image, $grozz, $nameProduct.".jpg" );
                 //$this->images->resize_jpeg( $itemFile, $path, $grozz, $nameProduct, 100, 1000, 500);
                 $r = true;
             }
@@ -543,9 +501,9 @@ class Alcor extends CI_Controller
                 'Брошь' => '35',
                 'Колье' => '36',
                 'Кольцо' => '1',
-                'Пирсинг' => '38',
+                'Пирсинг' => '38'
                 'Подвеска' => '19',
-                'Серьги' => '10'
+                'Серьги' => '10',
                 //
                 // 'Обручальные кольца' => '1',
                 // 'Крест' => '37',
@@ -553,6 +511,42 @@ class Alcor extends CI_Controller
                 // 'Браслеты' => '28',
                 // 'Запонки' => '41',
             ];
+
+            $cat_fx_1 = [
+                'Кольцо' => 'Кольцо',
+                'Пирсинг' => 'Пирсинг',
+                'Подвеска' => 'Подвеска',
+                'Крест' => 'Крест',
+                'Серьги' => 'Серьги',
+                'Колье' => 'Колье',
+                'Пуссеты' => 'Пуссет',
+                'Браслеты' => 'Браслет',
+                'Браслет' => 'Браслет',
+                'Запонки' => 'Запонка',
+                'Брошь' => 'Брошь'
+            ];
+
+            // $mett_fx_1 = [
+            //     'Красное' => ' из красного золота',
+            //     'Радаж (красное)' => ' из красного золота',
+            //     'Белое' => ' из белого золота',
+            //     'Желтое' => ' из желтого золота',
+            //     'Красное+белое+желтое' => ' из комбинированного золота',
+            //     'Бел. мат.' => ' из белого, матового золота',
+            //     'Красн. мат.' => ' из красного, матового золота',
+            //     'Желт. мат.' => ' из желтого, матового золота'
+            // ];
+            //
+            // $mett_fx_2 = [
+            //     'Красное' => 'krasnZoloto',
+            //     'Радаж (красное)' => 'krasnZoloto',
+            //     'Белое' => 'belZoloto',
+            //     'Желтое' => 'kombinZoloto',
+            //     'Красное+белое+желтое' => 'kombinZoloto',
+            //     'Бел. мат.' => 'belZoloto',
+            //     'Красн. мат.' => 'krasnZoloto',
+            //     'Желт. мат.' => 'kombinZoloto'
+            // ];
 
             $title = $item['vid_izdelia'];
             if( !empty( $item['dlaKogo'] ) && $item['dlaKogo'] === 'Женщине,Мужчине' )
@@ -626,7 +620,7 @@ class Alcor extends CI_Controller
                 'value' => '-'
             ]];
 
-            $paramItem[0]['value'] = 'Золото';
+            $paramItem[0]['value'] = $item['cvetMett'] .' золото';
             $paramItem[1]['value'] = 'Золото';
 
             $kamenList = ['Без камня','С камнем','Кристалл Swarovski','Swarovski Zirconia','Бриллиант','Сапфир','Изумруд','Рубин','Жемчуг','Топаз','Аметист','Гранат','Хризолит','Цитрин','Агат','Кварц','Янтарь','Опал','Фианит',
@@ -689,18 +683,17 @@ class Alcor extends CI_Controller
                 $filterData[1]['values'][] = 'empty';
             }
 
+            $filterData[0]['values'][] = $mett_fx_2[$item['cvetMett']];
+
             $razmerList = ['2.0','12.0','13.0','13.5','14.0','14.5','15.0','15.5','16.0','16.5','17.0','17.5','18.0','18.5','19.0','19.5','20.0','20.5','21.0','21.5','22.0','22.5','23.0','23.5','24.0','24.5','25.0'];
             $razmerListVals = ['2_0','12_0','13_0','13_5','14_0','14_5','15_0','15_5','16_0','16_5','17_0','17_5','18_0','18_5','19_0','19_5','20_0','20_5','21_0','21_5','22_0','22_5','23_0','23_5','24_0','24_5','25_0'];
 
-            /*В вес размер */
-            if( $item['size'] )
-            {
+            /*В вес pfgbcfk размер */
+            if( $item['size'] ){
                 $sz = str_replace( ",", ".", $item['size'] );
                 $paramItem[4]['value'] = $sz;
-                foreach( $razmerList as $rk => $rv )
-                {
-                    if( $rv === $sz )
-                    {
+                foreach( $razmerList as $rk => $rv ){
+                    if( $rv === $sz ){
                         $filterData[4]['values'][] = $razmerListVals[$rk];
                     }
                 }
@@ -720,12 +713,11 @@ class Alcor extends CI_Controller
             $r['product'] = [
                 'title' => $title,
                 'articul' => $item['articul'],
-                'cat' => $cat_ids[$item['vid_izdelia']],
+                'cat' => $cat_ids[$item['title']],
                 'params' => json_encode( $paramItem ),
                 'size' => str_replace( ",", ".", $item['size'] ),
                 'filters' => json_encode( $filterData ),
                 'proba' => $item['proba'],
-                'seria' => trim(mb_strtolower($item['seria'])),
                 'postavchik' => 'Alcor',
                 'parser' => 'Alcor',
                 'weight' => str_replace( ",", ".", $item['weight'] ),
@@ -740,117 +732,131 @@ class Alcor extends CI_Controller
                 'lastUpdate' => time(),
                 'optionLabel' => json_encode([
                     'collections' => $item['collection'],
-                    'options' => $item['complect'],
-                    'vstavki' => $item['vstavki'],
+                    'options' => $item['Komplect'],
                     'seria' => $item['optionLabel']
                 ])
             ];
 
             $r['photos'] = [
                 'product_id' => 0,
-                'photo_name' => $item['articul'].'.jpg',
+                'photo_name' => ( !isset($item['photo']) ) ? $item['articul'].'.jpg' : $item['photo'],
                 'define' => '1'
             ];
 
             return $r;
 
-        }
-
-
+       }
     }
 
     // Извлечение параметров ДРАГ камней
-    public function getDragValues ( $pids = [] )
+    public function getDragValues ()
     {
 
-        //$pids = [1, 2,3,4,5,6,7,8,9,10,11,12,13, 14, 15,16,17,18,19,20,21,22,23];
-        $r = [];
-        if( count( $pids ) > 0 )
-        {
-            $this->db->where_in( 'id', $pids );
-            $r = $this->db->get( 'products' )->result_array();
-        }
+        $Alcor = $this->mdl_product->queryData([
+            'return_type' => 'ARR2',
+            'where' => [
+                'method' => 'AND',
+                'set' => [[
+                    'item' => 'postavchik',
+                    'value' => 'Alcor'
+                ]]
+            ],
+            //'limit' => 100,
+            // 'order_by' => [
+            //     'item' => 'id',
+            //     'value' => 'DESC'
+            // ],
+            'labels' => ['id', 'title', 'optionLabel']
+        ]);
 
-        if( count( $r ) > 0 )
+        foreach( $Alcor as $key_prod => $value_prod )
         {
-            $upd = [];
 
-            foreach( $r as $key_prod => $value_prod )
+            $_1 = json_decode( $value_prod['optionLabel'], true );
+            $_2 = explode( ',', $_1['seria']);
+            foreach( $_2 as $_2k => $_2v )
             {
+                $_2[$_2k] = trim( $_2v );
+            }
+            $_2 = array_diff( $_2, [''] );
 
-                $_1 = json_decode( $value_prod['optionLabel'], true );
-                $_2 = explode( ',', $_1['seria']);
-                foreach( $_2 as $_2k => $_2v )
+            foreach( $_2 as $_2k => $_2v )
+            {
+                $__a = explode( ' ', $_2v );
+                $_2[$_2k] = $__a;
+                //$_2[$_2k] = array_diff( $__a, [''] );
+            }
+
+            $kl = ['сапфир','изумруд','бриллиант','рубин'];
+            $kl_index = [0,0,0,0];
+            $_for = [
+                'Бриллиант' => [ 'Камень', 'Кол-во камней', 'Вес, Ct.', 'Чистота/Цвет', 'Форма огранки', '-', 'Кол-во граней', 'Цвет'],
+                'Сапфир' => [ 'Камень', 'Кол-во камней', 'Вес, Ct.', '-', 'Форма огранки', '-',  'Кол-во граней', 'Цвет'],
+                'Рубин' => [ 'Камень', 'Кол-во камней', 'Вес, Ct.', '-', 'Форма огранки', '-',  'Кол-во граней', 'Цвет'],
+                'Изумруд' => [ 'Камень', 'Кол-во камней', 'Вес, Ct.', '-', 'Форма огранки', '-', 'Кол-во граней', 'Цвет']
+            ];
+
+            $_3 = [];
+            foreach( $_2 as $_2k => $_2v )
+            {
+                foreach( $_2v as $_2v_v )
                 {
-                    $_2[$_2k] = trim( $_2v );
-                }
-                $_2 = array_diff( $_2, [''] );
-
-                foreach( $_2 as $_2k => $_2v )
-                {
-                    $__a = explode( ' ', $_2v );
-                    $_2[$_2k] = array_diff( $__a, [''] );
-                }
-
-                $kl = ['сапфир','изумруд','бриллиант','рубин'];
-                $kl_index = [0,0,0,0];
-                $_for = [
-                    'Бриллиант' => [    'Кол-во камней', 'Камень',      'Форма огранки',    'Кол-во граней',    '-', 'Вес, Ct.'],
-                    'Сапфир' => [       'Кол-во камней', 'Вес, Ct.',    'Камень',           '-',                '-', '-'],
-                    'Рубин' => [        'Кол-во камней', 'Вес, Ct.',    'Камень',           '-',                '-', '-'],
-                    'Изумруд' => [      'Кол-во камней', 'Вес, Ct.',    'Камень',           '-',                '-', '-']
-                ];
-
-                $_3 = [];
-                foreach( $_2 as $_2k => $_2v )
-                {
-                    foreach( $_2v as $_2v_v )
+                    $__v = mb_strtolower( $_2v_v );
+                    if( in_array( $__v, $kl ) )
                     {
-                        $__v = mb_strtolower( $_2v_v );
-                        if( in_array( $__v, $kl ) )
+                        $__k = array_search( $__v, $kl );
+                        $__r = []; $__rk = 0;
+                        foreach( $_2v as $_2v_v_v )
                         {
-                            $__k = array_search( $__v, $kl );
-
-                            $__r = []; $__rk = 0;
-                            foreach( $_2v as $_2v_v_v )
-                            {
-                                $__r[$__rk] = $_2v_v_v;
-                                $__rk++;
-                            }
-                            $_2v = $__r;
-
-                            $___e = [
-                                'kamen' => $_2v[$kl_index[$__k]],
-                                'data' => []
-                            ];
-                            $__1 = $_for[$_2v[$kl_index[$__k]]];
-                            foreach( $__1 as $__1k => $__1v )
-                            {
-                                if( !isset( $_2v[$__1k] ) ) echo $value_prod['id'];
-                                $___e['data'][] = [
-                                    'name' => $__1v,
-                                    'value' => ( !isset( $_2v[$__1k] ) ) ? '-' : $_2v[$__1k]
-                                ];
-                            }
-                            $_3[] = $___e;
+                            $__r[$__rk] = $_2v_v_v;
+                            $__rk++;
                         }
+                        $_2v = $__r;
+
+                        $___e = [
+                            'kamen' => $_2v[$kl_index[$__k]],
+                            'data' => []
+                        ];
+
+                        $__1 = $_for[$_2v[$kl_index[$__k]]];
+                        foreach( $__1 as $__1k => $__1v )
+                        {
+                            if( !isset( $_2v[$__1k] ) ) echo $value_prod['id'];
+                            $___e['data'][] = [
+                                'name' => $__1v,
+                                'value' => ( !isset( $_2v[$__1k] ) ) ? '-' : $_2v[$__1k]
+                            ];
+                        }
+                        $_3[] = $___e;
                     }
                 }
-
-                $upd[] = [
-                    'id' => $value_prod['id'],
-                    'drag' => json_encode( $_3 )
-                ];
-
             }
 
-            if( count( $upd ) > 0 )
-            {
-                $this->db->update_batch( 'products', $upd, 'id' );
-            }
+            $Alcor[$key_prod]['drag'] = $_3;
+
         }
 
-        return true;
+
+       /*
+        echo "<pre>";
+        print_r( $Alcor );
+        echo "</pre>";
+         */
+
+        foreach( $Alcor as $v )
+        {
+
+            $upd = [
+                'drag' => json_encode( $v['drag'] )
+            ];
+
+             echo   $v['id'];
+            echo "<pre>";
+            print_r( $upd );
+            echo "</pre>";
+
+            $this->mdl_db->_update_db( "products", "id", $v['id'], $upd );
+        }
 
     }
 
