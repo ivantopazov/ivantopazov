@@ -609,7 +609,7 @@ class Kaborovsky extends CI_Controller {
     // Извлечение драг камней
     public function getDragValues ( $pids = [] )
     {
-        $pids = [13456, 13699, 13457];
+        //$pids = [13456, 13699, 13457];
         $r = [];
         if( count( $pids ) > 0 )
         {
