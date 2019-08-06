@@ -701,10 +701,20 @@ class Mdl_product extends CI_Model {
                     $prodSale = $prodCop - $minus; // Сумма со скидкой в коп
                     */
 
-                    $prodCop = $v['modules']['price_actual']['cop']; // Сумма текущая ( зачеркнутая ) коп
-                    $minus = $prodCop * ( $v['salle_procent'] / 100 ); // Сумма экономии коп
-                    $prodSale = $prodCop; // Сумма со скидкой в коп
-                    $prodCop = $prodCop + $minus; // Сумма со скидкой в коп
+                    $_proc = $v['salle_procent'];
+                    $_roz = $v['modules']['price_actual']['cop'];
+                    $_old = $_roz / ( ( 100 - $_proc ) / 100 );
+
+                    $minus = $_old - $_roz;
+                    $prodSale = $_roz;
+                    $prodCop = $_old;
+
+                    // $prodCop = $v['modules']['price_actual']['cop']; // Сумма текущая ( зачеркнутая ) коп
+                    // $minus = $prodCop * ( $v['salle_procent'] / 100 ); // Сумма экономии коп
+                    // $prodSale = $prodCop; // Сумма со скидкой в коп
+                    // $prodCop = $prodCop + $minus; // Сумма со скидкой в коп
+
+                    //30.000=21.000/((100-30%)/100)
 
                     $this->_query[$index]['result'][$k]['modules'][$item] = [
                         'COP' => [
@@ -1237,6 +1247,35 @@ class Mdl_product extends CI_Model {
 
     // Получение стоимости с учётом наценок и скидок
    public function getProductPrice( $product_data )
+   {
+
+       $res = false;
+
+       if( isset( $product_data['price_zac'] ) && !empty( $product_data['price_zac'] ) && (string)$product_data['price_zac'] !== '0' )
+       {
+
+           $price_z = $product_data['price_zac'] / 100;
+           $price_r = 0;
+
+           $proc_nacenca = 250;
+           $proc_skidka = rand( 20, 40 );
+
+           // Розничная стоимость
+           $price_r = ( $price_z * ( $proc_nacenca * 0.01 )); // 23692,5
+
+           $res = [
+               'procSkidca' => $proc_skidka,
+               'price_r' => $price_r
+           ];
+
+       }
+
+       return $res;
+
+   }
+
+    // Получение стоимости с учётом наценок и скидок
+   public function getProductPrice_old( $product_data )
    {
 
        $res = false;
