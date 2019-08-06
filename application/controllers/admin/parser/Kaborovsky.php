@@ -320,7 +320,7 @@ class Kaborovsky extends CI_Controller {
                 ));
                 if( isset( $res['price_r'] ) > 0 && (int)$res['price_r'] > 0 && $res['price_r'] !== 'МИНУС' )
                 {
-                    $end = intval( $res['price_r'] * 100 );
+                    $end = intval( $res['price_r'] ) * 100;
                     $upd[] = [
                         'id' => $v['id'],
                         'price_roz' => $end,
