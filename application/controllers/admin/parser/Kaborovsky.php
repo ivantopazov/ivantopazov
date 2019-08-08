@@ -698,4 +698,21 @@ class Kaborovsky extends CI_Controller {
 
     }
 
+
+    public function path_1()
+    {
+
+        $r = $this->db->get_where( 'products', [
+            'title' => 'брош'
+        ])->result_array();
+
+        echo "<pre>";
+        print_r( count($r) );
+        print_r( $r );
+        echo "</pre>";
+
+
+    }
+
+
 }
