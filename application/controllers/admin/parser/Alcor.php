@@ -537,13 +537,13 @@ class Alcor extends CI_Controller
        {
 
             $cat_ids = [
-                'Браслет' => '28',
-                'Брошь' => '35',
-                'Колье' => '36',
-                'Кольцо' => '1',
-                'Пирсинг' => '38',
-                'Подвеска' => '19',
-                'Серьги' => '10'
+                'Браслет' => '28', // -ий
+                'Брошь' => '35', // -ое
+                'Колье' => '36', // -ое
+                'Кольцо' => '1', // -ое
+                'Пирсинг' => '38', // -ий
+                'Подвеска' => '19', // -ая
+                'Серьги' => '10' // -ие
                 //
                 // 'Обручальные кольца' => '1',
                 // 'Крест' => '37',
@@ -565,7 +565,26 @@ class Alcor extends CI_Controller
 
             if( !empty( $item['dlaKogo'] ) && $item['dlaKogo'] === 'Детям' )
             {
-                $title .= ' детское';
+
+                $__t = 'ое';
+                $__i_int = $cat_ids[$item['vid_izdelia']];
+
+                if (in_array( $__i_int, ['28', '38'] ))
+                {
+                    $__t = 'ий';
+                }
+
+                if (in_array( $__i_int, ['19'] ))
+                {
+                    $__t = 'ая';
+                }
+
+                if (in_array( $__i_int, ['10'] ))
+                {
+                    $__t = '10';
+                }
+
+                $title .= ' детск' . $__t;
             }
 
             $filterData = [[
@@ -755,6 +774,7 @@ class Alcor extends CI_Controller
         }
 
 
+
     }
 
     // Извлечение параметров ДРАГ камней
@@ -851,5 +871,45 @@ class Alcor extends CI_Controller
         return true;
 
     }
+
+
+    public function path_1()
+    {
+
+        $this->db->like( 'title', 'детск' );
+        $r = $this->db->get( 'products' )->result_array();
+
+        $cat_ids = [
+            '28' => 'ий',
+            '35' => 'ое',
+            '36' => 'ое',
+            '1' => 'ое',
+            '38' => 'ий',
+            '19' => 'ая',
+            '10' => 'ие',
+        ];
+
+        echo count( $r );
+
+        foreach ($r as $key => $value)
+        {
+
+            $__t = 'ое';
+            if( isset( $cat_ids[$value['cat']] ))
+            {
+                $__t = $cat_ids[$value['cat']];
+            }
+            $__t_replace = 'детск' . $__t;
+
+            $title = str_replace("детское", $__t_replace, $value['title']);
+            $this->db->where('id', $value['id']);
+            $this->db->update('products', [
+                'title' => $title
+            ]);
+        }
+
+    }
+
+
 
 }
