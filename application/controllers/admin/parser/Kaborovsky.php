@@ -702,12 +702,14 @@ class Kaborovsky extends CI_Controller {
     public function path_1()
     {
 
-        $this->db->like( 'title', 'брош ' );
+        $this->db->like( 'title', 'Брош ' );
         $r = $this->db->get( 'products')->result_array();
+
+        echo count( $r );
 
         foreach ($r as $key => $value)
         {
-            $title = str_replace("брош ", "брошь", $value['title']);
+            $title = str_replace("Брош ", "Брошь", $value['title']);
             $this->db->where('id', $value['id']);
             $this->db->update('products', [
                 'title' => $title
