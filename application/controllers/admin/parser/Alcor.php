@@ -406,8 +406,7 @@ class Alcor extends CI_Controller
                 }
                 $aliase = $this->mdl_product->aliase_translite( $v['product']['title'] ) . '_' . trim( $v['product']['articul'] ) . '_' . $insID;
                 $updProd = [
-                    'aliase' => $aliase,
-                    'moderate' => 0
+                    'aliase' => $aliase
                 ];
                 if( isset( $v['photos'] ) )
                 {
@@ -422,7 +421,6 @@ class Alcor extends CI_Controller
                     $v['photos']['product_id'] = $insID;
                     $v['photos']['photo_name'] = $aliase.'.jpg';
                     $this->db->insert( 'products_photos', $v['photos'] );
-                    $updProd['moderate'] = 2;
                 }
                 if( !empty( $v['price']['price_item'] ))
                 {
