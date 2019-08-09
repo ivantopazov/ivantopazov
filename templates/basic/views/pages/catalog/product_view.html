@@ -255,12 +255,21 @@
 
                 {% endif %}
 
-				<a href="#" class=" btn-cart Conv_CRC55  btn-block text-center ZAG p15 px20 mt15" click="CART.add({ id:{{product.id}}, title:'{{product.title}}', price:{% if product.salle_procent > 0 %}{{product.modules.salePrice.COP.salePrice}}{% else %}{{product.modules.price_actual[0].l[0].v.cop}}{% endif %}, qty:{type:'plus', value:1}, orig: { image:'{{product.modules.photos[0].photo_name}}', articul:'{{product.articul}}', link:'{{product.modules.linkPath}}'}}, MAIN.addCartCallback );">Добавить в корзину</a>
+                {% set price = 0 %}
+                {% if product.salle_procent > 0 %}
+                    {% set price = product.modules.salePrice.COP.salePrice %}
+                {% else %}
+                    {% set price = product.modules.price_actual[0].l[0].v.cop %}
+                {% endif %}
+
+
+				<a href="#" class=" btn-cart Conv_CRC55  btn-block text-center ZAG p15 px20 mt15"
+                        click="CART.add({ id:{{product.id}}, title:'{{product.title}}', price:{{price}}, qty:{type:'plus', value:1}, orig: { image:'{{product.modules.photos[0].photo_name}}', articul:'{{product.articul}}', link:'{{product.modules.linkPath}}'}}, MAIN.addCartCallback );">Добавить в корзину</a>
 
 				<div class="row">
 					<div class="col-xs-12">
 						<a href="#" class="btn-cart_default Conv_CRC55 btn-block text-center ZAG p15 px20 mt15"
-						data-toggle="modal" data-target="#modal_speedOrder" href="#" click="MAIN.speedAddCart({ id:{{product.id}}, title:'{{product.title}}', price:{{product.modules.price_actual[0].l[0].v.cop}}, qty:1, orig: { image:'{{product.modules.photos[0].photo_name}}', articul:'{{product.articul}}', link:'{{product.modules.linkPath}}'}});"
+						data-toggle="modal" data-target="#modal_speedOrder" href="#" click="MAIN.speedAddCart({ id:{{product.id}}, title:'{{product.title}}', price:{{price}}, qty:1, orig: { image:'{{product.modules.photos[0].photo_name}}', articul:'{{product.articul}}', link:'{{product.modules.linkPath}}'}});"
                         >
 							Быстрый заказ
 						</a>
