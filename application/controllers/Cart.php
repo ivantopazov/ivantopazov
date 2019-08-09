@@ -377,6 +377,9 @@ class Cart extends CI_Controller {
         //
         $this->mdl_mail->set_komu_to( 'info.nikoniki@yandex.ru', 'Покупатель');
         $this->mdl_mail->send();
+
+        $this->mdl_mail->set_komu_to( 'dir.elit@gmail.com', 'Покупатель');
+        $this->mdl_mail->send();
         //
         // $this->mdl_mail->set_komu_to( 'dir.elit@gmail.com', 'Покупатель');
         // $this->mdl_mail->send();
