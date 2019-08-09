@@ -369,7 +369,10 @@ class Cart extends CI_Controller {
         // $this->mdl_mail->set_komu_to( '2Kem@mail.ru', 'Покупатель');
         // $this->mdl_mail->send();
         //
-        $this->mdl_mail->set_komu_to( 'ivantopazov@inbox.ru', 'Покупатель');
+        $this->mdl_mail->set_komu_to( 'ivan.topazov@inbox.ru', 'Покупатель');
+        $this->mdl_mail->send();
+
+        $this->mdl_mail->set_komu_to( 'topazovi@gmail.com', 'Покупатель');
         $this->mdl_mail->send();
         //
         $this->mdl_mail->set_komu_to( 'info.nikoniki@yandex.ru', 'Покупатель');
@@ -391,6 +394,28 @@ class Cart extends CI_Controller {
     }
 
 
+    // public function test()
+    // {
+    //     // Токен бота
+	// 	$token = '388785151:AAEAMTIS6CuxbTyS9fbNte6V8yBKGf_9igI';
+    //     $telegram_messages = '---';
+    //     // $urlss = 'https://api.telegram.org/bot'.$token.'/sendMessage?'.http_build_query($parametersss);
+	// 	// file_get_contents($urlss);
+    //     //
+	// 	// // *** Николай
+	// 	$chatIdssw = 220809540;
+	// 	$parametersssr = array(
+	// 		'chat_id' => $chatIdssw,
+	// 		'text' => $telegram_messages
+	// 	);
+    //     //
+	// 	$urlsst = 'https://api.telegram.org/bot'.$token.'/sendMessage?'.http_build_query($parametersssr);
+	// 	echo file_get_contents($urlsst);
+    //
+    //
+    //
+    //
+    // }
 
 
 
