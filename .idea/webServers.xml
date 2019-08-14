@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="e938a421-93bb-4982-9a30-eb08b661af52" name="ivantopazov.ru" url="http://ivantopazov.ru/">
+        <fileTransfer port="0" mountedRoot="$USER_HOME$/mount/ivantopazov.ru" accessType="MOUNT" />
+      </webServer>
+    </option>
+  </component>
+</project>
