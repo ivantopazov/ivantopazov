@@ -978,28 +978,35 @@ class Mdl_product extends CI_Model
             $newArrayProducts = [];
             foreach ($this->_query[$index]['result'] as $k => $v) {
                 $f = json_decode($v['filters'], true);
-                if (count($f) > 0) {
-                    $cou = count($setItems_checkboxes); // кол-во обязательных параметров
-                    $set_cou = 0; // кол-во ВЫПОЛНЕННЫХ обязательных параметров
-                    foreach ($setItems_checkboxes as $SIv) {
-                        $e = 0; // кол-во совпадений для одного обхода
+//              if( count( $f ) > 0 ){
+                $cou = count($setItems_checkboxes); // кол-во обязательных параметров
+                $set_cou = 0; // кол-во ВЫПОЛНЕННЫХ обязательных параметров
+                foreach ($setItems_checkboxes as $SIv) {
+                    $e = 0; // кол-во совпадений для одного обхода
+                    if ($SIv['item'] == 'brand') {
+                        if (in_array($v['postavchik'], $SIv['values'])) {
+                            $e++;
+                        }
+                    } else {
+
                         foreach ($f as $PRf) {
                             if ($SIv['item'] == $PRf['item']) {
-                                foreach ($SIv['values'] as $SIv_values) {
-                                    if (in_array($SIv_values, $PRf['values'])) {
+                                foreach ($SIv['values'] as $SIv_value) {
+                                    if (in_array($SIv_value, $PRf['values'])) {
                                         $e++;
                                     }
                                 }
                             }
                         }
-                        if ($e > 0) {
-                            $set_cou++;
-                        }
                     }
-                    if ($set_cou == $cou) {
-                        $newArrayProducts[] = $v;
+                    if ($e > 0) {
+                        $set_cou++;
                     }
                 }
+                if ($set_cou == $cou) {
+                    $newArrayProducts[] = $v;
+                }
+//              }
             }
 
             $this->_query[$index]['result'] = $newArrayProducts;
