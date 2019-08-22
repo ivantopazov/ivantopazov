@@ -11,8 +11,9 @@ class Alcor extends CI_Controller
 
     protected $post = array();
     protected $get = array();
+	private $imagePath = "./uploads/products/alcor/";
 
-    public function __construct()
+	public function __construct()
     {
 
         parent::__construct();
@@ -267,11 +268,12 @@ class Alcor extends CI_Controller
 
 
         error_reporting(-1);
-        ini_set('display_errors', 1);
+//		error_reporting(0);
+		ini_set('display_errors', 1);
+		// Первоначальная прочистка остатков
+        $clear = ( isset( $this->post['clear'] ) ) ? $this->post['clear'] : false;
 
-        // Первоначальная прочистка остатков
-        if( isset( $this->post['clear'] ) && (int)$this->post['clear'] === '1' )
-        {
+        if( $clear === '1' ){
             $this->mdl_db->_update_db( "products", "postavchik", 'Alcor', [
                 'qty' => 0
             ]);
@@ -279,7 +281,6 @@ class Alcor extends CI_Controller
 
         // Получение пакета данных
         $packs = ( isset( $this->post['pack'] ) ) ? $this->post['pack'] : [];
-
         // Получить список товаров со схожими сериями в поступлении
         $listArts = []; $err = 0;
         foreach( $packs as $v )
@@ -313,14 +314,17 @@ class Alcor extends CI_Controller
                         'value' => 'Alcor'
                     ]]
                 ],
-                'labels' => ['id', 'aliase', 'title', 'seria', 'articul']
+                'labels' => ['id', 'aliase', 'title', 'seria', 'articul', 'aliase']
             ]);
             foreach( $issetProducts as $v )
             {
                 $art = trim(mb_strtolower($v['seria']));
                 if( !in_array( $art, $listArtsIsset ) )
                 {
-                    $listArtsIsset[$art] = $v['id'];
+                    $listArtsIsset[$art] = [
+                    	'id' => $v['id'],
+						'aliase' => $v['aliase'],
+					];
                 }
             }
         }
@@ -340,26 +344,8 @@ class Alcor extends CI_Controller
                 else
                 {
                     $UPDATE[] = [
-                        'ID' => $listArtsIsset[$art],
-                        'data' => $this->getRenderAlcor( $v )
-                    ];
-                }
-            }
-        }
-
-        if( count( $packs ) > 0 )
-        {
-            foreach( $packs as $v )
-            {
-                $art = trim(mb_strtolower($v['seria']));
-                if( !isset( $listArtsIsset[$art] ) )
-                {
-                    $INSERT[] = $this->getRenderAlcor( $v );
-                }
-                else
-                {
-                    $UPDATE[] = [
-                        'ID' => $listArtsIsset[$art],
+                        'ID' => $listArtsIsset[$art]['id'],
+                        'aliase' => $listArtsIsset[$art]['aliase'],
                         'data' => $this->getRenderAlcor( $v )
                     ];
                 }
@@ -370,18 +356,40 @@ class Alcor extends CI_Controller
         if( count( $UPDATE ) > 0 )
         {
             $upd_bh = [];
-            foreach( $UPDATE as $k => $v )
-            {
-                $upd_bh[] = [
-                    'id' => $v['ID'],
-                    'qty' => '1',
-                    'price_zac' => $v['data']['product']['price_zac']
-                ];
-                if( !in_array( $v['ID'], $IDS ))
-                {
-                    $IDS[] = $v['ID'];
-                }
-            }
+            foreach( $UPDATE as $k => $v ) {
+				$upd_bh[] = [
+					'id' => $v['ID'],
+					'qty' => '1',
+					'price_zac' => $v['data']['product']['price_zac']
+				];
+				if (!in_array($v['ID'], $IDS)) {
+					$IDS[] = $v['ID'];
+				}
+				if (isset($v['data']['photos'])) {
+					$r = $this->saveImages($v['data']['photos']['photo_name'], $v['aliase']);
+
+					if ($r !== false) {
+						$products_photos = $this->mdl_product->queryData([
+							'in' => [
+								'method' => 'AND',
+								'set' => [[
+									'item' => 'product_id',
+									'values' => $v['ID'],
+								]],
+							],
+							'labels' => false,
+							'table_name' => 'products_photos',
+						]);
+						if (!count($products_photos)) {
+
+							$v['data']['photos']['product_id'] = $v['ID'];
+							$v['data']['photos']['photo_name'] = $v['aliase'] . '.jpg';
+//                    $v['data']['photos']['define'] = '1';
+							$this->db->insert('products_photos', $v['data']['photos']);
+						}
+					}
+				}
+			}
             if( count( $upd_bh ) > 0 )
             {
                 $this->db->update_batch( 'products', $upd_bh, 'id' );
@@ -398,6 +406,9 @@ class Alcor extends CI_Controller
                 {
                     continue;
                 }
+                if (!$this->checkImage( $v['photos']['photo_name'] )) {
+                	continue;
+				}
                 $this->db->insert('products', $v['product'] );
                 $insID = $this->db->insert_id();
                 if( !in_array( $insID, $IDS ))
@@ -443,6 +454,7 @@ class Alcor extends CI_Controller
             'err' => 0,
             'mess' => 'success'
         ]);
+        die;
 
     }
 
@@ -487,39 +499,42 @@ class Alcor extends CI_Controller
     // Сохранение картинок
     public function saveImages ( $image = false, $nameProduct = false )
     {
-
         $r = false;
 
-        if( $image !== false && $nameProduct !== false )
+		if( $image !== false && $nameProduct !== false )
         {
 
             $this->load->library('images');
-            $path = "./uploads/products/alcor/";
 
-            if ( file_exists( $path.$image ) )
+            if ( file_exists( $this->imagePath.$image ) )
             {
 
-                //$itemFile = $this->images->file_item( $path . $image, $nameProduct.'.jpg' );
+                //$itemFile = $this->images->file_item( $this->imagePath . $image, $nameProduct.'.jpg' );
 
                 $prew = "./uploads/products/100/";
-                $this->images->imageresize( $prew.$nameProduct.'.jpg', $path.$image, 100, 100, 100 );
+                $this->images->imageresize( $prew.$nameProduct.'.jpg', $this->imagePath.$image, 100, 100, 100 );
 
                 $prew2 = "./uploads/products/250/";
-                $this->images->imageresize( $prew2.$nameProduct.'.jpg', $path.$image, 250, 250, 100 );
+                $this->images->imageresize( $prew2.$nameProduct.'.jpg', $this->imagePath.$image, 250, 250, 100 );
 
                 $grozz = "./uploads/products/500/";
-                $this->getImage( $path.$image, $grozz, $nameProduct.".jpg" );
+                $this->getImage( $this->imagePath.$image, $grozz, $nameProduct.".jpg" );
 
 
-                //$this->images->imageresize( $prew.$nameProduct.'.jpg', $path.$image, 500, 500, 100 );
+                //$this->images->imageresize( $prew.$nameProduct.'.jpg', $this->imagePath.$image, 500, 500, 100 );
 
-                //$this->images->resize_jpeg( $itemFile, $path, $prew, $nameProduct, 100, 100, 100);
-                ///$this->images->resize_jpeg( $itemFile, $path, $prew2, $nameProduct, 100, 250, 250);
-                //$this->images->resize_jpeg( $itemFile, $path, $grozz, $nameProduct, 100, 1000, 500);
+                //$this->images->resize_jpeg( $itemFile, $this->imagePath, $prew, $nameProduct, 100, 100, 100);
+                ///$this->images->resize_jpeg( $itemFile, $this->imagePath, $prew2, $nameProduct, 100, 250, 250);
+                //$this->images->resize_jpeg( $itemFile, $this->imagePath, $grozz, $nameProduct, 100, 1000, 500);
                 $r = true;
             }
         }
         return $r;
+    }
+
+    public function checkImage ( $image )
+    {
+		return ( $image && file_exists( $this->imagePath.$image ) );
     }
 
     // Сохранить пхото как...
@@ -748,7 +763,7 @@ class Alcor extends CI_Controller
                 'weight' => str_replace( ",", ".", $item['weight'] ),
                 'qty_empty' => '1',
                 'prices_empty' => '1',
-                'price_zac' => ( isset( $item['price'] ) ) ? intval( $item['price'] * 100 ) : 0,
+                'price_zac' => ( isset( $item['price'] ) ) ? intval( preg_replace('{[^0-9]}', '', $item['price']) * 100 ) : 0,
                 'qty' => '1',
                 'sex' => $sex,//woman/men
                 'view' => '1',
