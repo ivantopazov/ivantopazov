@@ -19,5 +19,12 @@ RewriteRule ^(.*)$ index.php/$1 [L]
 Redirect 301 /index.html https://ivantopazov.ru/
 Redirect 301 /index.htm https://ivantopazov.ru/
 
+Redirect 301 /kabarovsky/kolca /catalog/kolca/?f[brand]=Kaborovsky
+Redirect 301 /kabarovsky/sergi /catalog/sergi/?f[brand]=Kaborovsky
+Redirect 301 /kabarovsky/podveski /catalog/podveski/?f[brand]=Kaborovsky
+Redirect 301 /kabarovsky/braslety /catalog/braslety/?f[brand]=Kaborovsky
+Redirect 301 /kabarovsky/broshi /catalog/broshi/?f[brand]=Kaborovsky
+Redirect 301 /kabarovsky/zaponki /catalog/zaponki/?f[brand]=Kaborovsky
+Redirect 301 /kabarovsky/kolie /catalog/kolie/?f[brand]=Kaborovsky
 
 AddDefaultCharset utf-8
