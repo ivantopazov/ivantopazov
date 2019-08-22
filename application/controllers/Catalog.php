@@ -499,7 +499,7 @@ class Catalog extends CI_Controller
 					'limit' => (isset($this->get['l'])) ? $this->get['l'] : 40,
 				],
 				'module_queue' => [
-					'price_actual', 'setSortPrices',
+					'price_actual',
 					'setFilters', 'limit', 'pagination',
 					'prices_all', 'photos', 'reviews', 'linkPath', 'salePrice',
 					'emptyPrice', 'qty_empty_status', 'paramsView',
@@ -600,15 +600,20 @@ class Catalog extends CI_Controller
 				];
 			}
 
-			if ($sort === 'pricemin' || $sort === 'pricemax') {
-				$option['modules'][] = [
-					'module_name' => 'setSortPrices',
-					'result_item' => 'setSortPrices',
-					'option' => [
-						'sort' => $sort,
-					],
+			if ($sort === 'pricemin') {
+				$option['order_by'] = [
+					'item' => 'price_roz',
+					'value' => 'ASC',
 				];
 			}
+
+			if ($sort === 'pricemax') {
+				$option['order_by'] = [
+					'item' => 'price_roz',
+					'value' => 'DESC',
+				];
+			}
+
 
 			//}
 

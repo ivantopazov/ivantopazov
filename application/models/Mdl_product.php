@@ -41,7 +41,7 @@ class Mdl_product extends CI_Model
             'debug' => false, // Диагностическая линия ( Необходим активный "+" в "return_type" )
             'module_queue' => [
                 'setFilters', 'limit', 'pagination',
-                'setSortPrices', 'price_actual',
+                'price_actual',
                 'prices_all', 'photos',
                 'reviews', 'linkPath', 'salePrice',
                 'emptyPrice', 'qty_empty_status', 'paramsView'
@@ -293,7 +293,7 @@ class Mdl_product extends CI_Model
             'debug' => false, // Диагностическая линия ( Необходим активный "+" в "return_type" )
             'module_queue' => [
                 'setFilters', 'limit', 'pagination',
-                'setSortPrices', 'price_actual',
+                'price_actual',
                 'prices_all', 'photos',
                 'reviews', 'linkPath', 'salePrice',
                 'emptyPrice', 'qty_empty_status', 'paramsView'
@@ -528,7 +528,7 @@ class Mdl_product extends CI_Model
             'debug' => false, // Диагностическая линия ( Необходим активный "+" в "return_type" )
             'module_queue' => [
                 'setFilters', 'limit', 'pagination',
-                'setSortPrices', 'price_actual',
+                'price_actual',
                 'prices_all', 'photos',
                 'reviews', 'linkPath', 'salePrice',
                 'emptyPrice', 'qty_empty_status', 'paramsView'
@@ -1389,57 +1389,6 @@ class Mdl_product extends CI_Model
 
     }
 
-    // Модуль сортировки по цене
-    /*
-        Зависимости:
-            1. Обязателен предварительный запуск модуля цены
-            2. Метод $this->price_sortable
-    */
-    public function mod_setSortPrices($item = 'setSortPrices', $option = array())
-    {
-        $index = (isset($option['index'])) ? $option['index'] : false;
-        $sort = (isset($option['sort'])) ? $option['sort'] : 'pricemin';
-        if (count($this->_query[$index]['result']) > 0) {
-
-            $formulaSort = array();
-            foreach ($this->_query[$index]['result'] as $k => $v) {
-
-                $formulaSort[] = [
-                    'PID' => $v['id'],
-                    'VALUE' => $v['modules']['price_actual']['cop'] / 100
-                ];
-
-
-                //if( !in_array( $v['id'], $GIDs) ) $GIDs[] = $v['id'];
-            }
-
-
-            if ($sort === 'pricemax') $formulaSort = $this->price_sortable($formulaSort, 'VALUE', SORT_DESC);
-            if ($sort === 'pricemin') $formulaSort = $this->price_sortable($formulaSort, 'VALUE', SORT_ASC);
-
-            $newArrayResult = [];
-            foreach ($formulaSort as $fsv) {
-                foreach ($this->_query[$index]['result'] as $rv) {
-                    if ($fsv['PID'] === $rv['id']) {
-                        $newArrayResult[] = $rv;
-                    }
-                }
-            }
-
-            $this->_query[$index]['result'] = $newArrayResult;
-            /*
-            echo "<pre>";
-            print_r( $formulaSort );
-            echo "</pre>";
-            */
-            //$this->_query[$index]['result'][$k]['modules'][$item] = $formulaSort;
-
-            /*$limit = ( $limit === 'all' ) ? count( $this->_query[$index]['result'] ) : $limit;
-            $this->_query[$index]['result'] = array_slice( $this->_query[$index]['result'], 0, $limit ); */
-        }
-        return true;
-    }
-
     // Модуль лимита
     public function mod_limit($item = 'limit', $option = array())
     {
@@ -1564,24 +1513,6 @@ class Mdl_product extends CI_Model
             return strtolower($str);
         }
 
-    }
-
-    //Сортировка ассоциативного массива по заданной колонке
-    public function price_sortable()
-    {
-        $args = func_get_args();
-        $data = array_shift($args);
-        foreach ($args as $n => $field) {
-            if (is_string($field)) {
-                $tmp = array();
-                foreach ($data as $key => $row)
-                    $tmp[$key] = $row[$field];
-                $args[$n] = $tmp;
-            }
-        }
-        $args[] = &$data;
-        call_user_func_array('array_multisort', $args);
-        return array_pop($args);
     }
 
     // Получить розничную стоимость
