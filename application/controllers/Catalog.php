@@ -500,7 +500,7 @@ class Catalog extends CI_Controller
 				],
 				'module_queue' => [
 					'price_actual',
-					'setFilters', 'limit', 'pagination',
+					'limit', 'pagination',
 					'prices_all', 'photos', 'reviews', 'linkPath', 'salePrice',
 					'emptyPrice', 'qty_empty_status', 'paramsView',
 				],
@@ -553,13 +553,8 @@ class Catalog extends CI_Controller
 					}
 				}
 
-				$option['modules'][] = [
-					'module_name' => 'setFilters',
-					'result_item' => 'setFilters',
-					'option' => [
-						'setItems' => $fNew,
-					],
-				];
+				$option['setFilters'] = $fNew;
+
 				$setFilters = $fNew;
 			}
 
@@ -613,7 +608,6 @@ class Catalog extends CI_Controller
 					'value' => 'DESC',
 				];
 			}
-
 
 			//}
 
@@ -1007,8 +1001,19 @@ class Catalog extends CI_Controller
 				'group_by' => 'articul',
 				'distinct' => true,
 				'labels' => ['id', 'aliase', 'title', 'salle_procent', 'sex', 'modules'],
+				'setFilters' => [
+					[
+						'item' => 'Cena',
+						'type' => 'range-values',
+						'values' => [$price_ot, $price_do],
+					], [
+						'item' => 'metall',
+						'type' => 'checkbox-group',
+						'values' => ($metall !== false) ? [$metall] : [],
+					],
+				],
 				'module_queue' => [
-					'price_actual', 'setFilters', 'limit', 'salePrice', 'linkPath', 'photos',
+					'price_actual', 'limit', 'salePrice', 'linkPath', 'photos',
 				],
 				'module' => true,
 				'modules' => [[
@@ -1030,20 +1035,6 @@ class Catalog extends CI_Controller
 					'result_item' => 'photos',
 					'option' => [
 						'no_images_view' => 1,
-					],
-				], [
-					'module_name' => 'setFilters',
-					'result_item' => 'setFilters',
-					'option' => [
-						'setItems' => [[
-							'item' => 'Cena',
-							'type' => 'range-values',
-							'values' => [$price_ot, $price_do],
-						], [
-							'item' => 'metall',
-							'type' => 'checkbox-group',
-							'values' => ($metall !== false) ? [$metall] : [],
-						]],
 					],
 				]],
 			];
@@ -1106,7 +1097,7 @@ class Catalog extends CI_Controller
 							'distinct' => true,
 							'labels' => ['id', 'aliase', 'title', 'salle_procent', 'sex', 'modules'],
 							'module_queue' => [
-								'price_actual', 'setFilters', 'limit', 'salePrice', 'linkPath', 'photos',
+								'price_actual', 'limit', 'salePrice', 'linkPath', 'photos',
 							],
 							'module' => true,
 							'modules' => [[

@@ -147,7 +147,7 @@ class Products extends CI_Controller {
                     'labels' => ['photo_name', 'define']
                 ]
             ],[
-                'module_name' => 'paginationAdmin',
+                'module_name' => 'pagination',
                 'result_item' => 'pagination',
                 'option' => [
                     'path' => $_SERVER['REDIRECT_URL'],
@@ -158,7 +158,7 @@ class Products extends CI_Controller {
                     ]
                 ]
             ]]
-        ];        
+        ];
         $r['textSearch'] = '';
         if( isset( $this->get['t'] ) ) {
             $t = $r['textSearch'] = $this->get['t'];
@@ -181,8 +181,8 @@ class Products extends CI_Controller {
             ];
         }
         
-        $result = $this->mdl_product->queryDataAdmin( $option );
-        
+        $result = $this->mdl_product->queryData( $option );
+
         $r['result'] = $result['result'];
         $r['option'] = $result['option'];
         
