@@ -934,7 +934,7 @@ class Mdl_product extends CI_Model
 			$condition = implode(" OR ", array_map(function ($value) use ($column) {
 				return "JSON_CONTAINS($column, '[\"$value\"]')";
 			}, $filter['values']));
-			$this->db->where($condition);
+			$this->db->where("($condition)");
 		}
 	}
 
