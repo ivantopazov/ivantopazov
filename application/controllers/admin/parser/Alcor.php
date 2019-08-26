@@ -266,10 +266,13 @@ class Alcor extends CI_Controller
 
         //echo json_encode($this->post);
 
+		// обновлять фотографии у существующих товаров (медленнее)
+		$updatePhotos = false;
 
-        error_reporting(-1);
-//		error_reporting(0);
-		ini_set('display_errors', 1);
+//        error_reporting(-1);
+//		ini_set('display_errors', 1);
+		error_reporting(0);
+		ini_set('display_errors', 0);
 		// Первоначальная прочистка остатков
         $clear = ( isset( $this->post['clear'] ) ) ? $this->post['clear'] : false;
 
@@ -365,7 +368,7 @@ class Alcor extends CI_Controller
 				if (!in_array($v['ID'], $IDS)) {
 					$IDS[] = $v['ID'];
 				}
-				if (isset($v['data']['photos'])) {
+				if ($updatePhotos && isset($v['data']['photos'])) {
 					$r = $this->saveImages($v['data']['photos']['photo_name'], $v['aliase']);
 
 					if ($r !== false) {
@@ -558,13 +561,13 @@ class Alcor extends CI_Controller
                 'Кольцо' => '1', // -ое
                 'Пирсинг' => '38', // -ий
                 'Подвеска' => '19', // -ая
-                'Серьги' => '10' // -ие
+                'Серьги' => '10', // -ие
                 //
                 // 'Обручальные кольца' => '1',
                 // 'Крест' => '37',
                 // 'Пуссеты' => '43',
                 // 'Браслеты' => '28',
-                // 'Запонки' => '41',
+                 'Запонки' => '41',
             ];
 
             $title = $item['vid_izdelia'];
@@ -596,7 +599,7 @@ class Alcor extends CI_Controller
 
                 if (in_array( $__i_int, ['10'] ))
                 {
-                    $__t = '10';
+                    $__t = 'ие';
                 }
 
                 $title .= ' детск' . $__t;
