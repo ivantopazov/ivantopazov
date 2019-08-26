@@ -242,16 +242,20 @@ class Search extends CI_Controller  {
                     'value' => 'DESC'
                 ]; 
             }
-            
-            if( $sort === 'pricemin' || $sort === 'pricemax' ){
-                $option['modules'][] = [
-                    'module_name' => 'setSortPrices',
-                    'result_item' => 'setSortPrices',
-                    'option' => [
-                        'sort' => $sort
-                    ]
-                ];
-            }
+
+			if ($sort === 'pricemin') {
+				$option['order_by'] = [
+					'item' => 'price_roz',
+					'value' => 'ASC',
+				];
+			}
+
+			if ($sort === 'pricemax') {
+				$option['order_by'] = [
+					'item' => 'price_roz',
+					'value' => 'DESC',
+				];
+			}
             
         }
         
@@ -400,16 +404,20 @@ class Search extends CI_Controller  {
                     'value' => 'DESC'
                 ]; 
             }
-            
-            if( $sort === 'pricemin' || $sort === 'pricemax' ){
-                $option['modules'][] = [
-                    'module_name' => 'setSortPrices',
-                    'result_item' => 'setSortPrices',
-                    'option' => [
-                        'sort' => $sort
-                    ]
-                ];
-            }
+
+			if ($sort === 'pricemin') {
+				$option['order_by'] = [
+					'item' => 'price_roz',
+					'value' => 'ASC',
+				];
+			}
+
+			if ($sort === 'pricemax') {
+				$option['order_by'] = [
+					'item' => 'price_roz',
+					'value' => 'DESC',
+				];
+			}
             
         }
         
