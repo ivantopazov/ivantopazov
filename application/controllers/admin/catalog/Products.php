@@ -121,14 +121,17 @@ class Products extends CI_Controller {
         $query_string = $this->mdl_helper->clear_array_0( $query_string, array('f', 's', 'l', 't'));         
         $sffix = $query_string;
         
-        
+		$page = ( isset( $this->get['page'] ) ) ? $this->get['page'] : 1;
+		$limit = ( isset( $this->get['l'] ) ) ? $this->get['l'] : 40;
+
         $option = [
             'return_type' => 'ARR2+',
             'labels' => [ 'id', 'title','articul', 'price', 'qty', 'postavchik', 'modules' ],
+//			'limit' => "$limit, $offset",
             'pagination' => [
                 'on' => true,
-                'page' => ( isset( $this->get['page'] ) ) ? $this->get['page'] : 1,
-                'limit' => ( isset( $this->get['l'] ) ) ? $this->get['l'] : 40
+                'page' => $page,
+                'limit' => $limit,
             ],
             'module' => true,
             'modules' => [[
@@ -155,7 +158,7 @@ class Products extends CI_Controller {
                     ]
                 ]
             ]]
-        ];        
+        ];
         $r['textSearch'] = '';
         if( isset( $this->get['t'] ) ) {
             $t = $r['textSearch'] = $this->get['t'];
@@ -179,7 +182,7 @@ class Products extends CI_Controller {
         }
         
         $result = $this->mdl_product->queryData( $option );
-        
+
         $r['result'] = $result['result'];
         $r['option'] = $result['option'];
         
