@@ -23,7 +23,7 @@ class Mdl_db extends CI_Model
         return $resli;
     }
     
-    function _all_query_db($table)    {
+    function _all_query_db($table = null)    {
         $query = $this->db->get($table);
         $resli = $query->result_array();
         return $resli;
