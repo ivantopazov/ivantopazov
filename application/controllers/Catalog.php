@@ -321,7 +321,7 @@ class Catalog extends CI_Controller
 					'items' => $getData['filter'],
 					'cena' => $getData['cena'],
 				), true),
-				'snipets' => ($getData['snipet'] !== false) ? $this->mdl_tpl->view('pages/catalog/cats_snipets/' . $data['item']['aliase'] . '.html', array(), true) : '',
+				//'snipets' => ($getData['snipet'] !== false) ? $this->mdl_tpl->view('pages/catalog/cats_snipets/' . $data['item']['aliase'] . '.html', array(), true) : '',
 				'textSearch' => $getData['textSearch'],
 				'sort' => $getData['sort'],
 				'header_title' => $data['item']['name'],
@@ -334,8 +334,8 @@ class Catalog extends CI_Controller
 				'products' => $this->mdl_tpl->view('pages/catalog/category_view_products.html', array(
 					'items' => $getData['products'],
 				), true),
-				'pagination' => $getData['products_pag'],
-				'description' => $data['item']['desription'],
+				'pagination' => $getData['products_pag']/*,
+				'description' => $data['item']['desription'],*/
 			), true),
 
 			'footer' => $this->mdl_tpl->view('snipets/footer.html', array(
@@ -757,9 +757,9 @@ class Catalog extends CI_Controller
 					'items' => $this->getKomplect($product['id'], false),
 				), true),
 
-				'VamPonravitsa' => $this->mdl_tpl->view('snipets/VamPonravitsa.html', array(
+				/*'VamPonravitsa' => $this->mdl_tpl->view('snipets/VamPonravitsa.html', array(
 					'items' => $this->getVamPonravitsa($product['id'], false),
-				), true),
+				), true),*/
 
 				'preimushchestva' => $this->mdl_tpl->view('snipets/preimushchestva.html', array(
 					'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
