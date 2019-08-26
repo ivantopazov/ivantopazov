@@ -334,8 +334,8 @@ class Catalog extends CI_Controller
 				'products' => $this->mdl_tpl->view('pages/catalog/category_view_products.html', array(
 					'items' => $getData['products'],
 				), true),
-				'pagination' => $getData['products_pag'],
-				'description' => $data['item']['desription'],
+				'pagination' => $getData['products_pag']/*,
+				'description' => $data['item']['desription'],*/
 			), true),
 
 			'footer' => $this->mdl_tpl->view('snipets/footer.html', array(
