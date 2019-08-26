@@ -5,4 +5,3 @@ http.htaccess
 https.htaccess
 .htaccess
 .gitignore
-/"./addons/twig/compilation_cache"/
