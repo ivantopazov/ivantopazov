@@ -10,8 +10,8 @@
       protected $post = array();
       protected $get = array();
       
-      private $prod_table = "upload_n";
-      private $ph_table = "upload_n_photos";
+      private $prod_table = "products";
+      private $ph_table = "products_photos";
       
       private $upload_path = "./uploads/products/trofimova/";
       private $type_cat = [
@@ -206,15 +206,28 @@
                }
             }
             
+            // Проверка фото
+            if(file_exists($this->upload_path.$dt["article"].".jpg")){
+               $ph_name = $dt["article"].".jpg";
+               $ph_ext = ".jpg";
+            } else if(file_exists($this->upload_path.$dt["article"].".tif")){
+               $ph_name = $dt["article"].".tif";
+               $ph_ext = ".tif";
+            }
+            
+            if(!$ph_name){
+               $err++;
+               echo json_encode(["err" => $err, "double" => $double]);
+               return;
+            }
+            
             $this->db->insert($this->prod_table, $item);
             $id = $this->db->insert_id();
             if(!$id) $err++;
             $aliase = $this->mdl_product->aliase_translite($title).'_'.trim($dt["article"]).'_'.$id;
             $this->mdl_db->_update_db($this->prod_table, "id", $id, ["aliase" => $aliase]);
             
-            //$this->images($dt["article"]);
-            if(file_get_contents($this->upload_path.$dt["article"].".jpg")) $ph_name = $dt["article"].".jpg";
-            else if(file_get_contents($this->upload_path.$dt["article"].".tif")) $ph_name = $dt["article"].".tif";
+            $this->images($dt["article"], $ph_ext);
             $ph = [
              "product_id" => $id,
              "photo_name" => $ph_name, // Вместо алиаса по артиклу
@@ -375,19 +388,19 @@
          return $drag;
       }
       
-      private function images($article){
-         if(!file_exists($this->upload_path.$article.".jpg")) return;
+      private function images($article, $ext){
+         if(!file_exists($this->upload_path.$article.$ext)) return;
          
          $this->load->library('images');
          
          $to_100 = "./uploads/products/100/";
-         $this->images->imageresize($to_100.$article.'.jpg', $this->upload_path.$article.'.jpg', 100, 100, 100);
+         $this->images->imageresize($to_100.$article.$ext, $this->upload_path.$article.$ext, 100, 100, 100);
          
          $to_250 = "./uploads/products/250/";
-         $this->images->imageresize($to_250.$article.'.jpg', $this->upload_path.$article.'.jpg', 250, 250, 100);
+         $this->images->imageresize($to_250.$article.$ext, $this->upload_path.$article.$ext, 250, 250, 100);
          
          $to_500 = "./uploads/products/500/";
-         $this->images->imageresize($to_500.$article.'.jpg', $this->upload_path.$article.'.jpg', 500, 500, 100);
+         $this->images->imageresize($to_500.$article.$ext, $this->upload_path.$article.$ext, 500, 500, 100);
       }
       
       public function count(){
