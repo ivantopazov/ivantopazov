@@ -24,7 +24,9 @@ class Home extends CI_Controller {
         
     public function index(){
         
-        $start = microtime(true); 
+//    	error_reporting(E_ALL);
+//		ini_set('display_errors', 1);
+    	$start = microtime(true);
                 
 		$title = ( !empty( $this->store_info['seo_title'] ) ) ? $this->store_info['seo_title'] : $this->store_info['header'];
 		$page_var = 'home';
@@ -59,12 +61,12 @@ class Home extends CI_Controller {
                 'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path')
             ),true),
             
-            'slider' => $this->mdl_tpl->view('pages/home/home_slider.html',array(
+            /*'slider' => $this->mdl_tpl->view('pages/home/home_slider.html',array(
                 'items' => $this->getSliderHome( false ),
                 'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path')
-            ), true ),
+            ), true ),*/
             
-            'content' => $this->mdl_tpl->view('pages/home/basic.html',array(),true),
+            'content' => "", //$this->mdl_tpl->view('pages/home/basic.html',array(),true),
             
             'actionsBlocks' => $this->mdl_tpl->view('snipets/actionsBlocks.html',array(),true),
             
@@ -72,13 +74,13 @@ class Home extends CI_Controller {
                 'items' => $this->getNovyePostuplenia( false )
             ),true),
             
-            'lideryProdazh' => $this->mdl_tpl->view('snipets/lideryProdazh.html',array(
+            /*'lideryProdazh' => $this->mdl_tpl->view('snipets/lideryProdazh.html',array(
                 'items' => $this->getLideryProdaj( false )
-            ),true),
+            ),true),*/
             
-            'popularnyeTovary' => $this->mdl_tpl->view('snipets/popularnyeTovary.html',array(
+            /*'popularnyeTovary' => $this->mdl_tpl->view('snipets/popularnyeTovary.html',array(
                 'items' => $this->popularnyeTovary( false )
-            ),true),
+            ),true),*/
             
             'preimushchestva' => $this->mdl_tpl->view('snipets/preimushchestva.html',array(
                 'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path')
@@ -232,6 +234,9 @@ class Home extends CI_Controller {
     
     // Лидеры продаж
     public function getLideryProdaj( $j = true ){
+   
+       error_reporting(-1);
+       ini_set('display_errors', 1);
         
         $r = $this->mdl_product->queryData([
             'return_type' => 'ARR2',
@@ -255,7 +260,7 @@ class Home extends CI_Controller {
             'order_by' => [
                 'item' => 'id',
                 'value' => 'RANDOM'
-            ], 
+            ],
             'labels' => ['id', 'aliase', 'title', 'salle_procent', 'modules'],
             'module' => true,
             'modules' => [[
@@ -291,6 +296,9 @@ class Home extends CI_Controller {
     
     // Популярные товары
     public function popularnyeTovary( $j = true ){
+   
+       error_reporting(-1);
+       ini_set('display_errors', 1);
         
         $r = $this->mdl_product->queryData([
             'return_type' => 'ARR2',

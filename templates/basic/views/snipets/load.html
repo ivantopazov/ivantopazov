@@ -35,7 +35,7 @@
                     <button data-dismiss="modal" class="close" type="button">
                         <span aria-hidden="true">×</span><span class="sr-only">Close</span>
 					</button>
-                    <h4 class="modal-title">Заявка на обратный звонок</h4>
+                    <h4 class="modal-title" id="callback_title">Заявка на обратный звонок</h4>
 				</div>
                 <div class="modal-body ev-modal_data">                                
                     <div class="row"> 
@@ -47,7 +47,7 @@
 					</div>                    
 				</div>
                 <div class="modal-footer">
-                    <button class="pull-right btn-event Conv_Circe-Bold button hover-shadows" type="submit">Отправить завяку</button>
+                    <button class="pull-right btn-event Conv_Circe-Bold button hover-shadows" type="submit">Отправить заявку</button>
 					
 				</div>
                 
@@ -179,11 +179,73 @@
     
 	<link href="/{{addons_folder}}/styles/plugins/bxSlider/jquery.bxslider.css" rel="stylesheet">
 	<script src="/{{addons_folder}}/scripts/plugins/bxSlider/bxslider.js"></script>
+	
+	<script src="//api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU" type="text/javascript"></script>
+	
+	<script>
+	   function callBackSale(){
+	       if(ymaps.geolocation.city.length>2) $("#callback_title").html("Ваш город "+ymaps.geolocation.city+"? Закажите обратный звонок и получите скидку 40%!");
+	       else $("#callback_title").html("Закажите обратный звонок и получите скидку 40%!");
+    	   $("#callback_link").attr("data-triggered", "click");
+    	   $("#callback_link").trigger("click");
+	   }
+	   
+        $("#callback_link").on("click", function(){
+            if($(this).attr("data-triggered")=="click") $(this).attr("data-triggered", "");
+            else $("#callback_title").html("Заявка на обратный звонок");
+        });
+        
+        function setCookie (name, value, expires, path, domain, secure) {
+            document.cookie = name + "=" + escape(value) +
+                ((expires) ? "; expires=" + expires : "") +
+                ((path) ? "; path=" + path : "") +
+                ((domain) ? "; domain=" + domain : "") +
+                ((secure) ? "; secure" : "");
+        }
+        
+        function getCookie(name) {
+        	var cookie = " " + document.cookie;
+        	var search = " " + name + "=";
+        	var setStr = null;
+        	var offset = 0;
+        	var end = 0;
+        	if (cookie.length > 0) {
+        		offset = cookie.indexOf(search);
+        		if (offset != -1) {
+        			offset += search.length;
+        			end = cookie.indexOf(";", offset)
+        			if (end == -1) {
+        				end = cookie.length;
+        			}
+        			setStr = unescape(cookie.substring(offset, end));
+        		}
+        	}
+        	return(setStr);
+        }
+        
+        function deleteCookie(name){
+          var cookie_date = new Date ();  // Текущая дата и время
+          cookie_date.setTime(cookie_date.getTime() - 1);
+          document.cookie = name + "=; expires=" + cookie_date.toGMTString();
+        }
+        
+        var interval = setInterval(function(){
+            var D = new Date();
+            if(!getCookie("alert")) setCookie("alert", D.getMinutes());
+            else if(D.getMinutes() - getCookie("alert") > 1){
+                deleteCookie("alert");
+                setCookie("alert", "100");
+                callBackSale();
+                clearInterval(interval);
+            }
+        }, 3600);
+	</script>
     
     
 	<script> 
 		$( document ).ready(function() {
-			$('.phone-mask').mask('+7(999)999-99-99'); 
+			if(screen.width > 767) $('.phone-mask').mask('+7(999)999-99-99');
+			else $('.phone-mask').val("+7");
             
             $('.brandsListSlider').bxSlider({
 				auto: true,
@@ -221,8 +283,22 @@
 			});
 		});
 	</script>
-		<!-- Chatra {literal} -->
+	<!— Chatra {literal} —>
 <script>
+(function(d, w, c) {
+w.ChatraID = 'bQvMtjD7e7g6EYDCj';
+var s = d.createElement('script');
+w[c] = w[c] || function() {
+(w[c].q = w[c].q || []).push(arguments);
+};
+s.async = true;
+s.src = 'https://call.chatra.io/chatra.js';
+if (d.head) d.head.appendChild(s);
+})(document, window, 'Chatra');
+</script>
+<!— /Chatra {/literal} —>
+		<!-- Chatra {literal} -->
+<!--<script>
     (function(d, w, c) {
         w.ChatraID = 'jksp4Yov6ThgxEbkq';
         var s = d.createElement('script');
@@ -234,5 +310,5 @@
         + '//call.chatra.io/chatra.js';
         if (d.head) d.head.appendChild(s);
     })(document, window, 'Chatra');
-</script>
+</script>-->
 <!-- /Chatra {/literal} -->

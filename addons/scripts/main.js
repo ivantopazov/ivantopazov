@@ -24,7 +24,7 @@ window.MAIN = {
                 var count = Number( count + val.qty );
             }
             var summaRUB = Number( summaCop / 100 );
-            if( summaCop > 500000 ){
+            /*if( summaCop > 500000 ){
                 var t = '';
                 t += 'Вы получаете бесплатную доставку';
                 $('#DeliverInfo').html( t );
@@ -35,7 +35,7 @@ window.MAIN = {
                 t += 'Сумма вашей корзины: ' + summaRUB + ' руб.';
                 $('#DeliverInfo').html( t );
                 $('#DeliverInfo').removeClass('hidden');
-            }
+            }*/ // Здесь было сообщение о минимальной сумме заказа для бесплатной доставки
         });
     },
 
@@ -178,9 +178,9 @@ window.MAIN = {
                 var count = Number( count + val.qty );
               }
               var summaRUB = Number( summaCop / 100 );
-              if( summaCop < 700000 ){
+              /*if( summaCop < 700000 ){
                   err++;
-              }
+              }*/ // Здесь стоял лимит на минимальную сумму заказа: 7к рублей в копейках
             });
 
             if( err < 1 ){
@@ -394,10 +394,9 @@ window.MAIN = {
         before : function( data ){
             var err = 0;
             var saveMenu = false;
-            for (var key in data.info) {
-                var val = data.info [key];
+            data.forEach (function(val) {
                 if( val.name === 'fio' ){
-                     if( !FNC.validate('string_cylric_plus', val.value ) ){
+                    if( !FNC.validate('string_cylric_plus', val.value.trim() ) ){
                         $( DOM.parent + ' input[name="fio"]').css('outline', '1px solid red');
                         setTimeout(function(){
                              $( DOM.parent + ' input[name="fio"]').css('outline', 'none');
@@ -406,7 +405,7 @@ window.MAIN = {
                     }
                 }
                 if( val.name === 'phone' ){
-                    if( FNC.validate( 'phone', val.value ) === false ){
+                    if( !FNC.validate( 'phone', val.value.trim() ) || val.value.trim().length < 10 ){
                         $( DOM.parent + ' input[name="phone"]').css('outline', '1px solid red');
                         setTimeout(function(){
                              $( DOM.parent + ' input[name="phone"]').css('outline', 'none');
@@ -414,7 +413,7 @@ window.MAIN = {
                         err++;
                     }
                 }
-            }
+            });
             return ( err < 1 ) ? true : false;
 
         },
