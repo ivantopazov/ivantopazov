@@ -57,7 +57,13 @@ class Mdl_product extends CI_Model
 			),
 			'table_name' => 'products',
 		);
+
+		$this->db->start_cache();
+
 		$this->_query[$index] = array_merge($_query, $settings);
+
+		$this->db->from($this->_query[$index]['table_name']);
+
 		if (count($this->_query[$index]['where']['set']) > 0) {
 			$lc = 0;
 			foreach ($this->_query[$index]['where']['set'] as $value) {
@@ -68,7 +74,6 @@ class Mdl_product extends CI_Model
 				$lc++;
 			}
 		}
-
 		if (count($this->_query[$index]['in']['set']) > 0) {
 			$lc = 0;
 			foreach ($this->_query[$index]['in']['set'] as $value) {
@@ -132,6 +137,9 @@ class Mdl_product extends CI_Model
 			$this->setFilters($this->_query[$index]['setFilters']);
 		}
 
+
+		$this->db->stop_cache();
+
 		if ($this->_query[$index]['limit'] !== false) {
 
 			if (is_int($this->_query[$index]['limit'])) {
@@ -145,7 +153,8 @@ class Mdl_product extends CI_Model
 
 		if ($this->_query[$index]['pagination']['on'] !== false) {
 
-			$this->_query[$index]['pagination']['count_all'] = $this->db->count_all_results($this->_query[$index]['table_name']);
+			$this->_query[$index]['pagination']['count_all'] = $this->db->count_all_results();
+
 			$page = (int)$this->_query[$index]['pagination']['page'] ?: 1;
 			$limit = (int)$this->_query[$index]['pagination']['limit'] ?: 10;
 			$offset = ($page - 1) * $limit;
@@ -181,7 +190,9 @@ class Mdl_product extends CI_Model
 		}
 
 		$this->_query[$index]['result'] = array();
-		$this->_query[$index]['result'] = $this->mdl_db->_all_query_db($this->_query[$index]['table_name']);
+		$this->_query[$index]['result'] = $this->mdl_db->_all_query_db();
+
+		$this->db->flush_cache();
 
 		// Очередность запуска модулей
 		$newArray = [];
