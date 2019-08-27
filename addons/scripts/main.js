@@ -24,18 +24,18 @@ window.MAIN = {
                 var count = Number( count + val.qty );
             }
             var summaRUB = Number( summaCop / 100 );
-            /*if( summaCop > 500000 ){
+            if( summaCop > 100000 ){
                 var t = '';
                 t += 'Вы получаете бесплатную доставку';
                 $('#DeliverInfo').html( t );
                 $('#DeliverInfo').removeClass('hidden');
             }else{
                 var t = '';
-                t += 'Получите бесплатную доставку при заказе от 5000 рублей! ';
+                t += 'Получите бесплатную доставку при заказе от 1000 рублей! ';
                 t += 'Сумма вашей корзины: ' + summaRUB + ' руб.';
                 $('#DeliverInfo').html( t );
                 $('#DeliverInfo').removeClass('hidden');
-            }*/ // Здесь было сообщение о минимальной сумме заказа для бесплатной доставки
+            }
         });
     },
 
