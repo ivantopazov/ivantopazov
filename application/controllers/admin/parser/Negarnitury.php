@@ -2,7 +2,7 @@
    
    defined('BASEPATH') OR exit('No direct script access allowed');
    
-   class Trofimova extends CI_Controller{
+   class Negarnitury extends CI_Controller{
       
       protected $user_info = array();
       protected $store_info = array();
@@ -13,7 +13,7 @@
       private $prod_table = "products";
       private $ph_table = "products_photos";
       
-      private $upload_path = "./uploads/products/trofimova/";
+      private $upload_path = "./uploads/products/negarnitury/";
       private $type_cat = [
        "Кольцо" => 1,
        "Серьги" => 10,
@@ -65,7 +65,7 @@
          
          $this->access_static();
          
-         $title = 'Выгрузка Trofimova jewellery';
+         $title = 'Выгрузка Ювелирные Традиции';
          $page_var = 'parser';
          
          $this->mdl_tpl->view('templates/doctype_admin.html', array(
@@ -91,13 +91,13 @@
            ]]
           ), true),
           
-          'content' => $this->mdl_tpl->view('pages/admin/parser/trofimova/trofimova.html', array(), true),
+          'content' => $this->mdl_tpl->view('pages/admin/parser/negarnitury/negarnitury.html', array(), true),
           
           'load' => $this->mdl_tpl->view('snipets/load.html', array(
            'addons_folder' => $this->mdl_stores->getСonfigFile('addons_folder')
           ), true),
           
-          'resorses' => $this->mdl_tpl->view('resorses/admin/parser/trofimova.html', array(
+          'resorses' => $this->mdl_tpl->view('resorses/admin/parser/negarnitury.html', array(
            'addons_folder' => $this->mdl_stores->getСonfigFile('addons_folder'),
            'config_scripts_path' => $this->mdl_stores->getСonfigFile('config_scripts_path')
           ), true)
@@ -112,7 +112,7 @@
          $err = 0;
          $double = 0;
          
-         $file = file($this->upload_path."/trofimova.csv");
+         $file = file($this->upload_path."/negarnitury.csv");
          $data = array();
          
          $file[$current_str] = mb_convert_encoding($file[$current_str], "utf8", "cp1251");
@@ -126,114 +126,118 @@
          }
          
          $data[0]["article"] = $val[1];
-         $data[0]["weight"] = str_replace(",", ".", $val[2]);
-         $data[0]["vstavka"] = $val[3];
+         $data[0]["vstavka"] = $val[2];
+         $data[0]["weight"] = $val[3];
          $data[0]["price"] = $val[4];
-         $data[0]["probe"] = $val[5];
-         $data[0]["size"] = str_replace("\r\n", "", $val[6]);
-         $data[0]["type"] = $val[7];
-         $data[0]["metal"] = $val[8];
+         //$data[0]["qty"] = $val[6];
+         $data[0]["size"] = $val[7];
+         $data[0]["type"] = $val[8];
+         $data[0]["metal"] = trim($val[9]);
          
          foreach($data as $key => $dt){
-            $title = $this->title($dt);
-            $params = $this->params($dt);
-            $filter = $this->filter($dt, $params[2]["value"]);
-            $drag = $this->drag($dt["vstavka"]);
-            
-            $item = [
-             'articul' => $dt['article'],
-             'cat' => $this->type_cat[$dt['type']],
-             'title' => $title,
-             'price_zac' => (int)str_replace(" ", "", $dt["price"]) * 100,
-             'price_roz' => (int)((int)str_replace(" ", "", $dt["price"]) * 2.5) * 100,
-             'current' => 'RUR',
-             'salle_procent' => rand(20, 40),
-             'view' => '1',
-             'qty' => '1',
-             'qty_empty' => '1',
-             'prices_empty' => '1',
-             'weight' => $dt["weight"],
-             'sex' => "woman",
-             'postavchik' => 'Trofimova jewellery',
-             'parser' => 'Trofimova',
-             'proba' => $dt['probe'],
-             'params' => json_encode($params),
-             'size' => $dt["size"],
-             'filters' => json_encode($filter),
-             'moderate' => '2',
-             'lastUpdate' => time(),
-             'optionLabel' => json_encode([
-              'collections' => "Trofimova jewellery",
-              'options' => "-",
-              'vstavki' => str_replace(" ", " ", str_replace(",", " ", $dt['vstavka'])),
-              'seria' => ""
-             ]),
-             'drag' => json_encode($drag)
-            ];
-            
-            // Получаем итем с одинаковым артикулом и весом для обновления цены
-            $prods = $this->mdl_product->queryData([
-             'type' => 'ARR2',
-             'where' => [
-              'method' => 'AND',
-              'set' => [[
-               'item' => 'parser',
-               'value' => 'Trofimova'
-              ], [
-               'item' => 'articul',
-               'value' => $dt["article"]
-              ]]
-             ],
-             'labels' => ['id', 'weight', 'size'],
-             'table_name' => $this->prod_table,
-            ]);
-            
-            // Если есть такой же товар по артиклу и весу, то обновляем его цену, иначе вносим в базу новый
-            if(count($prods) > 0){
-               foreach($prods as $k => $v){
-                  if($v["weight"] == $dt["weight"] and $v["size"] == $dt["size"]){
-                     $upd = [ // Сюда можно установить любые значения для обновления
-                      "price_zac" => $item["price_zac"],
-                      "price_roz" => $item["price_roz"]
-                     ];
-                     $this->mdl_db->_update_db($this->prod_table, "id", $v["id"], $upd);
-                     
-                     $double++; // Считаем дубли с обновлениями
-                     
-                     echo json_encode(["err" => $err, "double" => $double]);
-                     return;
+            $size = explode(" ", $dt["size"]);
+            foreach($size as $kk => $sz){
+               $title = $this->title($dt);
+               $params = $this->params($dt);
+               $filter = $this->filter($dt, $params[2]["value"], $sz);
+               $drag = $this->drag($dt["vstavka"]);
+   
+               if(empty($dt["price"])){
+                  $err++;
+                  echo json_encode(["err" => $err, "double" => $double]);
+                  return;
+               }
+               
+               $item = [
+                'articul' => $dt['article'],
+                'cat' => $this->type_cat[$dt['type']],
+                'title' => $title,
+                'price_zac' => (int)str_replace(" ", "", $dt["price"]) * 100,
+                'price_roz' => (int)((int)str_replace(" ", "", $dt["price"]) * 2.5) * 100,
+                'current' => 'RUR',
+                'salle_procent' => rand(20, 40),
+                'view' => '1',
+                'qty' => '1',
+                'qty_empty' => '1',
+                'prices_empty' => '1',
+                'weight' => $dt["weight"],
+                'sex' => "woman",
+                'postavchik' => 'Yuvelirnye Traditsii',
+                'parser' => 'Negarnitury',
+                'proba' => "585",
+                'params' => json_encode($params),
+                'size' => $sz,
+                'filters' => json_encode($filter),
+                'moderate' => '2',
+                'lastUpdate' => time(),
+                'optionLabel' => json_encode([
+                 'collections' => "Yuvelirnye Traditsii",
+                 'options' => "-",
+                 'vstavki' => str_replace(",", " ", $dt['vstavka']),
+                 'seria' => ""
+                ]),
+                'drag' => json_encode($drag)
+               ];
+               
+               // Получаем итем с одинаковым артикулом и весом для обновления цены
+               $prods = $this->mdl_product->queryData([
+                'type' => 'ARR2',
+                'where' => [
+                 'method' => 'AND',
+                 'set' => [[
+                  'item' => 'parser',
+                  'value' => 'Negarnitury'
+                 ], [
+                  'item' => 'articul',
+                  'value' => $dt["article"]
+                 ]]
+                ],
+                'labels' => ['id', 'weight', 'size'],
+                'table_name' => $this->prod_table,
+               ]);
+               
+               // Если есть такой же товар по артиклу и весу, то обновляем его цену, иначе вносим в базу новый
+               if(count($prods) > 0){
+                  foreach($prods as $k => $v){
+                     if($v["weight"] == $dt["weight"] and $v["size"] == $dt["size"]){
+                        $upd = [ // Сюда можно установить любые значения для обновления
+                         "aliase" => $this->mdl_product->aliase_translite($title).'_'.$this->mdl_product->aliase_translite(trim($dt["article"])).'_'.$v["id"],
+                         "price_zac" => $item["price_zac"],
+                         "price_roz" => $item["price_roz"]
+                        ];
+                        $this->mdl_db->_update_db($this->prod_table, "id", $v["id"], $upd);
+                        
+                        $double++; // Считаем дубли с обновлениями
+                        
+                        echo json_encode(["err" => $err, "double" => $double]);
+                        return;
+                     }
                   }
                }
+               
+               // Проверка фото
+               if(file_exists($this->upload_path.$dt["article"].".jpg")) $ph_name = $dt["article"].".jpg";
+               
+               if(!$ph_name){
+                  $err++;
+                  echo json_encode(["err" => $err, "double" => $double]);
+                  return;
+               }
+               
+               $this->db->insert($this->prod_table, $item);
+               $id = $this->db->insert_id();
+               if(!$id) $err++;
+               $aliase = $this->mdl_product->aliase_translite($title).'_'.$this->mdl_product->aliase_translite(trim($dt["article"])).'_'.$id;
+               $this->mdl_db->_update_db($this->prod_table, "id", $id, ["aliase" => $aliase]);
+               
+               $this->images($dt["article"], ".jpg");
+               $ph = [
+                "product_id" => $id,
+                "photo_name" => $ph_name, // Вместо алиаса по артиклу
+                "define" => 1
+               ];
+               $this->db->insert($this->ph_table, $ph);
             }
-            
-            // Проверка фото
-            if(file_exists($this->upload_path.$dt["article"].".jpg")){
-               $ph_name = $dt["article"].".jpg";
-               $ph_ext = ".jpg";
-            } else if(file_exists($this->upload_path.$dt["article"].".tif")){
-               $ph_name = $dt["article"].".tif";
-               $ph_ext = ".tif";
-            }
-            
-            if(!$ph_name){
-               $err++;
-               echo json_encode(["err" => $err, "double" => $double]);
-               return;
-            }
-            
-            $this->db->insert($this->prod_table, $item);
-            $id = $this->db->insert_id();
-            if(!$id) $err++;
-            $aliase = $this->mdl_product->aliase_translite($title).'_'.trim($dt["article"]).'_'.$id;
-            $this->mdl_db->_update_db($this->prod_table, "id", $id, ["aliase" => $aliase]);
-            
-            $this->images($dt["article"], $ph_ext);
-            $ph = [
-             "product_id" => $id,
-             "photo_name" => $ph_name, // Вместо алиаса по артиклу
-             "define" => 1
-            ];
-            $this->db->insert($this->ph_table, $ph);
             
             echo json_encode(["err" => $err, "double" => $double]);
             return;
@@ -252,20 +256,22 @@
          
          $len = strlen($title) + 3;
          $title .= " с ";
-         $kamen = explode(";", $dt["vstavka"]);
+         $kamen = explode(" ,", $dt["vstavka"]);
          foreach($kamen as $key => $val){
             if(preg_match("/Жемчуг/", $val) and !preg_match("/Жемчуг/", $title)) $title .= "Жемчугом, ";
-            if(preg_match("/Фианит/", $val) and !preg_match("/Фианит/", $title)) $title .= "Фианитом, ";
+            if(preg_match("/Фиан/", $val) and !preg_match("/Фианит/", $title)) $title .= "Фианитом, ";
             if(preg_match("/Гранат/", $val) and !preg_match("/Гранат/", $title)) $title .= "Гранатом, ";
             if(preg_match("/Корунд/", $val) and !preg_match("/Корунд/", $title)) $title .= "Корундом, ";
-            if(preg_match("/Топаз/", $val) and !preg_match("/Топаз/", $title)) $title .= "Топазом, ";
-            if(preg_match("/Аметист/", $val) and !preg_match("/Аметист/", $title)) $title .= "Аметистом, ";
+            if(preg_match("/Топаз Sky/", $val) and !preg_match("/Sky/", $title)) $title .= "Топазом Sky, ";
+            if(preg_match("/топ-London/", $val) and !preg_match("/Топаз/", $title)) $title .= "Топазом London, ";
+            if(preg_match("/Топ-swiss/", $val) and !preg_match("/Топаз/", $title)) $title .= "Топазом Swiss, ";
+            if(preg_match("/Амет/", $val) and !preg_match("/Аметист/", $title)) $title .= "Аметистом, ";
             if(preg_match("/Изумруд/", $val) and !preg_match("/Изумруд/", $title)) $title .= "Изумрудом, ";
             if(preg_match("/Бриллиант/", $val) and !preg_match("/Бриллиант/", $title)) $title .= "Бриллиантом, ";
             if(preg_match("/Родолит/", $val) and !preg_match("/Родолит/", $title)) $title .= "Родолитом, ";
             if(preg_match("/Шпинель/", $val) and !preg_match("/Шпинель/", $title)) $title .= "Шпинелью, ";
-            if(preg_match("/Раух-топаз/", $val) and !preg_match("/Раух-топаз/", $title)) $title .= "Раух-топазом, ";
-            if(preg_match("/Гранат/", $val) and !preg_match("/Гранат/", $title)) $title .= "Гранатом, ";
+            if(preg_match("/Р-топ/", $val) and !preg_match("/Раух-топаз/", $title)) $title .= "Раух-топазом, ";
+            if(preg_match("/Гр/", $val) and !preg_match("/Гранат/", $title)) $title .= "Гранатом, ";
             if(preg_match("/Лунный камень/", $val) and !preg_match("/Лунный камень/", $title)) $title .= "Лунным камнем, ";
             if(preg_match("/Агат/", $val) and !preg_match("/Агат/", $title)) $title .= "Агатом, ";
             if(preg_match("/Аквамарин/", $val) and !preg_match("/Аквамарин/", $title)) $title .= "Аквамарином, ";
@@ -279,8 +285,8 @@
             if(preg_match("/Сердолик/", $val) and !preg_match("/Сердолик/", $title)) $title .= "Сердоликом, ";
             if(preg_match("/Султанит/", $val) and !preg_match("/Султанит/", $title)) $title .= "Султанитом, ";
             if(preg_match("/Турмалин/", $val) and preg_match("/Турмалин/", $title)) $title .= "Турмалином, ";
-            if(preg_match("/Цитрин/", $val) and !preg_match("/Цитрин/", $title)) $title .= "Цитрином, ";
-            if(preg_match("/Хризолит/", $val) and !preg_match("/Хризолит/", $title)) $title .= "Хризолитом, ";
+            if(preg_match("/Цит/", $val) and !preg_match("/Цитрин/", $title)) $title .= "Цитрином, ";
+            if(preg_match("/Хр/", $val) and !preg_match("/Хризолит/", $title)) $title .= "Хризолитом, ";
          }
          
          if(strlen($title) == $len) $title = substr($title, 0, -3); // Если вдруг не оказалось совпадения по камням
@@ -313,7 +319,7 @@
           'value' => '-'
          ]];
          
-         $vstavka = explode(", ", $dt["vstavka"]);
+         $vstavka = explode(" ,", $dt["vstavka"]);
          
          $vstavka_param = "";
          $vstavka_form = "";
@@ -321,7 +327,8 @@
             $v = explode(" ", $value);
             
             $vstavka_param .= $v[1].", ";
-            $vstavka_form .= $v[2].", ";
+            if(preg_match("/Sky/", $v[2])) $vstavka_form .= $v[3].", ";
+            else $vstavka_form .= $v[2].", ";
          }
          $vstavka_param = substr($vstavka_param, 0, -2);
          $vstavka_form = substr($vstavka_form, 0, -2);
@@ -336,7 +343,7 @@
          return $params;
       }
       
-      private function filter($dt, $vstavka){
+      private function filter($dt, $vstavka, $size){
          $filter = [[
           'item' => 'metall',
           'values' => []
@@ -358,12 +365,12 @@
          if(trim($dt["metal"]) == "Красное золото") $filter[0]["values"][] = "krasnZoloto";
          if(trim($dt["metal"]) == "Желтое золото" or trim($dt["metal"]) == "Жёлтое золото") $filter[0]["values"][] = "JoltZoloto";
          
-         $kamen = explode(",", $vstavka);
+         $kamen = explode(", ", $vstavka);
          foreach($kamen as $k => $v) $filter[1]["values"][] = $this->mdl_product->aliase_translite($v);
          
          $filter[3]["values"][] = "woman";
          
-         $size = str_replace(",", "_", $dt["size"]);
+         $size = str_replace(",", "_", $size);
          $size = str_replace(".", "_", $size);
          $filter[4]["values"][] = $size;
          
@@ -373,15 +380,24 @@
       private function drag($descr){
          $drag = array();
          
-         $kamen = explode(",", $descr);
+         $kamen = explode(" ,", $descr);
          foreach($kamen as $key => $value){
             $val = explode(" ", $value);
+            
+            if(preg_match("/Sky/", $val[2])){
+               $form = $val[3];
+               $name = $val[1]." ".$val[2];
+            } else{
+               $form = $val[2];
+               $name = $val[1];
+            }
+            
             $drag[$key]["kamen"] = $val[1];
             $drag[$key]["data"] = [
              ["name" => "Кол-во камней", "value" => $val[0]],
-             ["name" => "Камень", "value" => $val[1]],
-             ["name" => "Форма огранки", "value" => $val[2]],
-             ["name" => "Вес, Ct.", "value" => $val[4]]
+             ["name" => "Камень", "value" => $name],
+             ["name" => "Форма огранки", "value" => $form],
+             ["name" => "Вес, Ct.", "value" => "-"]
             ];
          }
          
@@ -404,7 +420,7 @@
       }
       
       public function count(){
-         $file = file($this->upload_path."/trofimova.csv");
+         $file = file($this->upload_path."/negarnitury.csv");
          $count = count($file);
          if($count == 1 and strlen($file[0]) == 0) $count = 0;
          echo json_encode(['count' => $count]);
