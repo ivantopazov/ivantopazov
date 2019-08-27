@@ -201,7 +201,7 @@
                   foreach($prods as $k => $v){
                      if($v["weight"] == $dt["weight"] and $v["size"] == $dt["size"]){
                         $upd = [ // Сюда можно установить любые значения для обновления
-                         "aliase" => $aliase = $this->mdl_product->aliase_translite($title).'_'.$this->mdl_product->aliase_translite(trim($dt["article"])).'_'.$v["id"],
+                         "aliase" => $this->mdl_product->aliase_translite($title).'_'.$this->mdl_product->aliase_translite(trim($dt["article"])).'_'.$v["id"],
                          "price_zac" => $item["price_zac"],
                          "price_roz" => $item["price_roz"]
                         ];
