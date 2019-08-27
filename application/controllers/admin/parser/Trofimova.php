@@ -243,7 +243,7 @@
       private function title($dt){
          $title = $dt["type"]." из ";
          
-         if(trim($dt["metal"]) == "Желтое золото") $title .= "желтого ";
+         if(trim($dt["metal"]) == "Желтое золото" or trim($dt["metal"]) == "Жёлтое золото") $title .= "желтого ";
          if(trim($dt["metal"]) == "Красное золото") $title .= "красного ";
          if(trim($dt["metal"]) == "Белое золото") $title .= "белого ";
          $title .= "золота";
@@ -356,7 +356,7 @@
          
          if(trim($dt["metal"]) == "Белое золото") $filter[0]["values"][] = "belZoloto";
          if(trim($dt["metal"]) == "Красное золото") $filter[0]["values"][] = "krasnZoloto";
-         if(trim($dt["metal"]) == "Желтое золото") $filter[0]["values"][] = "JoltZoloto";
+         if(trim($dt["metal"]) == "Желтое золото" or trim($dt["metal"]) == "Жёлтое золото") $filter[0]["values"][] = "JoltZoloto";
          
          $kamen = explode(",", $vstavka);
          foreach($kamen as $k => $v) $filter[1]["values"][] = $this->mdl_product->aliase_translite($v);
@@ -381,7 +381,7 @@
              ["name" => "Кол-во камней", "value" => $val[0]],
              ["name" => "Камень", "value" => $val[1]],
              ["name" => "Форма огранки", "value" => $val[2]],
-             ["name" => "Вес, Ct.", "value" => $val[5]]
+             ["name" => "Вес, Ct.", "value" => $val[4]]
             ];
          }
          
