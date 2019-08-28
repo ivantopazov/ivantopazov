@@ -313,6 +313,36 @@ class Search extends CI_Controller  {
          
         $option = [
             'return_type' => 'ARR2+',
+            'like' => [
+             'math' => 'both',
+             'method' => 'OR',
+             'set' => [[
+              'item' => 'title',
+              'value' => $text
+             ],[
+              'item' => 'description',
+              'value' => $text
+             ],[
+              'item' => 'aliase',
+              'value' => $text
+             ],[
+              'item' => 'articul',
+              'value' => $text
+             ]]
+            ],
+            'where' => [
+             'method' => 'AND',
+             'set' => [[
+              'item' => 'view >',
+              'value' => 0
+             ],[
+              'item' => 'qty >',
+              'value' => 0
+             ],[
+              'item' => 'moderate >',
+              'value' => 1
+             ]]
+            ],
             'labels' => ['id', 'aliase', 'articul', 'title', 'prices_empty', 'filters', 'salle_procent', 'modules'],
             'pagination' => [
                 'on' => true,
@@ -436,7 +466,7 @@ class Search extends CI_Controller  {
         ];
         
         
-        $_r = $this->mdl_product->queryX( $this->db->select('*')->from('products')
+        /*$_r = $this->mdl_product->queryX( $this->db->select('*')->from('products')
             ->group_start()
                 ->where('view >', 0)
                 ->where('qty >', 0)
@@ -450,9 +480,11 @@ class Search extends CI_Controller  {
                 ->or_like('articul', $text)
             ->group_end()
             ->distinct()
+            ->limit(10)
             ->group_by('articul')
-        ->get(), $option );
+        ->get(), $option );*/
         
+        $_r = $this->mdl_product->queryData($option);
         
         $r['products'] = $_r['result'];
         $r['products_pag'] = $_r['option']['pag'];
