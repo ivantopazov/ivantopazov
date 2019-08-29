@@ -27,8 +27,8 @@
 
 		/* CSS3 Box Shadow */
 		-moz-box-shadow: 0 0 5px #777777, 0 0 10px #aaaaaa inset;
-		-webkit-box-shadow: 0 #777777px #777777;
-		box-shadow: 0 #777777px #777777, 0 #aaaaaapx #aaaaaa inset;
+		-webkit-box-shadow: 0 #777777px #777;
+		box-shadow: 0 #777777px #777, 0 #aaaaaapx #aaa inset;
 
 		/* CSS3 rounded corners */
 		-moz-border-radius: 90px;
@@ -61,7 +61,7 @@
 					{% for photo in product.modules.photos %}
 					{% if photo.define == '1' %}
 					<a href="/uploads/products/500/{{photo.photo_name}}" data-fancybox="gallery">
-						<img class="zoom-img" style="max-width: 100%;" alt="{{product.title}}"
+						<img style="max-width: 100%;" alt="{{product.title}}"
 							 src="/uploads/products/500/{{photo.photo_name}}">
 					</a>
 					{% endif %}
@@ -73,7 +73,7 @@
 					<div class="hidden"
 						 style="text-align: center; border: 1px solid #cbcbcb; padding: 3px; margin:0  0 8px 0px">
 						<div class="d-f-left-center">
-							<img class="zoom-img" style="width: 80px; height:80px;" alt=""
+							<img style="width: 80px; height:80px;" alt=""
 								 src="/uploads/products/100/{{photo.photo_name}}">
 						</div>
 					</div>
