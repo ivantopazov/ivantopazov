@@ -189,11 +189,11 @@ $(function () {
 
 	// Зум изображения при наведении
 	$('.zoom-img').imagezoomsl({
-		zoomrange: [2.12, 2.12],
-		magnifiersize: [630, 440],
+		zoomrange: [1.2, 1.2],
+		zoomstart: 1.2,
 		loopspeedanimate: 5,
-		cursorshadeborder: "1px solid black",
-		magnifiereffectanimate: "slideIn"
+		cursorshadeborder: '1px solid black',
+		magnifiereffectanimate: 'slideIn'
 	});
 
 });
