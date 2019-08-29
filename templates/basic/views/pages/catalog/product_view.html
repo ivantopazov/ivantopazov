@@ -1,92 +1,96 @@
 <style>
-    #webpage{
-	/* Contains the webpage screenshot */
-	width:499px;
-	height:283px;
-	position:absolute;
-	top:50%;
-	left:50%;
-	margin:-141px 0 0 -249px;
-}
+	#webpage {
+		/* Contains the webpage screenshot */
+		width: 499px;
+		height: 283px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		margin: -141px 0 0 -249px;
+	}
 
-#retina{
-	/* The Retina effect */
-	background:url('img/webpage.png') no-repeat center center white;
-	border:2px solid white;
+	#retina {
+		/* The Retina effect */
+		background: url('img/webpage.png') no-repeat center center white;
+		border: 2px solid white;
 
-	/* Positioned absolutely, so we can move it around */
-	position:absolute;
-	height:180px;
-	width:180px;
+		/* Positioned absolutely, so we can move it around */
+		position: absolute;
+		height: 180px;
+		width: 180px;
 
-	/* Hidden by default */
-	display:none;
+		/* Hidden by default */
+		display: none;
 
-	/* A blank cursor, notice the default fallback */
-	cursor:url('img/blank.cur'),default;
+		/* A blank cursor, notice the default fallback */
+		cursor: url('img/blank.cur'), default;
 
-	/* CSS3 Box Shadow */
-	-moz-box-shadow:0 0 5px #777, 0 0 10px #aaa inset;
-	-webkit-box-shadow:0 0 5px #777;
-	box-shadow:0 0 5px #777, 0 0 10px #aaa inset;
+		/* CSS3 Box Shadow */
+		-moz-box-shadow: 0 0 5px #777777, 0 0 10px #aaaaaa inset;
+		-webkit-box-shadow: 0 #777777px #777777;
+		box-shadow: 0 #777777px #777777, 0 #aaaaaapx #aaaaaa inset;
 
-	/* CSS3 rounded corners */
-	-moz-border-radius:90px;
-	-webkit-border-radius:90px;
-	border-radius:90px;
-}
+		/* CSS3 rounded corners */
+		-moz-border-radius: 90px;
+		-webkit-border-radius: 90px;
+		border-radius: 90px;
+	}
 
-#retina.chrome{
-	/* A special chrome version of the cursor */
-	cursor:url('img/blank_google_chrome.cur'),default;
-}
+	#retina.chrome {
+		/* A special chrome version of the cursor */
+		cursor: url('img/blank_google_chrome.cur'), default;
+	}
 
 
 </style>
 
 <section class="hidden_overflow">
-    <div class="container content">
-        <div class="bg-page">
+	<div class="container content">
+		<div class="bg-page">
 
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
-                <div style="text-align: center; border: 1px solid #cbcbcb; padding: 3px; margin-bottom: 10px">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
+				<div style="text-align: center; border: 1px solid #cbcbcb; padding: 3px; margin-bottom: 10px">
 
 
 					{% if product.salle_procent > 0 %}
-					<span class="label label-pill label-danger" style="position: absolute; margin-top: 20px; font-size: 130%; right: 45px;">- {{product.salle_procent}}%</span>
+					<span class="label label-pill label-danger"
+						  style="position: absolute; margin-top: 20px; font-size: 130%; right: 45px;">- {{product.salle_procent}}%</span>
 					{% endif %}
 
 
-                    {% for photo in product.modules.photos %}
-    					{% if photo.define == '1' %}
-                            <a href="/uploads/products/500/{{photo.photo_name}}" data-fancybox="gallery">
-        					    <img style="max-width: 100%;" alt="{{product.title}}" src="/uploads/products/500/{{photo.photo_name}}">
-                            </a>
-    					{% endif %}
-                    {% endfor %}
+					{% for photo in product.modules.photos %}
+					{% if photo.define == '1' %}
+					<a href="/uploads/products/500/{{photo.photo_name}}" data-fancybox="gallery">
+						<img class="zoom-img" style="max-width: 100%;" alt="{{product.title}}"
+							 src="/uploads/products/500/{{photo.photo_name}}">
+					</a>
+					{% endif %}
+					{% endfor %}
 
 				</div>
-                <div style="text-align: right; margin-bottom: 10px">
-                    {% for photo in product.modules.photos %}
-					<div class="hidden" style="text-align: center; border: 1px solid #cbcbcb; padding: 3px; margin:0  0 8px 0px">
+				<div style="text-align: right; margin-bottom: 10px">
+					{% for photo in product.modules.photos %}
+					<div class="hidden"
+						 style="text-align: center; border: 1px solid #cbcbcb; padding: 3px; margin:0  0 8px 0px">
 						<div class="d-f-left-center">
-							<img style="width: 80px; height:80px;" alt="" src="/uploads/products/100/{{photo.photo_name}}">
+							<img class="zoom-img" style="width: 80px; height:80px;" alt=""
+								 src="/uploads/products/100/{{photo.photo_name}}">
 						</div>
 					</div>
-                    {% endfor %}
+					{% endfor %}
 				</div>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="px18 mt15 Conv_CRC55">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="px18 mt15 Conv_CRC55">
 							{{brand_desc}}
 						</div>
 					</div>
-                </div>
+				</div>
 			</div>
 
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
 
-                <h2 class="Conv_Circe-Bold mt10t">{{product.title}}</h2>
+				<h2 class="Conv_Circe-Bold mt10t">{{product.title}}</h2>
 
 				<div class="pt10 mb15">
 					<div class="">
@@ -101,7 +105,7 @@
 					{% endif %}
 
 
-                    {% if product.salle_procent > 0 %}
+					{% if product.salle_procent > 0 %}
 					<div class="borbot pb20">
 						<ul class="list-inline px28">
 							<li>
@@ -142,17 +146,17 @@
 					{% endif %}
 				</div>
 
-                {% if product.salle_procent > 0 %}
+				{% if product.salle_procent > 0 %}
 				<div class="serebro_border p15_timer mb15">
 					<div class="clearfix visible-xs">
 
 						<div class="col-xs-12"><h3 class="mt0 Conv_CRC55">До конца акции осталось:</h3></div>
 
 						<div class="col-xs-12">
-							<ul class="list-inline" unload="Ev.catalog_product.runCounter( {{counter}} )" >
+							<ul class="list-inline" unload="Ev.catalog_product.runCounter( {{counter}} )">
 								<li>
 									<div class="serebro_border_mini p10 text-center px25 lh15 w50">
-										<span class="Conv_Circe-ExtraBold zoloto clearfix data-counter-h" >--</span>
+										<span class="Conv_Circe-ExtraBold zoloto clearfix data-counter-h">--</span>
 										<small class="Conv_CRC25 px10">часов</small>
 									</div>
 								</li>
@@ -187,16 +191,15 @@
 					</div>
 
 
-
 					<div class="clearfix hidden-xs">
 
 						<div class="col-xs-12"><h3 class="mt0 Conv_CRC55">До конца акции осталось:</h3></div>
 
 						<div class="col-xs-12">
-							<ul class="list-inline" unload="Ev.catalog_product.runCounter( {{counter}} )" >
+							<ul class="list-inline" unload="Ev.catalog_product.runCounter( {{counter}} )">
 								<li>
 									<div class="serebro_border_mini p10 text-center px25 lh15 w70">
-										<span class="Conv_Circe-ExtraBold zoloto clearfix data-counter-h" >--</span>
+										<span class="Conv_Circe-ExtraBold zoloto clearfix data-counter-h">--</span>
 										<small class="Conv_CRC25 px17">часов</small>
 									</div>
 								</li>
@@ -230,106 +233,112 @@
 
 					</div>
 				</div>
-                {% endif %}
+				{% endif %}
 
 				{% if product.size > 0 %}
 				<h4 class="Conv_CRC55 black"><strong>Размеры в наличии:</strong></h3>
 
-				<div class="plr5">
-					<ul class="list-inline px17 pb15_li mb0 plr0_li">
-						{% for size in sizes %}
-						{% if size.size == product.size %}
-						<li>
-							<a href="{{size.modules.linkPath}}" class="btn-mini">{{size.size}}</a>
-						</li>
-						{% else %}
-						<li>
-							<a href="{{size.modules.linkPath}}" class="btn-mini_default">{{size.size}}</a>
-						</li>
-						{% endif %}
-						{% endfor %}
-					</ul>
-				</div>
-
-				<a href="/wiki/kak-vybrat-razmer" class="px17 black_2 clearfix"><u>Как выбрать размер?</u></a>
-
-                {% endif %}
-
-                {% set price = 0 %}
-                {% if product.salle_procent > 0 %}
-                    {% set price = product.modules.salePrice.COP.salePrice %}
-                {% else %}
-                    {% set price = product.modules.price_actual[0].l[0].v.cop %}
-                {% endif %}
-
-
-				<a href="#" class=" btn-cart Conv_CRC55  btn-block text-center ZAG p15 px20 mt15"
-                        click="CART.add({ id:{{product.id}}, title:'{{product.title}}', price:{{price}}, qty:{type:'plus', value:1}, orig: { image:'{{product.modules.photos[0].photo_name}}', articul:'{{product.articul}}', link:'{{product.modules.linkPath}}'}}, MAIN.addCartCallback );">Добавить в корзину</a>
-
-				<div class="row">
-					<div class="col-xs-12">
-						<a href="#" class="btn-cart_default Conv_CRC55 btn-block text-center ZAG p15 px20 mt15"
-						data-toggle="modal" data-target="#modal_speedOrder" href="#" click="MAIN.speedAddCart({ id:{{product.id}}, title:'{{product.title}}', price:{{price}}, qty:1, orig: { image:'{{product.modules.photos[0].photo_name}}', articul:'{{product.articul}}', link:'{{product.modules.linkPath}}'}});"
-                        >
-							Быстрый заказ
-						</a>
+					<div class="plr5">
+						<ul class="list-inline px17 pb15_li mb0 plr0_li">
+							{% for size in sizes %}
+							{% if size.size == product.size %}
+							<li>
+								<a href="{{size.modules.linkPath}}" class="btn-mini">{{size.size}}</a>
+							</li>
+							{% else %}
+							<li>
+								<a href="{{size.modules.linkPath}}" class="btn-mini_default">{{size.size}}</a>
+							</li>
+							{% endif %}
+							{% endfor %}
+						</ul>
 					</div>
 
-					<!--div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-						<a href="#" class="btn-cart_default Conv_CRC55  btn-block text-center ZAG p15 px20 mt15"
-						data-toggle="modal" data-target="#modal_creditOrder" href="#" click="MAIN.CreditAddCart({ id:{{product.id}}, title:'{{product.title}}', price:{{product.modules.price_actual[0].l[0].v.cop}}, qty:1, orig: { image:'{{product.modules.photos[0].photo_name}}', articul:'{{product.articul}}', link:'{{product.modules.linkPath}}'}});"
-                        >
-						Покупка в кредит
-						</a>
-					</div-->
-				</div>
+					<a href="/wiki/kak-vybrat-razmer" class="px17 black_2 clearfix"><u>Как выбрать размер?</u></a>
+
+					{% endif %}
+
+					{% set price = 0 %}
+					{% if product.salle_procent > 0 %}
+					{% set price = product.modules.salePrice.COP.salePrice %}
+					{% else %}
+					{% set price = product.modules.price_actual[0].l[0].v.cop %}
+					{% endif %}
 
 
-				<div class="row mt15 hidden">
-					<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 Conv_CRC55 black mb25">
-						<img src="/templates/basic/images/ico-auto.png" class="mr15" align="left"> <p class="mt11"> Бесплатная доставка по России</p>
+					<a href="#" class=" btn-cart Conv_CRC55  btn-block text-center ZAG p15 px20 mt15"
+					   click="CART.add({ id:{{product.id}}, title:'{{product.title}}', price:{{price}}, qty:{type:'plus', value:1}, orig: { image:'{{product.modules.photos[0].photo_name}}', articul:'{{product.articul}}', link:'{{product.modules.linkPath}}'}}, MAIN.addCartCallback );">Добавить
+						в корзину</a>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<a href="#" class="btn-cart_default Conv_CRC55 btn-block text-center ZAG p15 px20 mt15"
+							   data-toggle="modal" data-target="#modal_speedOrder" href="#"
+							   click="MAIN.speedAddCart({ id:{{product.id}}, title:'{{product.title}}', price:{{price}}, qty:1, orig: { image:'{{product.modules.photos[0].photo_name}}', articul:'{{product.articul}}', link:'{{product.modules.linkPath}}'}});"
+							>
+								Быстрый заказ
+							</a>
+						</div>
+
+						<!--div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+							<a href="#" class="btn-cart_default Conv_CRC55  btn-block text-center ZAG p15 px20 mt15"
+							data-toggle="modal" data-target="#modal_creditOrder" href="#" click="MAIN.CreditAddCart({ id:{{product.id}}, title:'{{product.title}}', price:{{product.modules.price_actual[0].l[0].v.cop}}, qty:1, orig: { image:'{{product.modules.photos[0].photo_name}}', articul:'{{product.articul}}', link:'{{product.modules.linkPath}}'}});"
+							>
+							Покупка в кредит
+							</a>
+						</div-->
 					</div>
 
-					<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 Conv_CRC55 black">
-						<img src="/templates/basic/images/ico-ragantia.png" class="mr15" align="left"> <p class="mt11"> 10 лет гарантии на всю продукцию</p>
+
+					<div class="row mt15 hidden">
+						<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 Conv_CRC55 black mb25">
+							<img src="/templates/basic/images/ico-auto.png" class="mr15" align="left">
+							<p class="mt11"> Бесплатная доставка по России</p>
+						</div>
+
+						<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 Conv_CRC55 black">
+							<img src="/templates/basic/images/ico-ragantia.png" class="mr15" align="left">
+							<p class="mt11"> 10 лет гарантии на всю продукцию</p>
+						</div>
+
+					</div>
+					<!-- ################# -->
+
+
+					<div class="pt10 pb10 px15 fon18lh coltext">
+						<p>{{product.description}}</p>
 					</div>
 
-				</div>
-				<!-- ################# -->
 
-
-				<div class="pt10 pb10 px15 fon18lh coltext">
-					<p>{{product.description}}</p>
-				</div>
-
-
-				<div class="borbot pt10 pb10 pl10 bagav hidden">
-					<span>Количество: </span>
-					<span class="fon18s mar5555">
+					<div class="borbot pt10 pb10 pl10 bagav hidden">
+						<span>Количество: </span>
+						<span class="fon18s mar5555">
                         <input class="foren" type="text" id="count_qty" value="1" placeholder="1" size="5">
 					</span>
-				</div>
-
-				<div class="pt20 pb20 hidden">
-					<a href="#" class="btn_gora" click="CART.add({id:{{product.id}},title:'{{product.title|escape}}', price:{{product.modules.prices.cop}}, qty:{type:'fixed', input:'#count_qty', value:false }})" >Добавить в корзину</a>
-				</div>
-
-				<div class="hidden">
-					<div class="pt5 pb5 pl10 borbot">
-						<span class="display"  style="width:260px">Производитель:</span>
-						<span class="display fon17s ml10"> XiCA</span>
 					</div>
 
-					<div class="pt5 pb5 pl10 borbot">
-						<span class="display"  style="width:260px">Напряжение сети:</span>
-						<span class="display fon17s ml10"> 220 В/50 Гц </span>
+					<div class="pt20 pb20 hidden">
+						<a href="#" class="btn_gora"
+						   click="CART.add({id:{{product.id}},title:'{{product.title|escape}}', price:{{product.modules.prices.cop}}, qty:{type:'fixed', input:'#count_qty', value:false }})">Добавить
+							в корзину</a>
 					</div>
 
-					<div class="pt5 pb5 pl10 borbot">
-						<span class="display"  style="width:260px">Температура плавления пленки:</span>
-						<span class="display fon17s ml10"> 130°С  </span>
+					<div class="hidden">
+						<div class="pt5 pb5 pl10 borbot">
+							<span class="display" style="width:260px">Производитель:</span>
+							<span class="display fon17s ml10"> XiCA</span>
+						</div>
+
+						<div class="pt5 pb5 pl10 borbot">
+							<span class="display" style="width:260px">Напряжение сети:</span>
+							<span class="display fon17s ml10"> 220 В/50 Гц </span>
+						</div>
+
+						<div class="pt5 pb5 pl10 borbot">
+							<span class="display" style="width:260px">Температура плавления пленки:</span>
+							<span class="display fon17s ml10"> 130°С  </span>
+						</div>
 					</div>
-				</div>
 
 
 			</div>
@@ -337,25 +346,29 @@
 			<div class="col-xs-12">
 				<!-- Nav tabs -->
 				<ul class="nav nav-tabs nav-tabs_div" role="tablist">
-					<li role="presentation" class="active"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">Параметры</a></li>
-					<li role="presentation"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">О бренде</a></li>
-					<li role="presentation"><a href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">Отзывы</a></li>
+					<li role="presentation" class="active"><a href="#tab1" aria-controls="tab1" role="tab"
+															  data-toggle="tab">Параметры</a></li>
+					<li role="presentation"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">О
+						бренде</a></li>
+					<li role="presentation"><a href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">Отзывы</a>
+					</li>
 				</ul>
 			</div>
 			<!-- Tab panes -->
 			<div class="tab-content">
 				<div role="tabpanel" class="tab-pane fade in active pt10" id="tab1">
 
-                    {% if product.modules.paramsView |length > 0 %}
+					{% if product.modules.paramsView |length > 0 %}
 					<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mb15">
 						<div class="px18 mt15 Conv_Circe-Bold pb15">
 							Общие параметры:
 						</div>
 						{% for paramItem in product.modules.paramsView %}
-						<div class="Conv_CRC55 px17 mb10 bor_bot">{{paramItem.t}} <span class="pull-right"> {{paramItem.v}}</span></div>
+						<div class="Conv_CRC55 px17 mb10 bor_bot">{{paramItem.t}} <span class="pull-right"> {{paramItem.v}}</span>
+						</div>
 						{% endfor %}
 					</div>
-                    {% endif %}
+					{% endif %}
 
 					{% if product.modules.drags|length > 0 %}
 					<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mb15">
@@ -369,7 +382,8 @@
 
 						<!-- Параметры камня -->
 						{% for item in drag.data %}
-						<div class="Conv_CRC55 px17 mb10 bor_bot">{{item.name}} <span class="pull-right"> {{item.value|capitalize}}</span></div>
+						<div class="Conv_CRC55 px17 mb10 bor_bot">{{item.name}} <span class="pull-right"> {{item.value|capitalize}}</span>
+						</div>
 						{% endfor %}
 						<!-- ./Параметры камня -->
 
@@ -382,7 +396,7 @@
 
 				<div role="tabpanel" class="tab-pane fade" id="tab2">
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <div class="px18 mt15 Conv_CRC55">
+						<div class="px18 mt15 Conv_CRC55">
 							{{brand_desc}}
 						</div>
 					</div>
@@ -390,29 +404,31 @@
 
 				<div role="tabpanel" class="tab-pane fade" id="tab3">
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <div class="px18 mt15 Conv_CRC55">
+						<div class="px18 mt15 Conv_CRC55">
 
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <span class="title2 Conv_CRC55"><a href="#" data-toggle="modal" data-target="#modal_new_otziv">Оставить отзыв</a></span>
+							<div class="row">
+								<div class="col-xs-12">
+									<span class="title2 Conv_CRC55"><a href="#" data-toggle="modal"
+																	   data-target="#modal_new_otziv">Оставить отзыв</a></span>
 								</div>
 							</div>
 
-                            <div class="row" style="margin-top: 20px">
-                                <div class="col-xs-12" id="reviwsList">
+							<div class="row" style="margin-top: 20px">
+								<div class="col-xs-12" id="reviwsList">
 
-                                    {% for item in product.modules.reviews %}
+									{% for item in product.modules.reviews %}
 
 									{% if item.moderate == 0 %}
 									<!--noindex-->
 									{% endif %}
 
-									<div class="row {% if item.moderate < 1 %}hidden{% endif %}" data-review-code="{{item.ls_code}}" >
+									<div class="row {% if item.moderate < 1 %}hidden{% endif %}"
+										 data-review-code="{{item.ls_code}}">
 										<div class="col-xs-12">
 											<div class="rating_item">
 												<input type="hidden" name="val" value="{{item.rating}}"/>
 											</div>
-											<p><b>{{item.author}}</b> <br /> {{item.name}} - {{item.description}}</p>
+											<p><b>{{item.author}}</b> <br/> {{item.name}} - {{item.description}}</p>
 										</div>
 									</div>
 
@@ -420,7 +436,7 @@
 									<!--/noindex-->
 									{% endif %}
 
-                                    {% endfor %}
+									{% endfor %}
 
 								</div>
 							</div>
@@ -435,60 +451,63 @@
 			<div class="col-xs-12"></div>
 
 
-
 		</div>
 	</div>
 </section>
 
 <div aria-hidden="true" role="dialog" tabindex="-1" id="modal_new_otziv" class="modal inmodal fade">
-    <div class="modal-dialog modal-xs">
-        <div class="modal-content">
+	<div class="modal-dialog modal-xs">
+		<div class="modal-content">
 
-            <form action="/catalog/setReview" method="post"
-			before="Ev.catalog_product.setReview.before"
-			success="Ev.catalog_product.setReview.success"
-			data_type="json" id="form_setReview"
+			<form action="/catalog/setReview" method="post"
+				  before="Ev.catalog_product.setReview.before"
+				  success="Ev.catalog_product.setReview.success"
+				  data_type="json" id="form_setReview"
 			>
 
-                <div class="modal-header">
+				<div class="modal-header">
 
-                    <button data-dismiss="modal" class="close" type="button">
-                        <span aria-hidden="true">×</span><span class="sr-only">Close</span>
+					<button data-dismiss="modal" class="close" type="button">
+						<span aria-hidden="true">×</span><span class="sr-only">Close</span>
 					</button>
-                    <h4 class="modal-title">Форма добавления нового отзыва</h4>
+					<h4 class="modal-title">Форма добавления нового отзыва</h4>
 
 				</div>
 
-                <div class="modal-body ev-modal_data">
+				<div class="modal-body ev-modal_data">
 
-                    <div class="row">
-                        <div class="col-xs-12">
+					<div class="row">
+						<div class="col-xs-12">
 
-                            <p class="mb5">
-                                <input style="width: 100%;" class="form-control text-left" name="name" placeholder="Обьект отзыва [ Цена,Доставка,Внешний вид, ... ]" type="text">
+							<p class="mb5">
+								<input style="width: 100%;" class="form-control text-left" name="name"
+									   placeholder="Обьект отзыва [ Цена,Доставка,Внешний вид, ... ]" type="text">
 							</p>
 
-                            <p class="mb5">
-                                <input style="width: 100%;" class="form-control text-left" name="author" placeholder="Ваше имя" type="text">
+							<p class="mb5">
+								<input style="width: 100%;" class="form-control text-left" name="author"
+									   placeholder="Ваше имя" type="text">
 							</p>
 
-                            <p class="mb5">
-                                <textarea style="width: 100%; min-height: 79px;" name="description" class="input-style-2 h150 form-control"
-                                placeholder="Текст отзыва"></textarea>
+							<p class="mb5">
+                                <textarea style="width: 100%; min-height: 79px;" name="description"
+										  class="input-style-2 h150 form-control"
+										  placeholder="Текст отзыва"></textarea>
 							</p>
 
-                            <div unload="Ev.catalog_product.rating( this );"></div>
+							<div unload="Ev.catalog_product.rating( this );"></div>
 
-                            <input type="hidden" name="product_id" value="{{product.id}}" />
-                            <input type="hidden" name="codetch" value="{{oneString}}" />
+							<input type="hidden" name="product_id" value="{{product.id}}"/>
+							<input type="hidden" name="codetch" value="{{oneString}}"/>
 
 						</div>
 					</div>
 
 				</div>
 
-                <div class="modal-footer">
-                    <button class="btn-event Conv_Circe-Bold button hover-shadows" type="submit">Отправить отзыв</button>
+				<div class="modal-footer">
+					<button class="btn-event Conv_Circe-Bold button hover-shadows" type="submit">Отправить отзыв
+					</button>
 				</div>
 
 			</form>
