@@ -5,9 +5,9 @@ $(function(){
             
             var db_block = $(this).parents('div[data-parent]').attr('data-parent');
             
-            setTimeout(function(){
+            /*setTimeout(function(){
                 Ev.catalog.getFiltersParam( db_block );
-            },100);
+            },100);*/
         }).iCheck({
             checkboxClass: 'icheckbox_square-green',
             radioClass: 'iradio_square-green'
@@ -86,7 +86,7 @@ $(function(){
                 FNC._set_url(setUrl);
                 setTimeout(function(){
                     window.location.reload();
-                },100); 
+                },100);
                  
             }
             
