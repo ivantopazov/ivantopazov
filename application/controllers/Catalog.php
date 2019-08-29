@@ -243,6 +243,9 @@ class Catalog extends CI_Controller
 				'set' => [[
 					'item' => 'parent_id <',
 					'value' => '1',
+				],[
+					'item' => 'view >',
+					'value' => '0',
 				]],
 			],
 			'labels' => ['id', 'name', 'aliase', 'image'],
@@ -263,6 +266,14 @@ class Catalog extends CI_Controller
 		$start = microtime(true);
 
 		$getData = $this->getCatData($data['item']['id'], $data['item']['aliase'], false);
+
+		// Если нет товаров, ставим заглушку
+		if (count($getData["products"]) < 1) {
+			$descr = "<p style='font-size:18px;font-weight:bold;'>
+				Не нашли, что искали? Закажите <a href='#' data-toggle='modal' data-target='#modal_callback' style='color:#337ab7;'>звонок консультанта</a> или напишите в чат - возможно, на сайте идут работы. Приносим свои извинения за неудобства!
+			</p>";
+		} else $descr = "";
+
 		/*
 		echo "<pre>";
 		print_r( $getData['products'] );
@@ -334,8 +345,8 @@ class Catalog extends CI_Controller
 				'products' => $this->mdl_tpl->view('pages/catalog/category_view_products.html', array(
 					'items' => $getData['products'],
 				), true),
-				'pagination' => $getData['products_pag']/*,
-				'description' => $data['item']['desription'],*/
+				'pagination' => $getData['products_pag'],
+				'description' => $descr //$data['item']['desription'],
 			), true),
 
 			'footer' => $this->mdl_tpl->view('snipets/footer.html', array(
