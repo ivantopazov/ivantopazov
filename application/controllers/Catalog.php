@@ -1064,7 +1064,7 @@ class Catalog extends CI_Controller
 
 	}
 
-	// Блок вам понравится
+	// Блок "Дополните свой образ"
 	public function getKomplect($prodID = false, $j = true)
 	{
 
@@ -1078,9 +1078,6 @@ class Catalog extends CI_Controller
 					'set' => [[
 						'item' => 'id',
 						'value' => $prodID,
-					], [
-						'item' => 'postavchik',
-						'value' => 'Alcor',
 					]],
 				],
 				'labels' => ['id', 'optionLabel'],
@@ -1093,7 +1090,10 @@ class Catalog extends CI_Controller
 				if (isset($optionLabel['options'])) {
 
 					$OlO = $optionLabel['options'];
-					$_olo = explode(',', $OlO);
+					$_olo = array_map(function($article) {
+					    return trim($article);
+                    }, explode(',', $OlO));
+
 					if (count($_olo) > 0) {
 
 						$r = $this->mdl_product->queryData([

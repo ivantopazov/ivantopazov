@@ -579,8 +579,8 @@ class Kaborovsky extends CI_Controller {
                 'moderate' => '2',
                 'lastUpdate' => time(),
                 'optionLabel' => json_encode([
-                    'collections' => $item['seo_keys'],
-                    'options' => $item['optionLabel'],
+                    'characteristic' => $item['optionLabel'],
+                    'options' => $item['seo_keys'],
                     'seria' => $item['cat']
                 ])
             ];
