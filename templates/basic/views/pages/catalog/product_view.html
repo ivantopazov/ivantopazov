@@ -490,12 +490,19 @@
 							</p>
 
 							<p class="mb5">
+								<input style="width: 100%;" class="form-control text-left" name="email"
+									   placeholder="Ваш email (не показывается на сайте)" type="text">
+							</p>
+
+							<p class="mb5">
                                 <textarea style="width: 100%; min-height: 79px;" name="description"
 										  class="input-style-2 h150 form-control"
 										  placeholder="Текст отзыва"></textarea>
 							</p>
 
 							<div unload="Ev.catalog_product.rating( this );"></div>
+
+							<div class="g-recaptcha" data-sitekey="6LdaxbUUAAAAAGLAnbIlbIMWilK3y3uMMiawdooA"></div>
 
 							<input type="hidden" name="product_id" value="{{product.id}}"/>
 							<input type="hidden" name="codetch" value="{{oneString}}"/>
