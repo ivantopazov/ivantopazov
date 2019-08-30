@@ -141,7 +141,7 @@ window.MAIN = {
 				var val = data.info [key];
 
 				if (val.name === 'fio') {
-					if (!FNC.validate('string_cylric_plus', val.value)) {
+					if (!FNC.validate('string_cylric_plus', val.value.trim())) {
 						$(DOM.parent + ' input[name="fio"]').css('outline', '1px solid red');
 						setTimeout(function () {
 							$(DOM.parent + ' input[name="fio"]').css('outline', 'none');
@@ -151,7 +151,7 @@ window.MAIN = {
 				}
 
 				if (val.name === 'phone') {
-					if (val.value.length < 1) {
+					if (val.value.trim().length < 10) {
 						$(DOM.parent + ' input[name="phone"]').css('outline', '1px solid red');
 						setTimeout(function () {
 							$(DOM.parent + ' input[name="phone"]').css('outline', 'none');
@@ -161,7 +161,7 @@ window.MAIN = {
 				}
 
 				if (val.name === 'email') {
-					if (val.value.length < 1) {
+					if (val.value.trim().length < 1) {
 						$(DOM.parent + ' input[name="email"]').css('outline', '1px solid red');
 						setTimeout(function () {
 							$(DOM.parent + ' input[name="email"]').css('outline', 'none');
@@ -171,7 +171,7 @@ window.MAIN = {
 				}
 
 				if (val.name === 'times') {
-					if (val.value.length < 1) {
+					if (val.value.trim().length < 1) {
 						$(DOM.parent + ' input[name="times"]').css('outline', '1px solid red');
 						setTimeout(function () {
 							$(DOM.parent + ' input[name="times"]').css('outline', 'none');
@@ -181,7 +181,7 @@ window.MAIN = {
 				}
 
 				if (val.name === 'city') {
-					if (val.value.length < 1) {
+					if (val.value.trim().length < 1) {
 						$(DOM.parent + ' input[name="city"]').css('outline', '1px solid red');
 						setTimeout(function () {
 							$(DOM.parent + ' input[name="city"]').css('outline', 'none');
@@ -191,7 +191,7 @@ window.MAIN = {
 				}
 
 				if (val.name === 'address') {
-					if (val.value.length < 1) {
+					if (val.value.trim().length < 1) {
 						$(DOM.parent + ' input[name="address"]').css('outline', '1px solid red');
 						setTimeout(function () {
 							$(DOM.parent + ' input[name="address"]').css('outline', 'none');
