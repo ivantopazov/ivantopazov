@@ -1,17 +1,18 @@
 $(function () {
 
     $.getScript("/addons/scripts/plugins/iCheck/icheck.min.js", function () {
-        $('input.i-checks').on('ifChanged', function (event) {
+        $('input.i-checks')
+            /*.on('ifChanged', function (event) {
+                var db_block = $(this).parents('div[data-parent]').attr('data-parent');
 
-            var db_block = $(this).parents('div[data-parent]').attr('data-parent');
-
-            /*setTimeout(function(){
-                Ev.catalog.getFiltersParam( db_block );
-            },100);*/
-        }).iCheck({
-            checkboxClass: 'icheckbox_square-green',
-            radioClass: 'iradio_square-green'
-        });
+                setTimeout(function(){
+                    Ev.catalog.getFiltersParam( db_block );
+                },100);
+            })*/
+            .iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green'
+            });
     });
 
     var init = function () {
