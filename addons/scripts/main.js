@@ -160,11 +160,41 @@ window.MAIN = {
 					}
 				}
 
-				if (val.name === 'adress') {
+				if (val.name === 'email') {
 					if (val.value.length < 1) {
-						$(DOM.parent + ' textarea[name="adress"]').css('outline', '1px solid red');
+						$(DOM.parent + ' input[name="email"]').css('outline', '1px solid red');
 						setTimeout(function () {
-							$(DOM.parent + ' textarea[name="adress"]').css('outline', 'none');
+							$(DOM.parent + ' input[name="email"]').css('outline', 'none');
+						}, 5000);
+						err++;
+					}
+				}
+
+				if (val.name === 'times') {
+					if (val.value.length < 1) {
+						$(DOM.parent + ' input[name="times"]').css('outline', '1px solid red');
+						setTimeout(function () {
+							$(DOM.parent + ' input[name="times"]').css('outline', 'none');
+						}, 5000);
+						err++;
+					}
+				}
+
+				if (val.name === 'city') {
+					if (val.value.length < 1) {
+						$(DOM.parent + ' input[name="city"]').css('outline', '1px solid red');
+						setTimeout(function () {
+							$(DOM.parent + ' input[name="city"]').css('outline', 'none');
+						}, 5000);
+						err++;
+					}
+				}
+
+				if (val.name === 'address') {
+					if (val.value.length < 1) {
+						$(DOM.parent + ' input[name="address"]').css('outline', '1px solid red');
+						setTimeout(function () {
+							$(DOM.parent + ' input[name="address"]').css('outline', 'none');
 						}, 5000);
 						err++;
 					}
