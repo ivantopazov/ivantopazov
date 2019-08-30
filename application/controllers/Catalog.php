@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-require_once $_SERVER["DOCUMENT_ROOT"]."/application/libraries/ReCaptcha.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/application/libraries/ReCaptcha.php";
 
 class Catalog extends CI_Controller
 {
@@ -245,7 +245,7 @@ class Catalog extends CI_Controller
 				'set' => [[
 					'item' => 'parent_id <',
 					'value' => '1',
-				],[
+				], [
 					'item' => 'view >',
 					'value' => '0',
 				]],
@@ -1153,7 +1153,6 @@ class Catalog extends CI_Controller
 	// получение данных отзыва
 	public function setReview($j = true)
 	{
-
 		$r = ['err' => 1, 'mess' => 'Данные введены некорректно'];
 
 		$name = (isset($this->post['name'])) ? $this->post['name'] : false;
@@ -1163,11 +1162,12 @@ class Catalog extends CI_Controller
 		$set_rating = (isset($this->post['set_rating'])) ? $this->post['set_rating'] : false;
 		$product_id = (isset($this->post['product_id'])) ? $this->post['product_id'] : false;
 		$codetch = (isset($this->post['codetch'])) ? $this->post['codetch'] : false;
+		$ph = ($_POST["photo"]) ? "ok" : "not";
 
+		// Проверка капчи со стороны гугла
 		$secret = "6LdaxbUUAAAAAF-z_Jut-sQIOzD2Wc7SGPFUa3nU";
 		$response = null;
 		$reCaptcha = new ReCaptcha($secret);
-
 		if ($_POST["g-recaptcha-response"]) {
 			$response = $reCaptcha->verifyResponse(
 				$_SERVER["REMOTE_ADDR"],
