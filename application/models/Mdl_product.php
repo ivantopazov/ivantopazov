@@ -931,8 +931,12 @@ class Mdl_product extends CI_Model
 			$this->db->where_in('postavchik', $filter['values']);
 		} else {
 			$column = "filter_{$filter['item']}";
-			$condition = implode(" OR ", array_map(function ($value) use ($column) {
-				return "JSON_CONTAINS($column, '[\"$value\"]')";
+			$condition = implode(" OR ", array_map(function ($valueOr) use ($column) {
+                $valueOr  = trim($valueOr, ' ,');
+				return implode(" AND ", array_map(function ($valueAnd) use ($column) {
+                    $valueAnd = trim($valueAnd);
+                    return "JSON_CONTAINS($column, '[\"$valueAnd\"]')";
+                }, explode(',', $valueOr)));
 			}, $filter['values']));
 			$this->db->where("($condition)");
 		}
