@@ -213,6 +213,7 @@ class Negarnitury extends CI_Controller
 							$upd = [ // Сюда можно установить любые значения для обновления
 								"price_zac" => $item["price_zac"],
 								"price_roz" => $item["price_roz"],
+								"filters" => $item["filters"],
 							];
 							$this->mdl_db->_update_db($this->prod_table, "id", $v["id"], $upd);
 
@@ -378,7 +379,17 @@ class Negarnitury extends CI_Controller
 		if (trim($dt["metal"]) == "Желтое золото" or trim($dt["metal"]) == "Жёлтое золото") $filter[0]["values"][] = "JoltZoloto";
 
 		$kamen = explode(", ", $vstavka);
-		foreach ($kamen as $k => $v) $filter[1]["values"][] = $this->mdl_product->aliase_translite($v);
+		foreach ($kamen as $k => $v) {
+			$v = str_replace("Гр", "Гранат", $v);
+			$v = str_replace("Цит", "Цитрин", $v);
+			$v = str_replace("Амет", "Аметист", $v);
+			$v = str_replace("Фиан", "Фианит", $v);
+			$v = str_replace("Хр", "Хризолит", $v);
+			$v = str_replace("Топ-swiss", "Топаз Swiss", $v);
+			$v = str_replace("топ-London", "Топаз London", $v);
+			$v = str_replace("Р-топ", "Раух-Топаз", $v);
+			$filter[1]["values"][] = $this->mdl_product->aliase_translite($v);
+		}
 
 		$filter[3]["values"][] = "woman";
 
