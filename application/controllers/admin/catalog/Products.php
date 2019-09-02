@@ -525,8 +525,7 @@ class Products extends CI_Controller
 
 		$prices_empty = (isset($this->post['prices_empty'])) ? $this->post['prices_empty'] : 1;
 
-		//if( $title === false || $shop_category < 1 ) exit('{"err":"1","mess":"Данные - содержат ошибку"}');
-		//todo здесь костыль - не выполняется условие выше при обновлении цены
+		if (!$price_zac and !$price_roz) exit('{"err":"1","mess":"Данные - содержат ошибку"}');
 
 		$data = [
 			'price_zac' => $price_zac,
