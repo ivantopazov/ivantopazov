@@ -141,17 +141,14 @@ $(function () {
 							var r = text.toLowerCase().indexOf(str.toLowerCase());
 							return ( r >= 0 ) ? true : false;
 						};
-						var priceCount = 0;
-						var define_valuta = 0;
+						var zac = 0;
 						var product_id = false;
 						for (var key in data) {
 							var val = data [key];
-							if (LIKE('PRICE', val.name)) priceCount++;
-							if (val.name === 'define_valuta') define_valuta++;
+							if (val.name === 'price_zac') zac++;
 							if (val.name === 'product_id') product_id++;
 						}
-						//return ( priceCount > 0 && define_valuta > 0 && product_id  !== false ) ? true : false;
-						return true; //todo здесь костыль - по условию выше кнопка не работает
+						return ( zac > 0 && product_id !== false ) ? true : false;
 					},
 					success: function (response) {
 						FNC.alert(( response.err > 0 ) ? 'error' : 'success', response.mess);
