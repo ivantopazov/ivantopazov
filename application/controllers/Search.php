@@ -337,6 +337,7 @@ class Search extends CI_Controller
 				]],
 			],
 			'labels' => ['id', 'aliase', 'articul', 'title', 'prices_empty', 'filters', 'salle_procent', 'modules'],
+			'group_by' => 'articul',
 			'pagination' => [
 				'on' => true,
 				'page' => (isset($this->get['page'])) ? $this->get['page'] : 1,
