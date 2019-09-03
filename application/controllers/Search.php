@@ -91,198 +91,6 @@ class Search extends CI_Controller
 
 	}
 
-	// УСТАРЕЛА
-	public function _____getSearch($j = true)
-	{
-
-		$r = [];
-
-		$text = (isset($this->get['t'])) ? $this->get['t'] : false;
-		$text = (isset($this->post['t'])) ? $this->post['t'] : $text;
-
-		$query_string = array();
-		$query_string = array_merge($query_string, $this->get);
-		$query_string = array_merge($query_string, $this->post);
-
-		unset($query_string['page']);
-		unset($query_string['limit']);
-
-		$query_string = $this->mdl_helper->clear_array_0($query_string, array(
-			'f', 's', 'l', 't',
-		));
-
-		$sffix = $query_string;
-
-		$option = [
-			'return_type' => 'ARR2+',
-			'debug' => true,
-			'like' => [
-				'math' => 'both',
-				'method' => 'OR',
-				'set' => [[
-					'item' => 'title',
-					'value' => $text,
-				], [
-					'item' => 'description',
-					'value' => $text,
-				], [
-					'item' => 'aliase',
-					'value' => $text,
-				], [
-					'item' => 'articul',
-					'value' => $text,
-				]],
-			],
-			'where' => [
-				'method' => 'AND',
-				'set' => [[
-					'item' => 'view >',
-					'value' => 0,
-				], [
-					'item' => 'qty >',
-					'value' => 0,
-				], [
-					'item' => 'moderate >',
-					'value' => 1,
-				]],
-			],
-			'table_name' => 'sdfsdfsdf',
-			'group_by' => 'articul',
-			'distinct' => true,
-
-			'labels' => ['id', 'aliase', 'articul', 'title', 'prices_empty', 'filters', 'salle_procent', 'modules'],
-			'pagination' => [
-				'on' => true,
-				'page' => (isset($this->get['page'])) ? $this->get['page'] : 1,
-				'limit' => (isset($this->get['l'])) ? $this->get['l'] : 40,
-			],
-			'module' => true,
-			'modules' => [[
-				'module_name' => 'linkPath',
-				'result_item' => 'linkPath',
-				'option' => [],
-			], [
-				'module_name' => 'price_actual',
-				'result_item' => 'price_actual',
-				'option' => [
-					'labels' => false,
-				],
-			], [
-				'module_name' => 'salePrice',
-				'result_item' => 'salePrice',
-				'option' => [],
-			], [
-				'module_name' => 'photos',
-				'result_item' => 'photos',
-				'option' => [
-					'no_images_view' => 1,
-				],
-			], [
-				'module_name' => 'emptyPrice',
-				'result_item' => 'emptyPrice',
-				'option' => [
-					'labels' => false,
-				],
-			]],
-		];
-
-		$setFilters = []; // Запомнить установки выбора
-		if (isset($this->get['f']) && is_array($this->get['f'])) {
-
-			$f = $this->get['f'];
-			$fNew = [];
-			foreach ($f as $k => $v) {
-				foreach ($filter as $fv) {
-					if ($fv['variabled'] == $k) {
-						$fNew[] = [
-							'item' => $k,
-							'type' => $fv['type'],
-							'values' => explode('|', $v),
-						];
-					}
-				}
-			}
-
-			$option['modules'][] = [
-				'module_name' => 'setFilters',
-				'result_item' => 'setFilters',
-				'option' => [
-					'setItems' => $fNew,
-				],
-			];
-			$setFilters = $fNew;
-		}
-
-		$r['sort'] = (isset($this->get['s'])) ? $this->get['s'] : 'new';
-
-		if (isset($this->get['s'])) {
-
-			$sort = $this->get['s'];
-
-			if ($sort === 'pop') {
-				$option['order_by'] = [
-					'item' => 'view',
-					'value' => 'DESC',
-				];
-			}
-
-			if ($sort === 'new') {
-				$option['order_by'] = [
-					'item' => 'id',
-					'value' => 'DESC',
-				];
-			}
-
-			if ($sort === 'upsells') {
-				$option['order_by'] = [
-					'item' => 'salle_procent',
-					'value' => 'DESC',
-				];
-			}
-
-			if ($sort === 'pricemin') {
-				$option['order_by'] = [
-					'item' => 'price_roz',
-					'value' => 'ASC',
-				];
-			}
-
-			if ($sort === 'pricemax') {
-				$option['order_by'] = [
-					'item' => 'price_roz',
-					'value' => 'DESC',
-				];
-			}
-
-		}
-
-		$option['modules'][] = [
-			'module_name' => 'pagination',
-			'result_item' => 'pagination',
-			'option' => [
-				'path' => $_SERVER['REDIRECT_URL'],
-				'option_paginates' => [
-					'uri_segment' => 1,
-					'num_links' => 3,
-					'suffix' => $sffix,
-				],
-			],
-		];
-
-		$_r = $this->mdl_product->queryData($option);
-
-		$r['products'] = $_r['result'];
-		$r['products_pag'] = $_r['option']['pag'];
-		$r['textSearch'] = $text;
-
-		if ($j === true) {
-			$this->mdl_helper->__json($r);
-		} else {
-			return $r;
-		}
-
-	}
-
 	public function getSearch($j = true)
 	{
 
@@ -290,6 +98,7 @@ class Search extends CI_Controller
 
 		$text = (isset($this->get['t'])) ? $this->get['t'] : false;
 		$text = (isset($this->post['t'])) ? $this->post['t'] : $text;
+		$text = mb_strtolower($text);
 
 		$query_string = array();
 		$query_string = array_merge($query_string, $this->get);
@@ -304,40 +113,41 @@ class Search extends CI_Controller
 
 		$sffix = $query_string;
 
+		$where = [[
+			'item' => 'view >',
+			'value' => 0,
+		], [
+			'item' => 'qty >',
+			'value' => 0,
+		], [
+			'item' => 'moderate >',
+			'value' => 1,
+		]];
+
+		$kamen = explode("с ", $text);
+		$where[] = ['item' => 'title LIKE', 'value' => "%" . $kamen[1] . "%"];
+		if (preg_match("/красно/", $text)) $where[] = ['item' => 'filters LIKE', 'value' => "%krasnZoloto%"];
+		if (preg_match("/бело/", $text)) $where[] = ['item' => 'filters LIKE', 'value' => "%belZoloto%"];
+		if (preg_match("/желт/", $text)) $where[] = ['item' => 'filters LIKE', 'value' => "%JoltZoloto%"];
+
+		if (preg_match("/кольц/", $text)) $where[] = ['item' => 'cat', 'value' => 1];
+		if (preg_match("/серьг/", $text)) $where[] = ['item' => 'cat', 'value' => 10];
+		if (preg_match("/подвес/", $text)) $where[] = ['item' => 'cat', 'value' => 19];
+		if (preg_match("/брасле/", $text)) $where[] = ['item' => 'cat', 'value' => 28];
+		if (preg_match("/брош/", $text)) $where[] = ['item' => 'cat', 'value' => 35];
+		if (preg_match("/колье/", $text)) $where[] = ['item' => 'cat', 'value' => 36];
+		if (preg_match("/крест/", $text)) $where[] = ['item' => 'cat', 'value' => 37];
+		if (preg_match("/пирс/", $text)) $where[] = ['item' => 'cat', 'value' => 38];
+		if (preg_match("/запонк/", $text)) $where[] = ['item' => 'cat', 'value' => 41];
+		if (preg_match("/зажим/", $text)) $where[] = ['item' => 'cat', 'value' => 42];
+
 		$option = [
 			'return_type' => 'ARR2+',
-			'like' => [
-				'math' => 'both',
-				'method' => 'OR',
-				'set' => [[
-					'item' => 'title',
-					'value' => $text,
-				], [
-					'item' => 'description',
-					'value' => $text,
-				], [
-					'item' => 'aliase',
-					'value' => $text,
-				], [
-					'item' => 'articul',
-					'value' => $text,
-				]],
-			],
 			'where' => [
 				'method' => 'AND',
-				'set' => [[
-					'item' => 'view >',
-					'value' => 0,
-				], [
-					'item' => 'qty >',
-					'value' => 0,
-				], [
-					'item' => 'moderate >',
-					'value' => 1,
-				]],
+				'set' => $where,
 			],
 			'labels' => ['id', 'aliase', 'articul', 'title', 'prices_empty', 'filters', 'salle_procent', 'modules'],
-			'group_by' => 'articul',
 			'pagination' => [
 				'on' => true,
 				'page' => (isset($this->get['page'])) ? $this->get['page'] : 1,
@@ -455,24 +265,6 @@ class Search extends CI_Controller
 				],
 			],
 		];
-
-		/*$_r = $this->mdl_product->queryX( $this->db->select('*')->from('products')
-			->group_start()
-				->where('view >', 0)
-				->where('qty >', 0)
-				->where('moderate >', 1)
-			->group_end()
-			->group_start()
-				->like('title', $text)
-				->or_like('id', $text)
-				->or_like('description', $text)
-				->or_like('aliase', $text)
-				->or_like('articul', $text)
-			->group_end()
-			->distinct()
-			->limit(10)
-			->group_by('articul')
-		->get(), $option );*/
 
 		$_r = $this->mdl_product->queryData($option);
 
