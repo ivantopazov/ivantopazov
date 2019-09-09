@@ -169,7 +169,7 @@ class Master extends CI_Controller
 				'moderate' => '2',
 				'lastUpdate' => time(),
 				'optionLabel' => json_encode([
-					'collections' => "Magic Stones",
+					'collections' => $dt["brand"],
 					'options' => $dt['garniture'],
 					'vstavki' => str_replace(";", " ", str_replace("#", " ", $dt['descr'])),
 					'seria' => "",
@@ -212,6 +212,15 @@ class Master extends CI_Controller
 						return;
 					}
 				}
+			}
+
+			// Проверка фото
+			if (file_exists($this->upload_path . $dt["article"] . ".jpg")) $ph_name = $dt["article"] . ".jpg";
+
+			if (!$ph_name) {
+				$err++;
+				echo json_encode(["err" => $err, "double" => $double]);
+				return;
 			}
 
 			$this->db->insert($this->prod_table, $item);
@@ -309,7 +318,7 @@ class Master extends CI_Controller
 			'value' => '-',
 		]];
 
-		if (trim($dt["metal_color"]) == "Желтый") $metal = "Желтое ";
+		if (trim($dt["metal_color"]) == "Желтый" or trim($dt["metal_color"]) == "Жёлтый") $metal = "Желтое ";
 		if (trim($dt["metal_color"]) == "Красный") $metal = "Красное ";
 		if (trim($dt["metal_color"]) == "Белый") $metal = "Белое ";
 		if (trim($dt["metal_color"]) == "Красный желтый белый") $metal = "Красное, белое, желтое ";
@@ -361,7 +370,10 @@ class Master extends CI_Controller
 			'values' => [],
 		]];
 
-		$filter[0]["values"][] = $dt["metal"];
+		if (trim($dt["metal_color"]) == "Красный") $filter[0]["values"][] = "krasnZoloto";
+		if (trim($dt["metal_color"]) == "Белый") $filter[0]["values"][] = "belZoloto";
+		if (trim($dt["metal_color"]) == "Желтый" or trim($dt["metal_color"]) == "Жёлтый") $filter[0]["values"][] = "JoltZoloto";
+
 		$kamen = explode(",", $vstavka);
 		foreach ($kamen as $k => $v) $filter[1]["values"][] = $this->mdl_product->aliase_translite($v);
 
