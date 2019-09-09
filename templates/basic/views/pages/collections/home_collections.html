@@ -12,10 +12,9 @@
 			{% for val in items %}
 			<div class="col-lg-2 col-md-3 col-sm-6 col-xs-12 bord h50 mar0000 mar00rr">
 				{% if val.image %}
-				<!-- <p class="text-center"><img width="100%" src="/uploads/cats/{{val.image}}"></p>-->
-				<p class="text-center"><img width="100%" src="/uploads/no-photo.png"></p>
+				<p class="text-center"><img src="/uploads/collections/{{val.image}}" style="width: 160px; height: 145px;"></p>
 				{% else %}
-				<p class="text-center"><img width="100%" src="/uploads/no-photo.png"></p>
+				<p class="text-center"><img src="/uploads/no-photo.png" style="width: 160px; height: 145px;"></p>
 				{% endif %}
 				<p class="text-center"><a href="/collections/{{val.aliase}}">{{val.title}}</a></p>
 			</div>
