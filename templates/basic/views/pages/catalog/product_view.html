@@ -428,7 +428,8 @@
 											<div class="rating_item">
 												<input type="hidden" name="val" value="{{item.rating}}"/>
 											</div>
-											<p><b>{{item.author}}</b> <br/> {{item.name}} - {{item.description}}</p>
+											<p><b>{{item.author}}</b> из г. {{item.city}} {{item.date}}
+												<br/> {{item.name}} - {{item.description}}</p>
 										</div>
 									</div>
 
@@ -462,7 +463,8 @@
 			<form action="/catalog/setReview" method="post"
 				  before="Ev.catalog_product.setReview.before"
 				  success="Ev.catalog_product.setReview.success"
-				  data_type="json" id="form_setReview"
+				  data_type="json"
+				  id="form_setReview"
 			>
 
 				<div class="modal-header">
@@ -487,6 +489,11 @@
 							<p class="mb5">
 								<input style="width: 100%;" class="form-control text-left" name="author"
 									   placeholder="Ваше имя" type="text">
+							</p>
+
+							<p class="mb5">
+								<input style="width: 100%;" class="form-control text-left" name="city"
+									   placeholder="Ваш город" type="text">
 							</p>
 
 							<p class="mb5">
