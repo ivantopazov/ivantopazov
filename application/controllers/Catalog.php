@@ -1157,12 +1157,12 @@ class Catalog extends CI_Controller
 
 		$name = (isset($this->post['name'])) ? $this->post['name'] : false;
 		$author = (isset($this->post['author'])) ? $this->post['author'] : false;
+		$city = (isset($this->post['city'])) ? $this->post['city'] : false;
 		$email = (isset($this->post['email'])) ? $this->post['email'] : false;
 		$description = (isset($this->post['description'])) ? $this->post['description'] : false;
 		$set_rating = (isset($this->post['set_rating'])) ? $this->post['set_rating'] : false;
 		$product_id = (isset($this->post['product_id'])) ? $this->post['product_id'] : false;
 		$codetch = (isset($this->post['codetch'])) ? $this->post['codetch'] : false;
-		$ph = ($_POST["photo"]) ? "ok" : "not";
 
 		// Проверка капчи со стороны гугла
 		$secret = "6LdaxbUUAAAAAF-z_Jut-sQIOzD2Wc7SGPFUa3nU";
@@ -1179,6 +1179,7 @@ class Catalog extends CI_Controller
 			$codetch !== false &&
 			$name !== false &&
 			$author !== false &&
+			$city !== false &&
 			$email !== false &&
 			$description !== false &&
 			$set_rating !== false &&
@@ -1191,6 +1192,7 @@ class Catalog extends CI_Controller
 				'product_id' => $product_id,
 				'name' => $name,
 				'author' => $author,
+				'city' => $city,
 				'email' => $email,
 				'description' => $description,
 				'rating' => $set_rating,
