@@ -2,12 +2,12 @@
 	{% for item in reviews %}
 
 	<div class="row" style="margin-top: 20px;">
-		<div class="col-xs-1">
+		<div class="col-lg-1 col-md-2 col-sm-3" style="text-align: center;">
 			<img src="/uploads/products/100/{{item.photo}}"
 				 style="border: 1px solid #dca35f; border-radius: 100px;">
 		</div>
-		<div class="col-xs-11" style="padding-left: 35px; font-size: 16px;">
-			<p><b>{{item.author}}</b> на <a href="/catalog/{{item.link}}" style="color: #dca35f;">{{item.prod_title}}</a></p>
+		<div class="col-lg-11 col-md-10 col-sm-9" style="padding-left: 35px; font-size: 16px;">
+			<p><b>{{item.author}}</b> из г. {{item.city}} {{item.date}} на <a href="/catalog/{{item.link}}" style="color: #dca35f;">{{item.prod_title}}</a></p>
 			<p>{{item.name}} - {{item.text}}</p>
 			<div class="rating_item">
 				<input type="hidden" name="val" value="{{item.rating}}"/>
