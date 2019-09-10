@@ -68,10 +68,10 @@ class Home extends CI_Controller {
                 'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path')
             ),true),
             
-            /*'slider' => $this->mdl_tpl->view('pages/home/home_slider.html',array(
+            'slider' => $this->mdl_tpl->view('pages/home/home_slider.html',array(
                 'items' => $this->getSliderHome( false ),
                 'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path')
-            ), true ),*/
+            ), true ),
             
             'content' => "", //$this->mdl_tpl->view('pages/home/basic.html',array(),true),
             
