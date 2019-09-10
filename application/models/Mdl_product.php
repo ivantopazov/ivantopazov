@@ -587,6 +587,7 @@ class Mdl_product extends CI_Model
 
 				foreach ($products_reviews as $pk => $pv) {
 					if ($pv['product_id'] === $v['id']) {
+						$pv["date"] = date("d.m.Y", $pv["date_public"]);
 						$this->_query[$index]['result'][$k]['modules'][$item][] = ($labels !== false) ? $this->mdl_helper->clear_array_0($pv, $labels) : $pv;
 					}
 				}
