@@ -91,7 +91,7 @@ class Reviews extends CI_Controller
 		$review = array();
 
 		$q = $this->mdl_db->_query("
-			SELECT products_reviews.name, author, products_reviews.description, rating, products.aliase, title, photo_name, products_cats.aliase as cat_aliase
+			SELECT products_reviews.name, author, city, products_reviews.description, rating, products.aliase, title, photo_name, products_cats.aliase as cat_aliase, date_public
 			FROM products_reviews 
 			INNER JOIN products ON products_reviews.product_id=products.id 
 			INNER JOIN products_photos ON products_reviews.product_id=products_photos.product_id 
@@ -104,9 +104,11 @@ class Reviews extends CI_Controller
 		foreach ($q as $key => $val) {
 			$review[$key]["name"] = $val["name"];
 			$review[$key]["author"] = $val["author"];
+			$review[$key]["city"] = $val["city"];
 			$review[$key]["text"] = $val["description"];
 			$review[$key]["rating"] = $val["rating"];
 			$review[$key]["prod_title"] = $val["title"];
+			$review[$key]["date"] = date("d.m.Y", $val["date_public"]);
 			$review[$key]["photo"] = $val["photo_name"];
 			$review[$key]["link"] = $val["cat_aliase"] . "/" . $val["aliase"];
 		}
