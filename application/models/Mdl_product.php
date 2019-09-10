@@ -137,7 +137,6 @@ class Mdl_product extends CI_Model
 			$this->setFilters($this->_query[$index]['setFilters']);
 		}
 
-
 		$this->db->stop_cache();
 
 		if ($this->_query[$index]['limit'] !== false) {
@@ -588,6 +587,7 @@ class Mdl_product extends CI_Model
 
 				foreach ($products_reviews as $pk => $pv) {
 					if ($pv['product_id'] === $v['id']) {
+						$pv["date"] = date("d.m.Y", $pv["date_public"]);
 						$this->_query[$index]['result'][$k]['modules'][$item][] = ($labels !== false) ? $this->mdl_helper->clear_array_0($pv, $labels) : $pv;
 					}
 				}
@@ -678,13 +678,13 @@ class Mdl_product extends CI_Model
 					$prodSale = $prodCop - $minus; // Сумма со скидкой в коп
 					*/
 
-					$_proc = $v['salle_procent'];
+					/*$_proc = $v['salle_procent'];
 					$_roz = $v['modules']['price_actual']['cop'];
-					$_old = $_roz / ((100 - $_proc) / 100);
+					$_old = $_roz / ((100 - $_proc) / 100);*/
 
-					$minus = $_old - $_roz;
-					$prodSale = $_roz;
-					$prodCop = $_old;
+					$prodCop = $v['modules']['price_actual']['cop'];
+					$prodSale = $prodCop - $prodCop / 100 * $v['salle_procent'];
+					$minus = $prodCop - $prodSale;
 
 					// $prodCop = $v['modules']['price_actual']['cop']; // Сумма текущая ( зачеркнутая ) коп
 					// $minus = $prodCop * ( $v['salle_procent'] / 100 ); // Сумма экономии коп
@@ -932,11 +932,11 @@ class Mdl_product extends CI_Model
 		} else {
 			$column = "filter_{$filter['item']}";
 			$condition = implode(" OR ", array_map(function ($valueOr) use ($column) {
-                $valueOr  = trim($valueOr, ' ,');
+				$valueOr = trim($valueOr, ' ,');
 				return implode(" AND ", array_map(function ($valueAnd) use ($column) {
-                    $valueAnd = trim($valueAnd);
-                    return "JSON_CONTAINS($column, '[\"$valueAnd\"]')";
-                }, explode(',', $valueOr)));
+					$valueAnd = trim($valueAnd);
+					return "JSON_CONTAINS($column, '[\"$valueAnd\"]')";
+				}, explode(',', $valueOr)));
 			}, $filter['values']));
 			$this->db->where("($condition)");
 		}

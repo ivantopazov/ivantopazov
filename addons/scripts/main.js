@@ -84,17 +84,18 @@ window.MAIN = {
 
 	// Формирование списка позиций ( страница - корзина )
 	erectCartList: function (LIST) {
+		var itog = 0;
+		for (var key in LIST) {
+			var val = LIST[key];
+			itog += parseInt(( ( val.qty * val.price  ) / 100 ));
+
+			LIST[key]['pr'] = parseInt((LIST[key]['qty'] * LIST[key]['price']) / 100);
+		}
+		$('#itog').html(itog + ' руб.');
 
 		TPL.GET_TPL('pages/cart/items', {items: LIST}, function (t) {
 			$('.cartBlock .cartList').html(t);
 		});
-
-		var itog = 0;
-		for (var key in LIST) {
-			var val = LIST[key];
-			itog += ( ( val.qty * val.price  ) / 100 );
-		}
-		$('#itog').html(itog + ' руб.');
 
 		if (LIST.length > 0) {
 			$('.cartBlock').removeClass('hidden');
