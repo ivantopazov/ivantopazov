@@ -141,6 +141,16 @@ $(function () {
 							}
 						}
 
+						if (val.name === 'city') {
+							if (val.value.length < 3) {
+								err++;
+								$(DOM.parent + ' form#form_setReview input[name="' + val.name + '"]').css('border', '1px solid red');
+								setTimeout(function () {
+									$(DOM.parent + ' form#form_setReview input[name="' + val.name + '"]').css('border', 'auto');
+								}, 5000);
+							}
+						}
+
 						if (val.name === 'email') {
 							if (val.value.length < 3) {
 								err++;
