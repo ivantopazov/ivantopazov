@@ -929,6 +929,39 @@ class Mdl_product extends CI_Model
 	{
 		if ($filter['item'] === 'brand') {
 			$this->db->where_in('postavchik', $filter['values']);
+		} elseif ($filter['item'] === 'category') {
+			foreach ($filter["values"] as $key => $fl) {
+				switch ($fl) {
+					case "kolca":
+						$cat_id[] = 1;
+						break;
+					case "sergi":
+						$cat_id[] = 10;
+						break;
+					case "podveski":
+						$cat_id[] = 19;
+						break;
+					case "braslety":
+						$cat_id[] = 28;
+						break;
+					case "brosh":
+						$cat_id[] = 35;
+						break;
+					case "kole":
+						$cat_id[] = 36;
+						break;
+					case "krest":
+						$cat_id[] = 37;
+						break;
+					case "pirsing":
+						$cat_id[] = 38;
+						break;
+					case "zaponki":
+						$cat_id[] = 41;
+						break;
+				}
+			}
+			if ($cat_id) $this->db->where("cat IN (" . implode(",", $cat_id) . ")");
 		} else {
 			$column = "filter_{$filter['item']}";
 			$condition = implode(" OR ", array_map(function ($valueOr) use ($column) {

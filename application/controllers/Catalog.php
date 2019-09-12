@@ -178,6 +178,17 @@ class Catalog extends CI_Controller
 		$title = 'Ювелирный каталог';
 		$page_var = 'catalog';
 
+		$getData = $this->getCategoryHome();
+
+		// Если нет товаров, ставим заглушку
+		if (count($getData["products"]) < 1) {
+			$descr = "<p style='font-size:18px;font-weight:bold;'>
+				Не нашли, что искали? 
+				Закажите <a href='#' data-toggle='modal' data-target='#modal_callback' style='color:#337ab7;'>звонок консультанта</a> или напишите в чат - возможно, на сайте идут работы.
+				Приносим свои извинения за неудобства!
+			</p>";
+		} else $descr = "";
+
 		$this->mdl_tpl->view('templates/doctype_catalog.html', array(
 
 			'title' => $title,
@@ -208,10 +219,22 @@ class Catalog extends CI_Controller
 				'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
 			), true),
 
-			'content' => $this->mdl_tpl->view('pages/catalog/home_razdels.html', array(
-				'rasdels' => $this->mdl_tpl->view('pages/catalog/category_view_razdels.html', array(
-					'items' => $this->getCategoryHome(false),
+			'content' => $this->mdl_tpl->view('pages/catalog/home.html', array(
+				'blocks' => $this->mdl_tpl->view('pages/catalog/filters/items.html', array(
+					'items' => $getData['filter'],
+					'cena' => $getData['cena'],
 				), true),
+				'textSearch' => $getData['textSearch'],
+				'sort' => $getData['sort'],
+				'header_title' => "Все украшения",
+				'collections' => $this->mdl_tpl->view('pages/catalog/category_view_collections.html', array(
+					'items' => $getData['collections'],
+				), true),
+				'products' => $this->mdl_tpl->view('pages/catalog/category_view_products.html', array(
+					'items' => $getData['products'],
+				), true),
+				'pagination' => $getData['products_pag'],
+				'description' => $descr,
 			), true),
 
 			'footer' => $this->mdl_tpl->view('snipets/footer.html', array(
@@ -235,23 +258,235 @@ class Catalog extends CI_Controller
 
 	}
 
-	// Получить данные для главной страницы
-	public function getCategoryHome($j = true)
+	// Получить все товары для главной страницы
+	public function getCategoryHome($j = false)
 	{
+		$r = [
+			'products' => [],
+			'podcat' => [],
+			'collections' => [],
+		];
 
-		$r = $this->mdl_category->queryData([
+		$query_string = array();
+		$query_string = array_merge($query_string, $this->get);
+		$query_string = array_merge($query_string, $this->post);
+
+		unset($query_string['page']);
+		unset($query_string['limit']);
+
+		$query_string = $this->mdl_helper->clear_array_0($query_string, array(
+			'f', 's', 'l', 't', 'brand',
+		));
+
+		$sffix = $query_string;
+
+		$filter = $this->mdl_category->queryData([
+			'return_type' => 'ARR1',
+			'table_name' => 'products_filters',
+			'where' => [
+				'method' => 'AND',
+				'set' => [
+					['item' => 'id', 'value' => 11],
+				],
+			],
+			'labels' => ['id', 'labels'],
+			'module' => false,
+		]);
+
+		$filter = ($filter) ? json_decode($filter['labels'], true) : [];
+
+		$option = [
+			'return_type' => 'ARR2+',
+			'debug' => true,
 			'where' => [
 				'method' => 'AND',
 				'set' => [[
-					'item' => 'parent_id <',
-					'value' => '1',
-				], [
 					'item' => 'view >',
-					'value' => '0',
+					'value' => 0,
+				], [
+					'item' => 'qty >',
+					'value' => 0,
+				], [
+					'item' => 'moderate >',
+					'value' => 1,
 				]],
 			],
-			'labels' => ['id', 'name', 'aliase', 'image'],
-		]);
+			'group_by' => 'articul',
+			'distinct' => true,
+			'labels' => ['id', 'aliase', 'articul', 'title', 'seo_keys', 'seo_desc', 'seo_title', 'prices_empty', 'filters', 'salle_procent', 'modules'],
+			'pagination' => [
+				'on' => true,
+				'page' => (isset($this->get['page'])) ? $this->get['page'] : 1,
+				'limit' => (isset($this->get['l'])) ? $this->get['l'] : 40,
+			],
+			'module_queue' => [
+				'price_actual',
+				'limit', 'pagination',
+				'prices_all', 'photos', 'reviews', 'linkPath', 'salePrice',
+				'emptyPrice', 'qty_empty_status', 'paramsView',
+			],
+			'module' => true,
+			'modules' => [[
+				'module_name' => 'linkPath',
+				'result_item' => 'linkPath',
+				'option' => [],
+			], [
+				'module_name' => 'price_actual',
+				'result_item' => 'price_actual',
+				'option' => [
+					'labels' => false,
+				],
+			], [
+				'module_name' => 'salePrice',
+				'result_item' => 'salePrice',
+				'option' => [],
+			], [
+				'module_name' => 'photos',
+				'result_item' => 'photos',
+				'option' => [
+					'no_images_view' => 1,
+				],
+			], [
+				'module_name' => 'emptyPrice',
+				'result_item' => 'emptyPrice',
+				'option' => [
+					'labels' => false,
+				],
+			]],
+		];
+
+		$setFilters = []; // Запомнить установки выбора
+		if (isset($this->get['f']) && is_array($this->get['f'])) {
+
+			$f = $this->get['f'];
+			$fNew = [];
+			foreach ($f as $k => $v) {
+				foreach ($filter as $fv) {
+					if ($fv['variabled'] == $k) {
+						$fNew[] = [
+							'item' => $k,
+							'type' => $fv['type'],
+							'values' => explode('|', $v),
+						];
+					}
+				}
+			}
+
+			$option['setFilters'] = $fNew;
+
+			$setFilters = $fNew;
+		}
+
+		$r['brand'] = (isset($this->get['brand'])) ? $this->get['brand'] : '';
+
+		if (isset($this->get['brand'])) {
+			$b = $this->get['brand'];
+			$option['where']['set'][] = [
+				'item' => 'postavchik',
+				'value' => $b,
+			];
+		}
+
+		$r['sort'] = (isset($this->get['s'])) ? $this->get['s'] : 'pricemin';
+
+		$sort = $r['sort'];
+
+		if ($sort === 'pop') {
+			$option['order_by'] = [
+				'item' => 'view',
+				'value' => 'DESC',
+			];
+		}
+
+		if ($sort === 'new') {
+			$option['order_by'] = [
+				'item' => 'id',
+				'value' => 'DESC',
+			];
+		}
+
+		if ($sort === 'upsells') {
+			$option['order_by'] = [
+				'item' => 'salle_procent',
+				'value' => 'DESC',
+			];
+		}
+
+		if ($sort === 'pricemin') {
+			$option['order_by'] = [
+				'item' => 'price_roz',
+				'value' => 'ASC',
+			];
+		}
+
+		if ($sort === 'pricemax') {
+			$option['order_by'] = [
+				'item' => 'price_roz',
+				'value' => 'DESC',
+			];
+		}
+
+		$r['textSearch'] = '';
+		if (isset($this->get['t'])) {
+			$t = $r['textSearch'] = $this->get['t'];
+			$option['like'] = [
+				'math' => 'both', // '%before', 'after%' и '%both%' - опциональность поиска
+				'method' => 'AND', // AND (и) / OR(или) / NOT(за исключением и..) / OR_NOT(за исключением или)
+				'set' => [[
+					'item' => 'title',
+					'value' => $t,
+				]]  // [ 'item' => '', 'value' => '' ],[...]
+			];
+		}
+
+		$option['modules'][] = [
+			'module_name' => 'pagination',
+			'result_item' => 'pagination',
+			'option' => [
+				'path' => $_SERVER['REDIRECT_URL'],
+				'option_paginates' => [
+					'uri_segment' => 1,
+					'num_links' => 3,
+					'suffix' => $sffix,
+				],
+			],
+		];
+
+		$_r = $this->mdl_product->queryData($option);
+
+		$r['products'] = $_r['result'];
+		$r['products_pag'] = $_r['option']['pag'];
+
+		$r['cena'] = [0, 90000];
+		if (isset($this->get['f']['Cena'])) {
+			$r['cena'] = explode('|', $this->get['f']['Cena']);
+		}
+
+		foreach ($filter as $k => $v) {
+			foreach ($setFilters as $sfv) {
+				foreach ($v['data'] as $kData => $vData) {
+					$filter[$k]['data'][$kData]['check'] = 'off';
+				}
+			}
+		}
+
+		foreach ($filter as $k => $v) {
+			foreach ($setFilters as $sfv) {
+				if ($v['variabled'] === $sfv['item']) {
+
+					foreach ($v['data'] as $kData => $vData) {
+						if (in_array($vData['variabled'], $sfv['values'])) {
+							$filter[$k]['data'][$kData]['check'] = 'on';
+						} else {
+							$filter[$k]['data'][$kData]['check'] = 'off';
+						}
+					}
+
+				}
+			}
+		};
+
+		$r['filter'] = $filter;
 
 		if ($j === true) {
 			$this->mdl_helper->__json($r);
@@ -272,7 +507,9 @@ class Catalog extends CI_Controller
 		// Если нет товаров, ставим заглушку
 		if (count($getData["products"]) < 1) {
 			$descr = "<p style='font-size:18px;font-weight:bold;'>
-				Не нашли, что искали? Закажите <a href='#' data-toggle='modal' data-target='#modal_callback' style='color:#337ab7;'>звонок консультанта</a> или напишите в чат - возможно, на сайте идут работы. Приносим свои извинения за неудобства!
+				Не нашли, что искали? 
+				Закажите <a href='#' data-toggle='modal' data-target='#modal_callback' style='color:#337ab7;'>звонок консультанта</a> или напишите в чат - возможно, на сайте идут работы. 
+				Приносим свои извинения за неудобства!
 			</p>";
 		} else $descr = "";
 
@@ -1090,9 +1327,9 @@ class Catalog extends CI_Controller
 				if (isset($optionLabel['options'])) {
 
 					$OlO = $optionLabel['options'];
-					$_olo = array_map(function($article) {
-					    return trim($article);
-                    }, explode(',', $OlO));
+					$_olo = array_map(function ($article) {
+						return trim($article);
+					}, explode(',', $OlO));
 
 					if (count($_olo) > 0) {
 
