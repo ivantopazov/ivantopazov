@@ -959,6 +959,9 @@ class Mdl_product extends CI_Model
 					case "zaponki":
 						$cat_id[] = 41;
 						break;
+					case "zajimi-dlya-galstuka":
+						$cat_id[] = 42;
+						break;
 				}
 			}
 			if ($cat_id) $this->db->where("cat IN (" . implode(",", $cat_id) . ")");
