@@ -129,6 +129,8 @@ class Search extends CI_Controller
 		if (preg_match("/красно/", $text)) $where[] = ['item' => 'filters LIKE', 'value' => "%krasnZoloto%"];
 		if (preg_match("/бело/", $text)) $where[] = ['item' => 'filters LIKE', 'value' => "%belZoloto%"];
 		if (preg_match("/желт/", $text)) $where[] = ['item' => 'filters LIKE', 'value' => "%JoltZoloto%"];
+		if (preg_match("/мужск/", $text)) $where[] = ['item' => 'filters LIKE', 'value' => "%men%"];
+		if (preg_match("/женск/", $text)) $where[] = ['item' => 'filters LIKE', 'value' => "%woman%"];
 
 		if (preg_match("/кольц/", $text)) $where[] = ['item' => 'cat', 'value' => 1];
 		if (preg_match("/серьг/", $text)) $where[] = ['item' => 'cat', 'value' => 10];
