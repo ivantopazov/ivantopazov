@@ -414,14 +414,14 @@ class Catalog extends CI_Controller
 
 		if ($sort === 'pricemin') {
 			$option['order_by'] = [
-				'item' => 'price_roz',
+				'item' => 'price_real',
 				'value' => 'ASC',
 			];
 		}
 
 		if ($sort === 'pricemax') {
 			$option['order_by'] = [
-				'item' => 'price_roz',
+				'item' => 'price_real',
 				'value' => 'DESC',
 			];
 		}
@@ -457,7 +457,8 @@ class Catalog extends CI_Controller
 		$r['products'] = $_r['result'];
 		$r['products_pag'] = $_r['option']['pag'];
 
-		$r['cena'] = [0, 90000];
+//		$r['cena'] = [0, 90000];
+		$r['cena'] = [];
 		if (isset($this->get['f']['Cena'])) {
 			$r['cena'] = explode('|', $this->get['f']['Cena']);
 		}
@@ -847,14 +848,14 @@ class Catalog extends CI_Controller
 
 			if ($sort === 'pricemin') {
 				$option['order_by'] = [
-					'item' => 'price_roz',
+					'item' => 'price_real',
 					'value' => 'ASC',
 				];
 			}
 
 			if ($sort === 'pricemax') {
 				$option['order_by'] = [
-					'item' => 'price_roz',
+					'item' => 'price_real',
 					'value' => 'DESC',
 				];
 			}
@@ -892,7 +893,8 @@ class Catalog extends CI_Controller
 			$r['products'] = $_r['result'];
 			$r['products_pag'] = $_r['option']['pag'];
 
-			$r['cena'] = [0, 90000];
+//			$r['cena'] = [0, 90000];
+			$r['cena'] = [];
 			if (isset($this->get['f']['Cena'])) {
 				$r['cena'] = explode('|', $this->get['f']['Cena']);
 			}

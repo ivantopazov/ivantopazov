@@ -682,8 +682,8 @@ class Mdl_product extends CI_Model
 					$_roz = $v['modules']['price_actual']['cop'];
 					$_old = $_roz / ((100 - $_proc) / 100);*/
 
-					$prodCop = $v['modules']['price_actual']['cop'];
-					$prodSale = $prodCop - $prodCop / 100 * $v['salle_procent'];
+					$prodCop = $v['price_roz'];
+					$prodSale = $v['price_real'];
 					$minus = $prodCop - $prodSale;
 
 					// $prodCop = $v['modules']['price_actual']['cop']; // Сумма текущая ( зачеркнутая ) коп
@@ -982,10 +982,10 @@ class Mdl_product extends CI_Model
 			$price_from = intval($price_from) * 100;
 			$price_to = intval($price_to) * 100;
 			if ($price_from) {
-				$this->db->where("price_roz >= $price_from");
+				$this->db->where("price_real >= $price_from");
 			}
 			if ($price_to) {
-				$this->db->where("price_roz <= $price_to");
+				$this->db->where("price_real <= $price_to");
 			}
 		}
 	}

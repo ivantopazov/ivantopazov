@@ -240,14 +240,14 @@ class Search extends CI_Controller
 
 			if ($sort === 'pricemin') {
 				$option['order_by'] = [
-					'item' => 'price_roz',
+					'item' => 'price_real',
 					'value' => 'ASC',
 				];
 			}
 
 			if ($sort === 'pricemax') {
 				$option['order_by'] = [
-					'item' => 'price_roz',
+					'item' => 'price_real',
 					'value' => 'DESC',
 				];
 			}

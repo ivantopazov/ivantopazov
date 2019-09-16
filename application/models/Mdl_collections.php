@@ -415,14 +415,14 @@ class Mdl_collections extends CI_Model
 
 					if ($sort === 'pricemin') {
 						$option['order_by'] = [
-							'item' => 'price_roz',
+							'item' => 'price_rea;',
 							'value' => 'ASC',
 						];
 					}
 
 					if ($sort === 'pricemax') {
 						$option['order_by'] = [
-							'item' => 'price_roz',
+							'item' => 'price_real',
 							'value' => 'DESC',
 						];
 					}
