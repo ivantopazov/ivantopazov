@@ -199,10 +199,11 @@ class Master extends CI_Controller
 				foreach ($prods as $k => $v) {
 					if ($v["weight"] == $dt["weight"] and $v["size"] == $dt["size"]) {
 						$upd = [ // Сюда можно установить любые значения для обновления
-							"title" => $item["title"],
+							/*"title" => $item["title"],
 							"price_zac" => $item["price_zac"],
-							"price_roz" => $item["price_roz"],
+							"price_roz" => $item["price_roz"],*/
 							"params" => $item["params"],
+							"filters" => $item["filters"],
 						];
 						$this->mdl_db->_update_db($this->prod_table, "id", $v["id"], $upd);
 
