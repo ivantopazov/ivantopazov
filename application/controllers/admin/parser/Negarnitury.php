@@ -165,7 +165,7 @@ class Negarnitury extends CI_Controller
 					'price_zac' => $price_zac,
 					'price_roz' => $price_zac * 2.5,
 					'current' => 'RUR',
-					'salle_procent' => rand(20, 40),
+					'salle_procent' => rand(4, 8) * 5,
 					'view' => '1',
 					'qty' => '1',
 					'qty_empty' => '1',

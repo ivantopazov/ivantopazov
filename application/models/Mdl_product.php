@@ -1151,7 +1151,7 @@ class Mdl_product extends CI_Model
 			$price_r = 0;
 
 			$proc_nacenca = 250;
-			$proc_skidka = rand(20, 40);
+			$proc_skidka = rand(4, 8) * 5;
 
 			// Розничная стоимость
 			$price_r = ($price_z * ($proc_nacenca * 0.01)); // 23692,5

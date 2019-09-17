@@ -153,7 +153,7 @@ class Master extends CI_Controller
 				'price_zac' => (int)str_replace(" ", "", $dt["price"]) * 100,
 				'price_roz' => (int)((int)str_replace(" ", "", $dt["price"]) * 2.5) * 100,
 				'current' => 'RUR',
-				'salle_procent' => rand(20, 40),
+				'salle_procent' => rand(4, 8) * 5,
 				'view' => '1',
 				'qty' => '1',
 				'qty_empty' => '1',
