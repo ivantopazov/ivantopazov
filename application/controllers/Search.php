@@ -125,12 +125,17 @@ class Search extends CI_Controller
 		]];
 
 		$kamen = explode("с ", $text);
-		$where[] = ['item' => 'title LIKE', 'value' => "%" . $kamen[1] . "%"];
-		if (preg_match("/красно/", $text)) $where[] = ['item' => 'filters LIKE', 'value' => "%krasnZoloto%"];
-		if (preg_match("/бело/", $text)) $where[] = ['item' => 'filters LIKE', 'value' => "%belZoloto%"];
-		if (preg_match("/желт/", $text)) $where[] = ['item' => 'filters LIKE', 'value' => "%JoltZoloto%"];
-		if (preg_match("/мужск/", $text)) $where[] = ['item' => 'filters LIKE', 'value' => "%men%"];
-		if (preg_match("/женск/", $text)) $where[] = ['item' => 'filters LIKE', 'value' => "%woman%"];
+		if (isset($kamen[1])) {
+			$where[] = ['item' => 'title LIKE', 'value' => "%" . $kamen[1] . "%"];
+		}
+		if (preg_match("/красн/", $text)) $where[] = ['item' => "JSON_CONTAINS(filter_metall, '[\"krasnZoloto\"]')", 'value' => null];
+		if (preg_match("/бело/", $text)) $where[] = ['item' => "JSON_CONTAINS(filter_metall, '[\"belZoloto\"]')", 'value' => null];
+		if (preg_match("/желт/", $text)) $where[] = ['item' => "JSON_CONTAINS(filter_metall, '[\"JoltZoloto\"]')", 'value' => null];
+
+		if (preg_match("/мужск/", $text)) $where[] = ['item' => "JSON_CONTAINS(filter_sex, '[\"men\"]')", 'value' => null];
+		if (preg_match("/женск/", $text)) $where[] = ['item' => "JSON_CONTAINS(filter_sex, '[\"woman\"]')", 'value' => null];
+		if (preg_match("/унисекс/", $text)) $where[] = ['item' => "(JSON_CONTAINS(filter_sex, '[\"woman\"]') OR JSON_CONTAINS(filter_sex, '[\"woman\"]'))", 'value' => null];
+		if (preg_match("/дет/", $text)) $where[] = ['item' => "JSON_CONTAINS(filter_sex, '[\"kids\"]')", 'value' => null];
 
 		if (preg_match("/кольц/", $text)) $where[] = ['item' => 'cat', 'value' => 1];
 		if (preg_match("/серьг/", $text)) $where[] = ['item' => 'cat', 'value' => 10];
