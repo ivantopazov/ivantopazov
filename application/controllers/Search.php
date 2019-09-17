@@ -128,25 +128,60 @@ class Search extends CI_Controller
 		if (isset($kamen[1])) {
 			$where[] = ['item' => 'title LIKE', 'value' => "%" . $kamen[1] . "%"];
 		}
-		if (preg_match("/красн/", $text)) $where[] = ['item' => "JSON_CONTAINS(filter_metall, '[\"krasnZoloto\"]')", 'value' => null];
-		if (preg_match("/бело/", $text)) $where[] = ['item' => "JSON_CONTAINS(filter_metall, '[\"belZoloto\"]')", 'value' => null];
-		if (preg_match("/желт/", $text)) $where[] = ['item' => "JSON_CONTAINS(filter_metall, '[\"JoltZoloto\"]')", 'value' => null];
+		if (preg_match("/красн/", $text)) {
+			$where[] = ['item' => "JSON_CONTAINS(filter_metall, '[\"krasnZoloto\"]')", 'value' => null];
+		}
+		if (preg_match("/бело/", $text)) {
+			$where[] = ['item' => "JSON_CONTAINS(filter_metall, '[\"belZoloto\"]')", 'value' => null];
+		}
+		if (preg_match("/желт/", $text)) {
+			$where[] = ['item' => "JSON_CONTAINS(filter_metall, '[\"JoltZoloto\"]')", 'value' => null];
+		}
 
-		if (preg_match("/мужск/", $text)) $where[] = ['item' => "JSON_CONTAINS(filter_sex, '[\"men\"]')", 'value' => null];
-		if (preg_match("/женск/", $text)) $where[] = ['item' => "JSON_CONTAINS(filter_sex, '[\"woman\"]')", 'value' => null];
-		if (preg_match("/унисекс/", $text)) $where[] = ['item' => "(JSON_CONTAINS(filter_sex, '[\"woman\"]') OR JSON_CONTAINS(filter_sex, '[\"woman\"]'))", 'value' => null];
-		if (preg_match("/дет/", $text)) $where[] = ['item' => "JSON_CONTAINS(filter_sex, '[\"kids\"]')", 'value' => null];
+		if (preg_match("/мужск/", $text)) {
+			$where[] = ['item' => "JSON_CONTAINS(filter_sex, '[\"men\"]')", 'value' => null];
+		}
+		if (preg_match("/женск/", $text)) {
+			$where[] = ['item' => "JSON_CONTAINS(filter_sex, '[\"woman\"]')", 'value' => null];
+		}
+		if (preg_match("/унисекс/", $text)) {
+			$where[] = ['item' => "JSON_CONTAINS(filter_sex, '[\"men\"]')", 'value' => null];
+			$where[] = ['item' => "JSON_CONTAINS(filter_sex, '[\"woman\"]')", 'value' => null];
+		}
+		if (preg_match("/дет/", $text)) {
+			$where[] = ['item' => "JSON_CONTAINS(filter_sex, '[\"kids\"]')", 'value' => null];
+		}
 
-		if (preg_match("/кольц/", $text)) $where[] = ['item' => 'cat', 'value' => 1];
-		if (preg_match("/серьг/", $text)) $where[] = ['item' => 'cat', 'value' => 10];
-		if (preg_match("/подвес/", $text)) $where[] = ['item' => 'cat', 'value' => 19];
-		if (preg_match("/брасле/", $text)) $where[] = ['item' => 'cat', 'value' => 28];
-		if (preg_match("/брош/", $text)) $where[] = ['item' => 'cat', 'value' => 35];
-		if (preg_match("/колье/", $text)) $where[] = ['item' => 'cat', 'value' => 36];
-		if (preg_match("/крест/", $text)) $where[] = ['item' => 'cat', 'value' => 37];
-		if (preg_match("/пирс/", $text)) $where[] = ['item' => 'cat', 'value' => 38];
-		if (preg_match("/запонк/", $text)) $where[] = ['item' => 'cat', 'value' => 41];
-		if (preg_match("/зажим/", $text)) $where[] = ['item' => 'cat', 'value' => 42];
+		if (preg_match("/кольц/", $text)) {
+			$where[] = ['item' => 'cat', 'value' => 1];
+		}
+		if (preg_match("/серьг/", $text)) {
+			$where[] = ['item' => 'cat', 'value' => 10];
+		}
+		if (preg_match("/подвес/", $text)) {
+			$where[] = ['item' => 'cat', 'value' => 19];
+		}
+		if (preg_match("/брасле/", $text)) {
+			$where[] = ['item' => 'cat', 'value' => 28];
+		}
+		if (preg_match("/брош/", $text)) {
+			$where[] = ['item' => 'cat', 'value' => 35];
+		}
+		if (preg_match("/колье/", $text)) {
+			$where[] = ['item' => 'cat', 'value' => 36];
+		}
+		if (preg_match("/крест/", $text)) {
+			$where[] = ['item' => 'cat', 'value' => 37];
+		}
+		if (preg_match("/пирс/", $text)) {
+			$where[] = ['item' => 'cat', 'value' => 38];
+		}
+		if (preg_match("/запонк/", $text)) {
+			$where[] = ['item' => 'cat', 'value' => 41];
+		}
+		if (preg_match("/зажим/", $text)) {
+			$where[] = ['item' => 'cat', 'value' => 42];
+		}
 
 		$option = [
 			'return_type' => 'ARR2+',
