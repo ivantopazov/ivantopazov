@@ -213,7 +213,7 @@
 		
 		public function view_action($data = false){
 			
-			$start = microtime(true);
+			//$start = microtime(true);
 			
 			$title = $data['item']['title'];
 			$page_var = 'actions';
@@ -276,7 +276,7 @@
 			
 			), false);
 			
-			echo '<p style="background: yellow none repeat scroll 0% 0%; margin: 20px 0px 0px; position: fixed; bottom: 0px;">Время выполнения скрипта: '.(microtime(true) - $start).' сек.</p>';
+			//echo '<p style="background: yellow none repeat scroll 0% 0%; margin: 20px 0px 0px; position: fixed; bottom: 0px;">Время выполнения скрипта: '.(microtime(true) - $start).' сек.</p>';
 		}
 		
 		
