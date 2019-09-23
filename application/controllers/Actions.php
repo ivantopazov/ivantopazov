@@ -188,11 +188,12 @@
 				'value' => '0'
 			  ]]
 			 ],
-			 'labels' => ['id', 'date_start', 'date_end', 'title', 'aliase', 'photo_name', 'anonse']
+			 'labels' => ['id', 'date_start', 'date_end', 'title', 'aliase', 'link', 'photo_name', 'anonse']
 			]);
 			
 			$r = [];
 			foreach($actions as $a){
+				$a["aliase"] = $a["aliase"] ? "/actions/".$a["aliase"] : $a["link"];
 				if($a['date_start'] == '0' && $a['date_end'] == '0'){
 					$r[] = $a;
 				} else{
