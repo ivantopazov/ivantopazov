@@ -1,6 +1,8 @@
 uploads/*
 application/logs/*
 application/config/database.php
+.idea/*
+.idea/vcs.xml
 http.htaccess
 https.htaccess
 .htaccess
