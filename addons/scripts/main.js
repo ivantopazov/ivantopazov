@@ -21,7 +21,7 @@ window.MAIN = {
 			var count = 0;
 			for (var key in response) {
 				var val = response [key];
-				var summaCop = Number(summaCop) + ( val.qty * Number(val.price));
+				var summaCop = Number(summaCop) + (val.qty * Number(val.price));
 				var count = Number(count + val.qty);
 			}
 			var summaRUB = Number(summaCop / 100);
@@ -46,7 +46,7 @@ window.MAIN = {
 		var count = 0;
 		for (var key in response) {
 			var val = response [key];
-			var summaCop = Number(summaCop) + ( val.qty * Number(val.price));
+			var summaCop = Number(summaCop) + (val.qty * Number(val.price));
 			var count = Number(count + val.qty);
 		}
 		var summaRUB = Number(summaCop / 100);
@@ -87,7 +87,7 @@ window.MAIN = {
 		var itog = 0;
 		for (var key in LIST) {
 			var val = LIST[key];
-			itog += parseInt(( ( val.qty * val.price  ) / 100 ));
+			itog += parseInt(((val.qty * val.price) / 100));
 
 			LIST[key]['pr'] = parseInt((LIST[key]['qty'] * LIST[key]['price']) / 100);
 		}
@@ -208,7 +208,7 @@ window.MAIN = {
 				var count = 0;
 				for (var key in response) {
 					var val = response [key];
-					var summaCop = Number(summaCop) + ( val.qty * Number(val.price));
+					var summaCop = Number(summaCop) + (val.qty * Number(val.price));
 					var count = Number(count + val.qty);
 				}
 				var summaRUB = Number(summaCop / 100);
@@ -224,7 +224,7 @@ window.MAIN = {
 			//console.log( 'xx', MAIN.sendSuccess() );
 
 			//return false;
-			return ( err < 1 ) ? true : false;
+			return (err < 1) ? true : false;
 
 		},
 
@@ -335,7 +335,7 @@ window.MAIN = {
 				}
 			}
 
-			return ( err < 1 ) ? true : false;
+			return (err < 1) ? true : false;
 
 		},
 
@@ -405,7 +405,7 @@ window.MAIN = {
 					}
 				}
 			}
-			return ( err < 1 ) ? true : false;
+			return (err < 1) ? true : false;
 
 		},
 
@@ -447,7 +447,7 @@ window.MAIN = {
 					}
 				}
 			});
-			return ( err < 1 ) ? true : false;
+			return (err < 1) ? true : false;
 
 		},
 
