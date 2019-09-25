@@ -683,7 +683,9 @@ class Mdl_product extends CI_Model
 					$_old = $_roz / ((100 - $_proc) / 100);*/
 
 					$prodCop = $v['price_roz'];
-					$prodSale = $v['price_real'];
+					$prodSale = $v['price_real']/100;
+					$prodSale = $prodSale % 100 < 50 ? $prodSale - ($prodSale % 100) : $prodSale + (100 - $prodSale % 100);
+					$prodSale *= 100;
 					$minus = $prodCop - $prodSale;
 
 					// $prodCop = $v['modules']['price_actual']['cop']; // Сумма текущая ( зачеркнутая ) коп
