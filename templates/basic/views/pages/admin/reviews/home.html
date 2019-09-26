@@ -1,0 +1,20 @@
+{% for item in reviews %}
+
+<div class="row" style="margin-top: 20px;" data-id="{{item.id}}">
+	<div class="col-xs-12" style="font-size: 16px;">
+		<p><b>{{item.author}}</b> (<a href="mailto:{{item.email}}">{{item.email}}</a>) из г. {{item.city}} {{item.date}} на <a href="/catalog/{{item.link}}"
+																		  style="color: #dca35f;">{{item.prod_title}}</a>
+		</p>
+		<p>{{item.name}} - {{item.text}}</p>
+		<div class="rating_item col-xs-12">
+			<input type="hidden" name="val" value="{{item.rating}}"/>
+		</div>
+		<div class="col-xs-12">
+			<span class="btn btn-md btn-primary" data-id="{{item.id}}" data-type="accept">Принять</span>
+			&nbsp &nbsp
+			<span class="btn btn-md btn-danger" data-id="{{item.id}}" data-type="deny">Отклонить</span>
+		</div>
+	</div>
+</div>
+
+{% endfor %}
