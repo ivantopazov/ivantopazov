@@ -141,6 +141,14 @@ div.media.bot_border {
     padding: 8px 20px;
 }
 
+.btn-use-promocode {
+	background-color: transparent;
+    border: 2px solid #dca35f;
+    color: #333;
+    font-size: 14px;
+    padding: 5px 20px;
+}
+
 .btn-event_blue {
 	background-color: transparent;
     border: 2px solid #6489b3;
@@ -192,6 +200,21 @@ div.media.bot_border {
 
 .ZAG {
 	text-transform: uppercase;
+}
+
+.promocodeCode,
+.promocodeValue {
+	color: #dca35f;
+}
+#promocodeInfo {
+	margin-right: 20px;
+}
+
+.oldPrice {
+	color: #818181 !important;
+	font-size: 17px !important;
+	text-decoration: line-through;
+	margin-right: 10px;
 }
 
 .mt8 {

@@ -329,27 +329,27 @@ $(function () {
 						$('#messageCartSumma').html(t);
 						$('#messageCartSumma').removeClass('hidden');
 					}
-
-					console.log('Содержимое корзины', items, list);
-
 				},
 
-				list: function (callFnc) {
+				list: function (callFnc, onlyIds) {
 
-					var callFnc = callFnc || false;
+					callFnc = callFnc || false;
+					onlyIds = !!onlyIds;
 					var response = [];
 
-					if (localStorage.getItem('cart') === 'undefined') localStorage.setItem('cart', '[]');
-					if (!localStorage.getItem('cart')) localStorage.setItem('cart', '[]');
-
 					var _cart = localStorage.getItem('cart');
+					if (_cart === 'undefined' || !_cart) {
+						_cart = '[]';
+						localStorage.setItem('cart', _cart);
+					}
+
 					var cart = $.parseJSON(_cart);
 
 					if (cart.length > 0) {
 						for (var key in cart) {
 							var val = cart[key];
 							var x = (LS.fnc._type_of(val) === 'object') ? val : $.parseJSON(val);
-							response.push(x);
+							response.push(onlyIds ? x.id : x);
 						}
 					}
 
@@ -357,6 +357,26 @@ $(function () {
 						callFnc(response);
 					} else {
 						return response;
+					}
+
+				},
+
+				promocode: function (callFnc) {
+
+					callFnc = callFnc || false;
+
+					var _promocode = localStorage.getItem('promocode');
+					if (_promocode === 'undefined' || !_promocode) {
+						_promocode = '{}';
+						localStorage.setItem('promocode', _promocode);
+					}
+
+					var promocode = $.parseJSON(_promocode);
+
+					if (callFnc) {
+						callFnc(promocode);
+					} else {
+						return promocode;
 					}
 
 				},
@@ -495,7 +515,6 @@ $(function () {
 						});
 					} else {
 
-						var list = [];
 						var list = this.list(false);
 						if (list.length > 0) {
 							for (var key in list) {
@@ -507,7 +526,10 @@ $(function () {
 						}
 
 						localStorage.setItem('cart', LS.fnc._convert_value(list));
-						if (callFnc !== false) callFnc(list);
+
+						if (callFnc !== false) {
+							callFnc(list);
+						}
 
 					}
 
@@ -515,10 +537,72 @@ $(function () {
 
 				},
 
+				updatePrice: function (ID, price, callFnc) {
+
+					var callFnc = callFnc || false;
+
+					if (price <= 0) {
+						CART.remove(ID, function (list) {
+							localStorage.setItem('cart', LS.fnc._convert_value(list));
+							if (callFnc !== false) {
+								callFnc(list);
+							}
+						});
+					} else {
+
+						var list = this.list(false);
+						if (list.length > 0) {
+							for (var key in list) {
+								var val = list[key];
+								if (val.id.toString() === ID.toString()) {
+									list[key].price = price;
+								}
+							}
+						}
+
+						localStorage.setItem('cart', LS.fnc._convert_value(list));
+
+						if (callFnc !== false) {
+							callFnc(list);
+						}
+
+					}
+
+					this.header_update();
+
+				},
+
+				setPromocode: function (promocode, callFnc) {
+					var callFnc = callFnc || false;
+
+					if (!promocode || !promocode.code) {
+						promocode = {};
+					}
+					localStorage.setItem('promocode', LS.fnc._convert_value(promocode));
+				},
+
+				update: function (prices, promocode, callFnc) {
+					var callFnc = callFnc || false;
+
+					Object.keys(prices).forEach(function (ID) {
+						var price = prices[ID];
+						CART.updatePrice(ID, price);
+					});
+
+					CART.setPromocode(promocode);
+
+					if (callFnc !== false) {
+						callFnc();
+					}
+				},
+
 				removeAll: function (callFnc) {
+
 					var callFnc = callFnc || false;
 					var list = [];
+					var promocode = {};
 					localStorage.setItem('cart', LS.fnc._convert_value(list));
+					localStorage.setItem('promocode', LS.fnc._convert_value(promocode));
 					this.header_update();
 					if (callFnc) {
 						callFnc(list);

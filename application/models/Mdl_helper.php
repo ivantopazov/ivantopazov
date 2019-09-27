@@ -10,6 +10,7 @@ class Mdl_helper extends CI_Model
 			return json_encode($array);
 		} else {
 			echo json_encode($array);
+			die;
 		}
 	}
 

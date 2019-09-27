@@ -154,6 +154,8 @@ class Cart extends CI_Controller
 		if (!isset($this->post['cart'])) exit();
 		if (!isset($this->post['type'])) exit();
 
+		$promocode = isset($this->post['promocode']) ? $this->post['promocode'] : [];
+
 		$user = array();
 		foreach ($this->post['info'] as $v) {
 			if ($v['name'] === 'fio') {
@@ -165,23 +167,24 @@ class Cart extends CI_Controller
             if( $v['name'] === 'email' ){
                 $user['email'] = $v['value'];
             }            */
-			if ($v['name'] === 'adress') {
-				$user['adress'] = $v['value'];
+			if ($v['name'] === 'address') {
+				$user['address'] = $v['value'];
 			}
 		}
 
 		$name = $user['fio'];
 		$phone = $user['phone'];
 		//$email = $user['email'];
-		$adress = $user['adress'];
+		$address = $user['address'];
 
 		$tovary = array();
 		$summa = 0;
+
 		$IDsTov = [];
 		foreach ($this->post['cart'] as $cv) {
 			$price = ($cv['price'] / 100);
 			$summaItem = ($price * $cv['qty']);
-			$summa = $summa + $summaItem;
+			$summa += $summaItem;
 			$tovary[] = array(
 				'id' => $cv['id'],
 				'title' => $cv['title'],
@@ -189,7 +192,6 @@ class Cart extends CI_Controller
 				'articul' => $cv['orig']['articul'],
 				'image' => $cv['orig']['image'],
 				'link' => $cv['orig']['link'],
-				'qty' => $cv['qty'],
 				'price' => $price,
 				'summa' => $summaItem,
 			);
@@ -197,7 +199,12 @@ class Cart extends CI_Controller
 			if (!in_array($cv['id'], $IDsTov)) {
 				$IDsTov[] = $cv['id'];
 			}
+		}
 
+		$summaWithPromocode = $summa;
+		if (!empty($promocode)) {
+			$summaWithPromocode = (int)$promocode['percent'] ? round($summa * (100 - (int)$promocode['percent']) / 100) :
+				$summa - $promocode['amount'];
 		}
 
 		if (count($IDsTov) > 0) {
@@ -255,10 +262,12 @@ class Cart extends CI_Controller
 
 		$cart = array(
 			'user_id' => $user['id'],
+			'promocode_id' => !empty($promocode) ? (int)$promocode['id'] : 0,
 			'traker' => $traker,
 			'products_list' => json_encode($tovary),
 			'summa' => $summa,
-			'adress' => $adress,
+			'summa_with_promocode' => $summaWithPromocode,
+			'adress' => $address,
 			'time' => time(),
 			'date' => date("Y-m-d H:i:s"),
 			'status' => 0,
@@ -269,19 +278,23 @@ class Cart extends CI_Controller
 			$t = urlencode( 'Вы можете отслеживать состояние заказа используя код отслеживания: ' . $traker );
 			file_get_contents('http://sms.ru/sms/send?api_id=9EB00FFE-FAA5-7459-C608-CEC685B49F6C&to='. $phone .'&text=' . $t );
 			*/
+		$promocodeValue = !empty($promocode) ? ((int)$promocode['percent'] ? ($promocode['percent'] . '%') :
+			($promocode['amount'] . +' р.')) : '';
 
 		$html_content = $this->mdl_tpl->view('email/cart/newOrder.html', array(
 			'domen' => 'IVAN TOPAZOV',
 			'http' => 'http://' . $_SERVER['HTTP_HOST'],
 			'tovary' => $tovary,
+			'promocode' => !empty($promocode) ? "{$promocode['code']} (-{$promocodeValue})" : '',
 			'summa' => $summa,
+			'summaWithPromocode' => $summaWithPromocode,
 			'type' => $this->post['type'],
 			'name' => $name,
 			'phone' => $phone,
 			'traker' => $traker,
 			//'email' => $email,
 			'ulmLabels' => $this->mdl_tpl->view('email/ulmLabels/labelItems.html', $this->mdl_seo->getUtmData(), true),
-			'adress' => $adress,
+			'adress' => $address,
 			'date' => date('d.m.Y в H.i'),
 		), true);
 
@@ -374,14 +387,137 @@ class Cart extends CI_Controller
 
 		$this->mdl_mail->set_komu_to('dir.elit@gmail.com', 'Покупатель');
 		$this->mdl_mail->send();
+
 		//
 		// $this->mdl_mail->set_komu_to( 'dir.elit@gmail.com', 'Покупатель');
 		// $this->mdl_mail->send();
 
 		echo json_encode(array('err' => 0));
-
+		exit();
 	}
 
+	/**
+	 * Обновление цен заказа
+	 */
+	public function refresh()
+	{
+		$cart = isset($this->post['cart']) ? $this->post['cart'] : [];
+		if (empty($cart) || !array($cart)) {
+			echo json_encode(['success' => false]);
+			exit();
+		}
+		$ids = array_map(function ($cartItem) {
+			return $cartItem['id'];
+		}, $cart);
+
+		$cart = array_combine($ids, $cart);
+
+		$promocodeCode = isset($this->post['promocodeCode']) ? $this->post['promocodeCode'] : '';
+
+		$products = $this->mdl_product->queryData([
+			'return_type' => 'ARR2',
+			'in' => [
+				'method' => 'AND',
+				'set' => [[
+					'item' => 'id',
+					'values' => $ids,
+				]],
+			],
+			'labels' => ['id', 'qty', 'price_real'],
+		]);
+
+		$prices = [];
+
+		$cartTotal = 0;
+		if (count($products) > 0) {
+
+			foreach ($ids as $id) {
+				$prices[$id] = 0;
+				foreach ($products as $product) {
+					if ($product['id'] == $id) {
+						if ((int)$product['qty']) {
+							$prices[$id] = $product['price_real'];
+							$cartItem = $cart[$id];
+							$cartTotal += (int)$cartItem['qty'] * $product['price_real'] / 100;
+						}
+						break;
+					}
+				}
+			}
+		}
+
+		$promocode = false;
+		if ($cartTotal) {
+			$today = strtotime('today');
+			$promocode = $this->mdl_promocode->queryData([
+				'return_type' => 'ARR1',
+				'where' => [
+					'method' => 'AND',
+					'set' => [[
+						'item' => 'code',
+						'value' => $promocodeCode,
+					], [
+						'item' => "(date_start <= $today)",
+					], [
+						'item' => "(date_end >= $today)",
+					], [
+						'item' => "min_order <= $cartTotal",
+					],],
+				],
+				'labels' => ['id', 'code', 'amount', 'percent', 'min_order', 'date_start', 'date_end'],
+			]);
+		}
+		echo json_encode(['success' => true, 'prices' => $prices, 'promocode' => $promocode]);
+		exit();
+	}
+
+	/**
+	 * Применение промокода
+	 */
+	public function use_promocode()
+	{
+		$code = isset($this->post['code']) ? trim($this->post['code']) : '';
+		if (!$code) {
+			echo json_encode(['success' => false, 'error' => 'Промокод не указан.'], JSON_UNESCAPED_UNICODE);
+			exit();
+		}
+		$cartTotal = isset($this->post['cartTotal']) ? (int)$this->post['cartTotal'] : 0;
+		if (!$cartTotal) {
+			echo json_encode(['success' => false, 'error' => 'Корзина пуста.'], JSON_UNESCAPED_UNICODE);
+			exit();
+		}
+		$today = strtotime('today');
+		$promocode = $this->mdl_promocode->queryData([
+			'return_type' => 'ARR1',
+			'where' => [
+				'method' => 'AND',
+				'set' => [[
+					'item' => 'code',
+					'value' => $code,
+				]],
+			],
+			'labels' => ['id', 'code', 'amount', 'percent', 'min_order', 'date_start', 'date_end'],
+		]);
+
+		$error = false;
+		if (empty($promocode)) {
+			$error = 'Промокод не найден.';
+		} elseif ($promocode['date_start'] && $promocode['date_start'] > $today) {
+			$error = 'Промокод еще неактивен.';
+		} elseif ($promocode['date_end'] && $promocode['date_end'] < $today) {
+			$error = 'Промокод уже неактивен.';
+		} elseif ($promocode['min_order'] > $cartTotal) {
+			$error = "Минимальная сумма заказа для применения промокода {$promocode['min_order']} р.";
+		}
+
+		if ($error) {
+			echo json_encode(['success' => false, 'error' => $error], JSON_UNESCAPED_UNICODE);
+			exit();
+		}
+
+		echo json_encode(['success' => true, 'promocode' => $promocode], JSON_UNESCAPED_UNICODE);
+		exit();
+	}
 
 	// public function test()
 	// {

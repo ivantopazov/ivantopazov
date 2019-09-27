@@ -22,5 +22,6 @@ $autoload['model'] = array(
     'mdl_category',
     'mdl_product',
     'mdl_orders',
-    'mdl_seo'
+    'mdl_seo',
+	'mdl_promocode',
 );
