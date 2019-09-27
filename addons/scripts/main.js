@@ -4,7 +4,7 @@ window.MAIN = {
 	setEvents: function () {
 		$('#cart').off('change');
 		$('#cart').on('change', 'input[type="text"].qtyChange', function () {
-			console.log($(this).attr('itemid'), $(this).val(), 'update 1 1 ');
+			// console.log($(this).attr('itemid'), $(this).val(), 'update 1 1 ');
 			CART.updateCount($(this).attr('itemid'), $(this).val(), MAIN.cartPages);
 		});
 	},
@@ -21,7 +21,7 @@ window.MAIN = {
 			var count = 0;
 			for (var key in response) {
 				var val = response [key];
-				var summaCop = Number(summaCop) + ( val.qty * Number(val.price));
+				var summaCop = Number(summaCop) + (val.qty * Number(val.price));
 				var count = Number(count + val.qty);
 			}
 			var summaRUB = Number(summaCop / 100);
@@ -42,12 +42,12 @@ window.MAIN = {
 
 	// Обновить информацию в шапке корзины
 	updateView: function (response) {
-		var summaCop = [];
+		var summaCop = 0;
 		var count = 0;
 		for (var key in response) {
 			var val = response [key];
-			var summaCop = Number(summaCop) + ( val.qty * Number(val.price));
-			var count = Number(count + val.qty);
+			summaCop = Number(summaCop) + (val.qty * Number(val.price));
+			count = Number(count + val.qty);
 		}
 		var summaRUB = Number(summaCop / 100);
 		$('.cartSumma').html(count);
@@ -64,7 +64,7 @@ window.MAIN = {
 	speedAddCart: function (item) {
 		window.speedCart = [];
 		window.speedCart.push(item);
-		console.log('-<<<-', window.speedCart, item);
+		// console.log('-<<<-', window.speedCart, item);
 
 	},
 
@@ -80,6 +80,33 @@ window.MAIN = {
 			MAIN.erectCartList(response);
 			MAIN.setEvents();
 		});
+		CART.promocode(function (response) {
+			MAIN.setPromocodeInfo(response);
+		});
+	},
+
+	// Загрузка позиций корзины с предварительным обновлением цен
+	cartPagesWithRefresh: function () {
+		var promocode = CART.promocode();
+		CART.list(function (response) {
+			$.ajax({
+				type: 'post',
+				url: '/cart/refresh',
+				data: {
+					cart: response,
+					promocodeCode: promocode.code,
+				},
+				dataType: 'json',
+				success: function (data) {
+					if (data.success) {
+						CART.update(data.prices, data.promocode, MAIN.cartPages);
+					}
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					FNC.errorConnect(errorThrown);
+				},
+			});
+		});
 	},
 
 	// Формирование списка позиций ( страница - корзина )
@@ -87,7 +114,7 @@ window.MAIN = {
 		var itog = 0;
 		for (var key in LIST) {
 			var val = LIST[key];
-			itog += parseInt(( ( val.qty * val.price  ) / 100 ));
+			itog += parseInt(((val.qty * val.price) / 100));
 
 			LIST[key]['pr'] = parseInt((LIST[key]['qty'] * LIST[key]['price']) / 100);
 		}
@@ -111,19 +138,87 @@ window.MAIN = {
 		this.messagesDeliver();
 	},
 
+	usePromocode: function () {
+		var code = $.trim($('#promocode').val());
+		if (code) {
+			$.ajax({
+				type: 'post',
+				url: '/cart/use_promocode',
+				data: {
+					code: code,
+					cartTotal: parseInt($('#itog').html()),
+				},
+				dataType: 'json',
+				success: function (data) {
+					if (data.success && data.promocode && data.promocode.code) {
+						CART.setPromocode(data.promocode);
+						MAIN.setPromocodeInfo(data.promocode);
+
+						$('#modal_promocode_success').modal();
+					} else {
+						CART.setPromocode({});
+						MAIN.setPromocodeInfo({});
+						$('#promocodeError').html(data.error || 'Произошла ошибка, попробуйте позднее.');
+						$('#modal_promocode_failed').modal();
+					}
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					FNC.errorConnect(errorThrown);
+					$('#promocodeError').html('Произошла ошибка, попробуйте позднее.');
+					$('#modal_promocode_failed').modal();
+				},
+			});
+		}
+	},
+
+	removePromocode: function () {
+		CART.setPromocode({});
+		MAIN.setPromocodeInfo({});
+		$('#modal_promocode_removed').modal();
+	},
+
+	setPromocodeInfo: function (promocode) {
+		if (promocode && promocode.code) {
+			var cartTotal = parseInt($('#itog').html());
+			cartTotalWithPromocode = +promocode.percent ?
+				Math.round(cartTotal * (100 - promocode.percent) / 100) :
+				cartTotal - promocode.amount;
+			var promocodeValue = +promocode.percent ? promocode.percent + '%' :
+				promocode.amount + ' р.';
+
+			$('#itogWithPromocode').html(cartTotalWithPromocode + ' руб.');
+			$('#itog').addClass('oldPrice');
+
+			$('#promocode').val(promocode.code);
+			$('.promocodeCode').html(promocode.code);
+			$('.promocodeValue').html(promocodeValue);
+			$('#promocodeInfo').removeClass('hidden');
+			$('#promocodeRemove').removeClass('hidden');
+		} else {
+			$('#itogWithPromocode').html('');
+			$('#itog').removeClass('oldPrice');
+
+			$('#promocode').val('');
+			$('#promocodeInfo').addClass('hidden');
+			$('#promocodeRemove').addClass('hidden');
+		}
+	},
+
 	// ОФОРМЛЕНИЕ КОРЗИНЫ
 	FORM: {
 
 		requare: function (data, callback) {
 
-			var cartArray = CART.list(false);
+			var cartArray = CART.list();
+			var promocode = CART.promocode();
 			var success = true;
 			var postData = {};
 
 			if (cartArray.length > 0) {
 				var postData = {
 					type: 'Обычная покупка',
-					cart: CART.list(false),
+					cart: cartArray,
+					promocode: promocode,
 					info: data,
 				};
 			} else {
@@ -208,7 +303,7 @@ window.MAIN = {
 				var count = 0;
 				for (var key in response) {
 					var val = response [key];
-					var summaCop = Number(summaCop) + ( val.qty * Number(val.price));
+					var summaCop = Number(summaCop) + (val.qty * Number(val.price));
 					var count = Number(count + val.qty);
 				}
 				var summaRUB = Number(summaCop / 100);
@@ -221,10 +316,7 @@ window.MAIN = {
 				$(DOM.parent + ' #order_info button[type="submit"]').prop('disabled', true);
 			}
 
-			//console.log( 'xx', MAIN.sendSuccess() );
-
-			//return false;
-			return ( err < 1 ) ? true : false;
+			return (err < 1) ? true : false;
 
 		},
 
@@ -268,7 +360,6 @@ window.MAIN = {
 				//});
 
 				CART.removeAll(function () {
-					console.log('thanks');
 					window.location.replace('/cart/thanks');
 				});
 			} else {
@@ -335,7 +426,7 @@ window.MAIN = {
 				}
 			}
 
-			return ( err < 1 ) ? true : false;
+			return (err < 1) ? true : false;
 
 		},
 
@@ -405,7 +496,7 @@ window.MAIN = {
 					}
 				}
 			}
-			return ( err < 1 ) ? true : false;
+			return (err < 1) ? true : false;
 
 		},
 
@@ -447,7 +538,7 @@ window.MAIN = {
 					}
 				}
 			});
-			return ( err < 1 ) ? true : false;
+			return (err < 1) ? true : false;
 
 		},
 
