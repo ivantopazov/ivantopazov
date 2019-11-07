@@ -929,6 +929,8 @@ class Mdl_product extends CI_Model
 	{
 		if ($filter['item'] === 'brand') {
 			$this->db->where_in('postavchik', $filter['values']);
+		} elseif ($filter['item'] === 'proba') {
+			$this->db->where_in('proba', $filter['values']);
 		} elseif ($filter['item'] === 'category') {
 			foreach ($filter["values"] as $key => $fl) {
 				switch ($fl) {
