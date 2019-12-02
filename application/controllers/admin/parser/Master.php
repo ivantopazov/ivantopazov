@@ -145,6 +145,7 @@ class Master extends CI_Controller
 			$params = $this->params($dt);
 			$filter = $this->filter($dt, $params[2]["value"]);
 			$drag = $this->drag($dt["descr"]);
+			$caratsRanges = $this->getCaratsRanges($drag);
 
 			$item = [
 				'articul' => $dt['article'],
@@ -163,9 +164,9 @@ class Master extends CI_Controller
 				'postavchik' => 'Master Brilliant',
 				'parser' => 'Master',
 				'proba' => $dt['probe'],
-				'params' => json_encode($params),
+				'params' => json_encode($params, JSON_UNESCAPED_UNICODE),
 				'size' => $dt["size"],
-				'filters' => json_encode($filter),
+				'filters' => json_encode($filter, JSON_UNESCAPED_UNICODE),
 				'moderate' => '2',
 				'lastUpdate' => time(),
 				'optionLabel' => json_encode([
@@ -173,8 +174,9 @@ class Master extends CI_Controller
 					'options' => $dt['garniture'],
 					'vstavki' => str_replace(";", " ", str_replace("#", " ", $dt['descr'])),
 					'seria' => "",
-				]),
-				'drag' => json_encode($drag),
+				], JSON_UNESCAPED_UNICODE),
+				'drag' => json_encode($drag, JSON_UNESCAPED_UNICODE),
+				'filter_carats' => json_encode($caratsRanges, JSON_UNESCAPED_UNICODE),
 			];
 
 			// Получаем итем с одинаковым артикулом и весом для обновления цены
@@ -428,6 +430,98 @@ class Master extends CI_Controller
 		if ($count == 1 and strlen($file[0]) == 0) $count = 0;
 		echo json_encode(['count' => $count]);
 		die;
+	}
+
+	public function getCaratsRangesAll($productIds = [])
+	{
+//		$prodictIds = [62284];
+//		$products = [];
+//		if (count($prodictIds) > 0) {
+//			$this->db->where_in('id', $prodictIds);
+			$this->db->where('postavchik', 'Master Brilliant');
+			$this->db->limit(10000, 30000);
+			$products = $this->db->get('products')->result_array();
+//		}
+
+		$upd = [];
+		if (count($products) > 0) {
+			foreach ($products as $product) {
+				$drag = json_decode($product['drag'], true);
+				$optionLabel = json_decode($product['optionLabel'], true);
+				$caratsRanges = $this->getCaratsRanges($drag);
+				$upd[] = [
+					'id' => $product['id'],
+					'optionLabel' => json_encode($optionLabel, JSON_UNESCAPED_UNICODE),
+					'drag' => json_encode($drag, JSON_UNESCAPED_UNICODE),
+					'filter_carats' => json_encode($caratsRanges, JSON_UNESCAPED_UNICODE),
+				];
+			}
+			if (count($upd)) {
+				$this->db->update_batch('products', $upd, 'id');
+				var_dump(count($upd));
+				die;
+			}
+		}
+	}
+
+	public function decodeOptionLabel($productIds = [])
+	{
+//		$prodictIds = [62284];
+//		$products = [];
+//		if (count($prodictIds) > 0) {
+//			$this->db->where_in('id', $prodictIds);
+			$this->db->where('postavchik', 'Master Brilliant');
+			$this->db->limit(10000, 30000);
+			$products = $this->db->get('products')->result_array();
+//		}
+
+		$upd = [];
+		if (count($products) > 0) {
+			foreach ($products as $product) {
+				$optionLabel = $product['optionLabel'];
+				for ($i = 0; $i < 10; $i++) {
+					$decoded = json_decode($optionLabel, true);
+					if ($decoded) {
+						$optionLabel = $decoded;
+					} else {
+						break;
+					}
+
+				}
+				$upd[] = [
+					'id' => $product['id'],
+					'optionLabel' => json_encode($optionLabel, JSON_UNESCAPED_UNICODE),
+				];
+			}
+			if (count($upd)) {
+				$this->db->update_batch('products', $upd, 'id');
+				var_dump(count($upd));
+				die;
+			}
+		}
+	}
+
+	/**
+	 * Градации каратности по значению поля drag
+	 *
+	 * @param array $drag
+	 * @return array
+	 */
+	public function getCaratsRanges($drag)
+	{
+		$caratsRanges = [];
+		foreach ($drag as $item) {
+			foreach ($item['data'] as $stoneProperty) {
+
+				if ($stoneProperty['name'] == 'Вес, Ct.') {
+					$caratsRange = $this->mdl_product->getCaratsRange($stoneProperty['value']);
+					if ($caratsRange && !in_array($caratsRange, $caratsRanges)) {
+						$caratsRanges[] = $caratsRange;
+					}
+				}
+			}
+		}
+		return $caratsRanges;
 	}
 
 }

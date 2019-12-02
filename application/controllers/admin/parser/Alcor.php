@@ -285,6 +285,7 @@ class Alcor extends CI_Controller
 					'qty' => '1',
 					'price_zac' => $v['data']['product']['price_zac'],
 					'params' => $v['data']['product']['params'],
+					'filters' => $v['data']['product']['filters'],
 				];
 				if (!in_array($v['ID'], $IDS)) {
 					$IDS[] = $v['ID'];
@@ -317,10 +318,10 @@ class Alcor extends CI_Controller
 			}
 		}
 		if (count($INSERT) > 0) {
-			$insert_ok = [];
+			$insertedSeries = [];
 			foreach ($INSERT as $k => $v) {
 				$art = $v['product']['seria'];
-				if (in_array($art, $insert_ok)) {
+				if (in_array($art, $insertedSeries)) {
 					continue;
 				}
 				if (!$this->checkImage($v['photos']['photo_name'])) {
@@ -330,6 +331,9 @@ class Alcor extends CI_Controller
 				$insID = $this->db->insert_id();
 				if (!in_array($insID, $IDS)) {
 					$IDS[] = $insID;
+				}
+				if (!in_array($v['product']['seria'], $insertedSeries)) {
+					$insertedSeries[] = $v['product']['seria'];
 				}
 				$aliase = $this->mdl_product->aliase_translite($v['product']['title']) . '_' . trim($v['product']['articul']) . '_' . $insID;
 				$updProd = [
@@ -580,39 +584,39 @@ class Alcor extends CI_Controller
 			}
 
 			$paramItem[1]['value'] = 'Золото';
-			$kamenList = ['Без камня', 'С камнем', 'Кристалл Swarovski', 'Swarovski Zirconia', 'Бриллиант', 'Сапфир', 'Изумруд', 'Рубин', 'Жемчуг', 'Топаз', 'Аметист', 'Гранат', 'Хризолит', 'Цитрин', 'Агат', 'Кварц', 'Янтарь', 'Опал', 'Фианит',
+			$stoneList = ['Без камня', 'С камнем', 'Кристалл Swarovski', 'Swarovski Zirconia', 'Бриллиант', 'Сапфир', 'Изумруд', 'Рубин', 'Жемчуг', 'Топаз', 'Аметист', 'Гранат', 'Хризолит', 'Цитрин', 'Агат', 'Кварц', 'Янтарь', 'Опал', 'Фианит',
 				'Родолит', 'Ситалл', 'Эмаль', 'Оникс', 'Корунд', 'Коралл прессованный'];
-			$kamenListVals = ['empty', 'no_empty', 'swarovski', 'swarovski', 'brilliant', 'sapfir', 'izumrud', 'rubin', 'jemchug', 'topaz', 'ametist', 'granat', 'hrizolit', 'citrin', 'agat', 'kvarc', 'jantar', 'opal', 'fianit',
+			$stoneListVals = ['empty', 'no_empty', 'swarovski', 'swarovski', 'brilliant', 'sapfir', 'izumrud', 'rubin', 'jemchug', 'topaz', 'ametist', 'granat', 'hrizolit', 'citrin', 'agat', 'kvarc', 'jantar', 'opal', 'fianit',
 				'Rodolit', 'Sitall', 'Emal', 'Oniks', 'Korund', 'Corall_pressovannyi'];
-			$kamenList2 = ['Без камня', 'С камнем', 'Кристаллом Swarovski', 'Swarovski Zirconia', 'Бриллиантом', 'Сапфиром', 'Изумрудом', 'Рубином', 'Жемчугом', 'Топазом', 'Аметистом', 'Гранатом', 'Хризолитом', 'Цитрином', 'Агатом', 'Кварцом', 'Янтарем', 'Опалом', 'Фианитом',
+			$stoneList2 = ['Без камня', 'С камнем', 'Кристаллом Swarovski', 'Swarovski Zirconia', 'Бриллиантом', 'Сапфиром', 'Изумрудом', 'Рубином', 'Жемчугом', 'Топазом', 'Аметистом', 'Гранатом', 'Хризолитом', 'Цитрином', 'Агатом', 'Кварцом', 'Янтарем', 'Опалом', 'Фианитом',
 				'Родолитом', 'Ситаллом', 'Эмалью', 'Ониксом', 'Корундом', 'Кораллом прессованным'];
 			$text = $item['optionLabel'];
-			$kamen_list = [];
+			$stone_list = [];
 			$param_kamen_list = [];
-			foreach ($kamenList as $pk => $pv) {
+			foreach ($stoneList as $pk => $pv) {
 				$str_text = mb_strtolower($text);
 				$str_find = '/' . mb_strtolower($pv) . '/iU';
 				if (preg_match($str_find, $str_text)) {
-					$filterData[1]['values'][] = $kamenListVals[$pk];
-					$kamen_list[] = $kamenList2[$pk];
-					$param_kamen_list[] = $kamenList[$pk];
+					$filterData[1]['values'][] = $stoneListVals[$pk];
+					$stone_list[] = $stoneList2[$pk];
+					$param_kamen_list[] = $stoneList[$pk];
 				}
 			}
-			if (count($kamen_list) > 0) {
-				if (count($kamen_list) == 1) {
-					$title = $title . ' с ' . $kamen_list[0];
+			if (count($stone_list) > 0) {
+				if (count($stone_list) == 1) {
+					$title = $title . ' с ' . $stone_list[0];
 					$paramItem[2]['value'] = $param_kamen_list[0];
 				}
-				if (count($kamen_list) == 2) {
-					$title = $title . ' с ' . $kamen_list[0] . ' и ' . $kamen_list[1];
+				if (count($stone_list) == 2) {
+					$title = $title . ' с ' . $stone_list[0] . ' и ' . $stone_list[1];
 					$paramItem[2]['value'] = $param_kamen_list[0] . ', ' . $param_kamen_list[1];
 				}
-				if (count($kamen_list) > 2) {
+				if (count($stone_list) > 2) {
 					$paramItem[2]['value'] = $param_kamen_list;
-					$__i = count($kamen_list) - 1;
-					$last = $kamen_list[$__i];
-					array_splice($kamen_list, -1);
-					$title = $title . ' с ' . implode(',', $kamen_list) . ' и ' . $last;
+					$__i = count($stone_list) - 1;
+					$last = $stone_list[$__i];
+					array_splice($stone_list, -1);
+					$title = $title . ' с ' . implode(',', $stone_list) . ' и ' . $last;
 				}
 			}
 			// 'empty','no_empty'
@@ -678,84 +682,127 @@ class Alcor extends CI_Controller
 	}
 
 	// Извлечение параметров ДРАГ камней
-	public function getDragValues($pids = [])
+	public function getDragValues($productIds = [])
 	{
-		//$pids = [1, 2,3,4,5,6,7,8,9,10,11,12,13, 14, 15,16,17,18,19,20,21,22,23];
-		$r = [];
-		if (count($pids) > 0) {
-			$this->db->where_in('id', $pids);
-			$r = $this->db->get('products')->result_array();
-		}
-		if (count($r) > 0) {
+//		$productIds = [68359];
+		$products = [];
+//		if (count($productIds) > 0) {
+//			$this->db->where_in('id', $productIds);
+			$this->db->where('postavchik', 'Alcor');
+			$this->db->limit(10000, 50000);
+			$products = $this->db->get('products')->result_array();
+//		}
+		if (count($products) > 0) {
+			$propertyNamesForStones = [
+				'Агат зеленый' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
+				'Бриллиант' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Рассев', 'Кол-во граней'],
+				'Г.Т.изумруд' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
+				'Г.Т.сапфир' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
+				'Гранат' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
+				'Жемчуг' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
+				'Изумруд' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
+				'Лондон Топаз' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
+				'Оникс' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
+				'Рубин' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
+				'Сапфир' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
+				'Сапфир диффузионный' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
+				'Сапфир звездчатый' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
+				'Синтетический корунд' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
+				'Топаз Swiss' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
+				'Хризолит' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
+				'Цитрин' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
+			];
+			// Названия камней
+			$stoneNames = array_keys($propertyNamesForStones);
+			// Названия камней с замененными пробелами
+			$stoneNamesProcessed = [];
+			// Позиция названия камня в данных (описании) камня, здесь везде 0
+//			$stoneNameIndexes = [];
+
+			foreach ($propertyNamesForStones as $stoneName => $stonePropertyNames) {
+				$stoneNamesProcessed[] = str_replace(' ', '+', $stoneName);
+//				$stoneNameIndexes[] = array_search('Камень', $stonePropertyNames);
+			}
+
 			$upd = [];
-			foreach ($r as $key_prod => $value_prod) {
-				$_1 = json_decode($value_prod['optionLabel'], true);
-				$_2 = explode(',', $_1['seria']);
-				foreach ($_2 as $_2k => $_2v) {
-					$_2[$_2k] = trim($_2v);
+			foreach ($products as $product) {
+				$optionLabel = json_decode($product['optionLabel'], true);
+				$stoneDatasList = explode(',', $optionLabel['seria']);
+
+				foreach ($stoneDatasList as $stoneIndex => $stoneData) {
+					$stoneDatasList[$stoneIndex] = trim($stoneData);
 				}
-				$_2 = array_diff($_2, ['']);
-				foreach ($_2 as $_2k => $_2v) {
-					$__a = explode(' ', $_2v);
-					$_2[$_2k] = array_diff($__a, ['']);
+
+				// убираем пустые значения
+				$stoneDatasList = array_values(array_filter($stoneDatasList));
+
+				foreach ($stoneDatasList as $stoneDataIndex => $stoneData) {
+					foreach ($stoneNames as $stoneIndex => $stoneName) {
+						if (strpos($stoneName, ' ') !== false) {
+							$stoneNamePlus = $stoneNamesProcessed[$stoneIndex];
+							$stoneData = str_replace($stoneName, $stoneNamePlus, $stoneData);
+						}
+					}
+					$stoneProperties = explode(' ', $stoneData);
+					$stoneDatasList[$stoneDataIndex] = array_values(array_filter($stoneProperties));
 				}
-				$kl = ['сапфир', 'изумруд', 'бриллиант', 'рубин'];
-				$kl_index = [0, 0, 0, 0];
-				$_for = [
-					'Агат зеленый' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
-					'Бриллиант' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Рассев', 'Кол-во граней'],
-					'Г.Т.изумруд' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
-					'Г.Т.сапфир' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
-					'Гранат' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
-					'Жемчуг' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
-					'Изумруд' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
-					'Лондон Топаз' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
-					'Оникс' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
-					'Рубин' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
-					'Сапфир' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
-					'Сапфир диффузионный' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
-					'Сапфир звездчатый' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
-					'Синтетический корунд' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
-					'Топаз Swiss' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
-					'Хризолит' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
-					'Цитрин' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Цвет/Чистота', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
-				];
-				$_3 = [];
-				foreach ($_2 as $_2k => $_2v) {
-					foreach ($_2v as $_2v_v) {
-						$__v = mb_strtolower($_2v_v);
-						if (in_array($__v, $kl)) {
-							$__k = array_search($__v, $kl);
-							$__r = [];
-							$__rk = 0;
-							foreach ($_2v as $_2v_v_v) {
-								$__r[$__rk] = $_2v_v_v;
-								$__rk++;
-							}
-							$_2v = $__r;
-							$___e = [
-								'kamen' => $_2v[$kl_index[$__k]],
+
+				$caratsRanges = []; // массив для поля 'filter_carats'
+				$drag = []; // массив для поля 'drag'
+				foreach ($stoneDatasList as $stoneProperties) {
+					foreach ($stoneProperties as $stoneProperty) {
+//						$__v = mb_strtolower($stoneProperty);
+						if (in_array($stoneProperty, $stoneNamesProcessed)) {
+							$stoneIndex = array_search($stoneProperty, $stoneNamesProcessed);
+//							$stoneNameIndex = $stoneNameIndexes[$stoneIndex];
+							$stoneName = $stoneNames[$stoneIndex];
+
+							$dragItem = [
+								'kamen' => $stoneName,
 								'data' => [],
 							];
-							$__1 = $_for[$_2v[$kl_index[$__k]]];
-							foreach ($__1 as $__1k => $__1v) {
-								if (!isset($_2v[$__1k])) echo $value_prod['id'];
-								$___e['data'][] = [
-									'name' => $__1v,
-									'value' => (!isset($_2v[$__1k])) ? '-' : $_2v[$__1k],
+
+							$stonePropertyNames = $propertyNamesForStones[$stoneName];
+							$caratsRange = null;
+							foreach ($stonePropertyNames as $stonePropertyIndex => $stonePropertyName) {
+//								if (!isset($stoneProperties[$stonePropertyIndex])) {
+//									echo $product['id'];
+//								}
+
+								if ($stonePropertyName == 'Камень') { // это название камня
+									$stoneProperty = $stoneName;
+								} else {
+									$stoneProperty = $stoneProperties[$stonePropertyIndex];
+								}
+
+								$dragItem['data'][] = [
+									'name' => $stonePropertyName,
+									'value' => $stoneProperty ?: '-',
 								];
+
+								if ($stoneProperty && $stonePropertyName == 'Вес, Ct.') { // это вес камня
+									$caratsRange = $this->mdl_product->getCaratsRange($stoneProperty);
+								}
 							}
-							$_3[] = $___e;
+							$drag[] = $dragItem;
+							if ($caratsRange && !in_array($caratsRange, $caratsRanges)) {
+								$caratsRanges[] = $caratsRange;
+							}
 						}
 					}
 				}
 				$upd[] = [
-					'id' => $value_prod['id'],
-					'drag' => json_encode($_3),
+					'id' => $product['id'],
+					'optionLabel' => json_encode($optionLabel, JSON_UNESCAPED_UNICODE),
+					'drag' => json_encode($drag, JSON_UNESCAPED_UNICODE),
+					'filter_carats' => json_encode($caratsRanges, JSON_UNESCAPED_UNICODE),
 				];
 			}
-			if (count($upd) > 0) {
+
+			if (count($upd)) {
 				$this->db->update_batch('products', $upd, 'id');
+				var_dump(count($upd));
+				die;
 			}
 		}
 		return true;

@@ -70,8 +70,12 @@ $(function () {
 
 
                 arr.f['Cena'] = [];
-                arr.f['Cena'].push($(DOM.parent + '  div[data-parent="' + db_block + '"] input[name="ot"]').val());
-                arr.f['Cena'].push($(DOM.parent + '  div[data-parent="' + db_block + '"] input[name="do"]').val());
+                arr.f['Cena'].push($(DOM.parent + '  div[data-parent="' + db_block + '"] input[name="price-ot"]').val());
+                arr.f['Cena'].push($(DOM.parent + '  div[data-parent="' + db_block + '"] input[name="price-do"]').val());
+
+                arr.f['weight'] = [];
+                arr.f['weight'].push($(DOM.parent + '  div[data-parent="' + db_block + '"] input[name="weight-ot"]').val());
+                arr.f['weight'].push($(DOM.parent + '  div[data-parent="' + db_block + '"] input[name="weight-do"]').val());
 
                 for (var key in arr.f) {
                     var val = arr.f [key];

@@ -12,6 +12,18 @@ class Mdl_product extends CI_Model
 	// Выполнение запросов
 	protected $_query = array();
 
+	// верхние грацицы диапазонов каратности
+	protected $caratsRanges = [
+		'1' => 0.25,
+		'2' => 0.5,
+		'3' => 1,
+		'4' => 2,
+		'5' => 3,
+		'6' => 4,
+		'7' => 5,
+		'8' => false,
+	];
+
 	public function queryData($settings = array())
 	{
 
@@ -973,9 +985,11 @@ class Mdl_product extends CI_Model
 				$valueOr = trim($valueOr, ' ,');
 				return implode(" AND ", array_map(function ($valueAnd) use ($column) {
 					$valueAnd = trim($valueAnd);
-					return "JSON_CONTAINS($column, '[\"$valueAnd\"]')";
+					$valueAnd = $column == 'filter_carats' ? "'{$valueAnd}'" : "'[\"$valueAnd\"]'";
+					return "JSON_CONTAINS($column, $valueAnd)";
 				}, explode(',', $valueOr)));
 			}, $filter['values']));
+
 			$this->db->where("($condition)");
 		}
 	}
@@ -991,6 +1005,15 @@ class Mdl_product extends CI_Model
 			}
 			if ($price_to) {
 				$this->db->where("price_real <= $price_to");
+			}
+		}
+		if ($filter['item'] === 'weight') {
+			list($weight_from, $weight_to) = $filter['values'];
+			if ($weight_from) {
+				$this->db->where("weight >= $weight_from");
+			}
+			if ($weight_to) {
+				$this->db->where("weight <= $weight_to");
 			}
 		}
 	}
@@ -1318,6 +1341,38 @@ class Mdl_product extends CI_Model
 
 		return $res;
 
+	}
+
+	/**
+	 * Список градаций каратности
+	 *
+	 * @return array
+	 */
+	public function getCaratsRanges()
+	{
+		return $this->caratsRanges;
+	}
+
+	/**
+	 * Код градации каратности по значению
+	 *
+	 * @param $carats
+	 * @return int
+	 */
+	public function getCaratsRange($carats)
+	{
+		$rangeId = null;
+		if (preg_match('/^[0-9.,]+$/', $carats)) {
+			$carats = (double)str_replace(',', '.', $carats);
+			if ($carats > 0) {
+				foreach ($this->caratsRanges as $rangeId => $rangeMax) {
+					if ($rangeMax && $carats <= $rangeMax) {
+						break;
+					}
+				}
+			}
+		}
+		return $rangeId;
 	}
 
 }

@@ -145,6 +145,7 @@ class Trofimova extends CI_Controller
 			$params = $this->params($dt);
 			$filter = $this->filter($dt, $params[2]["value"]);
 			$drag = $this->drag($dt["vstavka"]);
+			$caratsRanges = $this->getCaratsRanges($drag);
 
 			$item = [
 				'articul' => $dt['article'],
@@ -163,9 +164,9 @@ class Trofimova extends CI_Controller
 				'postavchik' => 'Trofimova jewellery',
 				'parser' => 'Trofimova',
 				'proba' => $dt['probe'],
-				'params' => json_encode($params),
+				'params' => json_encode($params, JSON_UNESCAPED_UNICODE),
 				'size' => $dt["size"],
-				'filters' => json_encode($filter),
+				'filters' => json_encode($filter, JSON_UNESCAPED_UNICODE),
 				'moderate' => '2',
 				'lastUpdate' => time(),
 				'optionLabel' => json_encode([
@@ -173,8 +174,9 @@ class Trofimova extends CI_Controller
 					'options' => "-",
 					'vstavki' => str_replace(" ", " ", str_replace(",", " ", $dt['vstavka'])),
 					'seria' => "",
-				]),
-				'drag' => json_encode($drag),
+				], JSON_UNESCAPED_UNICODE),
+				'drag' => json_encode($drag, JSON_UNESCAPED_UNICODE),
+				'filter_carats' => json_encode($caratsRanges, JSON_UNESCAPED_UNICODE),
 			];
 
 			// Получаем итем с одинаковым артикулом и весом для обновления цены
@@ -385,6 +387,7 @@ class Trofimova extends CI_Controller
 
 		$kamen = explode(",", $descr);
 		foreach ($kamen as $key => $value) {
+			$value = preg_replace('/(\d+) (\d+Ct)/', '$1.$2', trim($value));
 			$val = explode(" ", $value);
 			$drag[$key]["kamen"] = $val[1];
 			$drag[$key]["data"] = [
@@ -422,5 +425,62 @@ class Trofimova extends CI_Controller
 		echo json_encode(['count' => $count]);
 		die;
 	}
+
+	public function getCaratsRangesAll($productIds = [])
+	{
+//		$prodictIds = [62284];
+//		$products = [];
+//		if (count($prodictIds) > 0) {
+//			$this->db->where_in('id', $prodictIds);
+			$this->db->where('postavchik', 'Trofimova jewellery');
+//			$this->db->limit(10000, 30000);
+			$products = $this->db->get('products')->result_array();
+//		}
+
+		$upd = [];
+		if (count($products) > 0) {
+			foreach ($products as $product) {
+				$drag = json_decode($product['drag'], true);
+				$optionLabel = json_decode($product['optionLabel'], true);
+				$caratsRanges = $this->getCaratsRanges($drag);
+				$upd[] = [
+					'id' => $product['id'],
+					'optionLabel' => json_encode($optionLabel, JSON_UNESCAPED_UNICODE),
+					'drag' => json_encode($drag, JSON_UNESCAPED_UNICODE),
+					'filter_carats' => json_encode($caratsRanges, JSON_UNESCAPED_UNICODE),
+				];
+			}
+			if (count($upd)) {
+				$this->db->update_batch('products', $upd, 'id');
+				var_dump(count($upd));
+				die;
+			}
+		}
+	}
+
+	/**
+	 * Градации каратности по значению поля drag
+	 *
+	 * @param array $drag
+	 * @return array
+	 */
+	public function getCaratsRanges($drag)
+	{
+		$caratsRanges = [];
+		foreach ($drag as $item) {
+			foreach ($item['data'] as $stoneProperty) {
+
+				if ($stoneProperty['name'] == 'Вес, Ct.') {
+					$value = str_replace('Ct', '', $stoneProperty['value']);
+					$caratsRange = $this->mdl_product->getCaratsRange($value);
+					if ($caratsRange && !in_array($caratsRange, $caratsRanges)) {
+						$caratsRanges[] = $caratsRange;
+					}
+				}
+			}
+		}
+		return $caratsRanges;
+	}
+
 
 }

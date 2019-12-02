@@ -222,7 +222,8 @@ class Catalog extends CI_Controller
 			'content' => $this->mdl_tpl->view('pages/catalog/home.html', array(
 				'blocks' => $this->mdl_tpl->view('pages/catalog/filters/items.html', array(
 					'items' => $getData['filter'],
-					'cena' => $getData['cena'],
+					'Cena' => $getData['cena'],
+					'weight' => $getData['weight'],
 				), true),
 				'textSearch' => $getData['textSearch'],
 				'sort' => $getData['sort'],
@@ -463,6 +464,11 @@ class Catalog extends CI_Controller
 			$r['cena'] = explode('|', $this->get['f']['Cena']);
 		}
 
+		$r['weight'] = [];
+		if (isset($this->get['f']['weight'])) {
+			$r['weight'] = explode('|', $this->get['f']['weight']);
+		}
+
 		foreach ($filter as $k => $v) {
 			foreach ($setFilters as $sfv) {
 				foreach ($v['data'] as $kData => $vData) {
@@ -570,7 +576,8 @@ class Catalog extends CI_Controller
 			'content' => $this->mdl_tpl->view('pages/catalog/home.html', array(
 				'blocks' => $this->mdl_tpl->view('pages/catalog/filters/items.html', array(
 					'items' => $getData['filter'],
-					'cena' => $getData['cena'],
+					'Cena' => $getData['cena'],
+					'weight' => $getData['weight'],
 				), true),
 				//'snipets' => ($getData['snipet'] !== false) ? $this->mdl_tpl->view('pages/catalog/cats_snipets/' . $data['item']['aliase'] . '.html', array(), true) : '',
 				'textSearch' => $getData['textSearch'],
@@ -897,6 +904,11 @@ class Catalog extends CI_Controller
 			$r['cena'] = [];
 			if (isset($this->get['f']['Cena'])) {
 				$r['cena'] = explode('|', $this->get['f']['Cena']);
+			}
+
+			$r['weight'] = [];
+			if (isset($this->get['f']['weight'])) {
+				$r['weight'] = explode('|', $this->get['f']['weight']);
 			}
 
 			foreach ($filter as $k => $v) {

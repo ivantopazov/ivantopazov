@@ -8,13 +8,13 @@
 		{% if item.type == 'range-values' %}
 		<div class="row" style="margin-bottom: 20px;">
 			{% for kk, link in item.data %}
-			<div class="col-xs-6">  
+			<div class="col-xs-6">
 				<div class="row">
 					<label class="col-xs-12" for="{{link.variabled}}" title="{{link.title}}">{{link.title}}</label>    
-					<div class="col-xs-12">  
+					<div class="col-xs-12">
 						<div class="pull-right">
 							<span class="control-label">
-								<input type="text" id="{{link.variabled}}" name="{{link.variabled}}" class="form-control" value="{{cena[kk]}}" placeholder="{{link.title}}" />
+								<input type="text" id="{{link.variabled}}" name="{{link.variabled}}" class="form-control" value="{{ _context[item.variabled][kk] }}" placeholder="{{link.title}}" />
 							</span>
 						</div>
 					</div>
@@ -31,7 +31,7 @@
 			
 			<div class="row">
 				{% for link in item.data %}
-				<div class="{% if item.variabled == 'size' %} col-xs-4 {% else %} col-xs-12 {% endif %}">  
+				<div class="{% if item.variabled == 'size' %} col-xs-6 {% else %} col-xs-12 {% endif %}">
 					
 					<div class="pull-left">  
 						<div class="pull-right">
