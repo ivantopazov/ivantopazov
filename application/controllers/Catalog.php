@@ -175,10 +175,13 @@ class Catalog extends CI_Controller
 
 		$start = microtime(true);
 
-		$title = 'Ювелирный каталог';
 		$page_var = 'catalog';
 
-		$getData = $this->getCategoryHome();
+//		$getData = $this->getCategoryHome();
+		$getData = $this->getCatData();
+
+		$title = (!isset($getData['setFilters']['category']) ? 'все украшения ' : '') . $getData['filterTitle'];
+		$title = mb_strtoupper(mb_substr($title, 0, 1)) . mb_substr($title, 1);
 
 		// Если нет товаров, ставим заглушку
 		if (count($getData["products"]) < 1) {
@@ -227,7 +230,7 @@ class Catalog extends CI_Controller
 				), true),
 				'textSearch' => $getData['textSearch'],
 				'sort' => $getData['sort'],
-				'header_title' => "Все украшения",
+				'header_title' => $title,
 				'collections' => $this->mdl_tpl->view('pages/catalog/category_view_collections.html', array(
 					'items' => $getData['collections'],
 				), true),
@@ -259,7 +262,7 @@ class Catalog extends CI_Controller
 
 	}
 
-	// Получить все товары для главной страницы
+/*	// Получить все товары для главной страницы
 	public function getCategoryHome($j = false)
 	{
 		$r = [
@@ -364,7 +367,7 @@ class Catalog extends CI_Controller
 			foreach ($f as $k => $v) {
 				foreach ($filter as $fv) {
 					if ($fv['variabled'] == $k) {
-						$fNew[] = [
+						$fNew[$k] = [
 							'item' => $k,
 							'type' => $fv['type'],
 							'values' => explode('|', $v),
@@ -373,9 +376,10 @@ class Catalog extends CI_Controller
 				}
 			}
 
-			$option['setFilters'] = $fNew;
-
 			$setFilters = $fNew;
+
+			$option['setFilters'] = $setFilters;
+			$r['setFilters'] = $setFilters;
 		}
 
 		$r['brand'] = (isset($this->get['brand'])) ? $this->get['brand'] : '';
@@ -458,15 +462,30 @@ class Catalog extends CI_Controller
 		$r['products'] = $_r['result'];
 		$r['products_pag'] = $_r['option']['pag'];
 
+		$filterTitle = '';
 //		$r['cena'] = [0, 90000];
 		$r['cena'] = [];
 		if (isset($this->get['f']['Cena'])) {
-			$r['cena'] = explode('|', $this->get['f']['Cena']);
+			$prices = explode('|', $this->get['f']['Cena']);
+			$r['cena'] = $prices;
+			list($price_from, $price_to) = $prices;
+			$price_from = (int)$price_from;
+			$price_to = (int)$price_to;
+			if ($price_from || $price_to) {
+				$filterTitle .= 'ценой ' . ($price_from ? 'от ' . $price_from : '') . ($price_to ? 'до ' . $price_to : '');
+			}
 		}
 
 		$r['weight'] = [];
 		if (isset($this->get['f']['weight'])) {
-			$r['weight'] = explode('|', $this->get['f']['weight']);
+			$weights = explode('|', $this->get['f']['weight']);
+			$r['weight'] = $weights;
+			list($weight_from, $weight_to) = $weights;
+			$weight_from = (float)$weight_from;
+			$weight_to = (float)$weight_to;
+			if ($weight_from || $weight_to) {
+				$filterTitle .= ' весом ' . ($weight_from ? 'от ' . $weight_from : '') . ($weight_to ? 'до ' . $weight_to : '');
+			}
 		}
 
 		foreach ($filter as $k => $v) {
@@ -478,12 +497,14 @@ class Catalog extends CI_Controller
 		}
 
 		foreach ($filter as $k => $v) {
+			$filterTitles = [];
 			foreach ($setFilters as $sfv) {
 				if ($v['variabled'] === $sfv['item']) {
 
 					foreach ($v['data'] as $kData => $vData) {
 						if (in_array($vData['variabled'], $sfv['values'])) {
 							$filter[$k]['data'][$kData]['check'] = 'on';
+							$filterTitles[] = isset($vData['metaTitle']) && $vData['metaTitle'] ? $vData['metaTitle'] : mb_strtolower($vData['title']);
 						} else {
 							$filter[$k]['data'][$kData]['check'] = 'off';
 						}
@@ -491,9 +512,15 @@ class Catalog extends CI_Controller
 
 				}
 			}
+			if (count($filterTitles)) {
+				$filterTitle .= isset($v['metaTitle']) && $v['metaTitle'] ? ' ' . $v['metaTitle'] . ' ' : ' ';
+				$filterTitle .= implode(' и ', $filterTitles);
+			}
 		};
+		$filterTitle = trim($filterTitle);
 
 		$r['filter'] = $filter;
+		$r['filterTitle'] = $filterTitle;
 
 		if ($j === true) {
 			$this->mdl_helper->__json($r);
@@ -501,7 +528,7 @@ class Catalog extends CI_Controller
 			return $r;
 		}
 
-	}
+	}*/
 
 	// Вывести категорию или разделы и товары в ней
 	public function view_category($data)
@@ -509,7 +536,7 @@ class Catalog extends CI_Controller
 
 		$start = microtime(true);
 
-		$getData = $this->getCatData($data['item']['id'], $data['item']['aliase'], false);
+		$getData = $this->getCatData($data['item']['id']);
 
 		// Если нет товаров, ставим заглушку
 		if (count($getData["products"]) < 1) {
@@ -520,20 +547,7 @@ class Catalog extends CI_Controller
 			</p>";
 		} else $descr = "";
 
-		/*
-		echo "<pre>";
-		print_r( $getData['products'] );
-		echo "</pre>";
-		*/
-		//foreach(  as $v ){
-		//$eee[] = $v['id'];
-
-		//echo "UPDATE `products` SET `salle_procent`=30 WHERE `id` = '{$v['id']}'; <br />";
-		//}
-
-		//echo implode( ',', $eee );
-
-		$title = $data['item']['name'];
+		$title = $data['item']['name'] . ' ' . $getData['filterTitle'];
 		//$title = ( !empty( $this->store_info['seo_title'] ) ) ? $this->store_info['seo_title'] : $this->store_info['header'];
 		$page_var = 'catalog';
 
@@ -582,7 +596,7 @@ class Catalog extends CI_Controller
 				//'snipets' => ($getData['snipet'] !== false) ? $this->mdl_tpl->view('pages/catalog/cats_snipets/' . $data['item']['aliase'] . '.html', array(), true) : '',
 				'textSearch' => $getData['textSearch'],
 				'sort' => $getData['sort'],
-				'header_title' => $data['item']['name'],
+				'header_title' => $title,
 				'collections' => $this->mdl_tpl->view('pages/catalog/category_view_collections.html', array(
 					'items' => $getData['collections'],
 				), true),
@@ -618,13 +632,13 @@ class Catalog extends CI_Controller
 	}
 
 	// Получить данные о категории
-	public function getCatData($catId = false, $catAliase = false, $j = true)
+	public function getCatData($catId = false/*, $catAliase = false*/, $j = false)
 	{
 
 		$catId = (isset($this->post['cat_id'])) ? $this->post['cat_id'] : $catId;
-		$catAliase = (isset($this->post['catAliase'])) ? $this->post['catAliase'] : $catAliase;
+//		$catAliase = (isset($this->post['catAliase'])) ? $this->post['catAliase'] : $catAliase;
 
-		if ($catId === false) {
+		/*if ($catId === false) {
 			$queryCat = $this->mdl_category->queryData([
 				'return_type' => 'ARR1',
 				'where' => [
@@ -637,7 +651,7 @@ class Catalog extends CI_Controller
 				'module' => false,
 			]);
 			$catId = $queryCat['id'];
-		}
+		}*/
 
 		$r = [
 			'products' => [],
@@ -659,6 +673,8 @@ class Catalog extends CI_Controller
 
 		$sffix = $query_string;
 
+		$cat_item = false;
+
 		if ($catId !== false) {
 
 			$fileSnipet = './' . $this->config->item('config_tpl_path') . '/pages/catalog/cats_snipets/' . $catAliase . '.html';
@@ -678,9 +694,9 @@ class Catalog extends CI_Controller
 				'modules' => [[
 					'module_name' => 'linkPath',
 					'result_item' => 'linkPath',
-					'option' => [
-						'cat_aliase' => $catAliase,
-					],
+//					'option' => [
+//						'cat_aliase' => $catAliase,
+//					],
 				]],
 			]);
 
@@ -711,233 +727,260 @@ class Catalog extends CI_Controller
 				'labels' => ['id', 'filter_id'],
 				'module' => false,
 			]);
-
-			$filter = $this->mdl_category->queryData([
-				'return_type' => 'ARR1',
-				'table_name' => 'products_filters',
-				'where' => [
-					'method' => 'AND',
-					'set' => [
-						['item' => 'id', 'value' => $cat_item['filter_id']],
-					],
-				],
-				'labels' => ['id', 'labels'],
-				'module' => false,
-			]);
-
-			//$r['filter_id'] = ( $filter ) ? $filter['id']: false;
-
-			$filter = ($filter) ? json_decode($filter['labels'], true) : [];
-
-			$option = [
-				'return_type' => 'ARR2+',
-				'debug' => true,
-				'where' => [
-					'method' => 'AND',
-					'set' => [[
-						'item' => 'cat',
-						'value' => $catId,
-					], [
-						'item' => 'view >',
-						'value' => 0,
-					], [
-						'item' => 'qty >',
-						'value' => 0,
-					], [
-						'item' => 'moderate >',
-						'value' => 1,
-					]],
-				],
-				'group_by' => 'articul',
-				'distinct' => true,
-				'labels' => ['id', 'aliase', 'articul', 'title', 'seo_keys', 'seo_desc', 'seo_title', 'prices_empty', 'filters', 'salle_procent', 'modules'],
-				'pagination' => [
-					'on' => true,
-					'page' => (isset($this->get['page'])) ? $this->get['page'] : 1,
-					'limit' => (isset($this->get['l'])) ? $this->get['l'] : 40,
-				],
-				'module_queue' => [
-					'price_actual',
-					'limit', 'pagination',
-					'prices_all', 'photos', 'reviews', 'linkPath', 'salePrice',
-					'emptyPrice', 'qty_empty_status', 'paramsView',
-				],
-				'module' => true,
-				'modules' => [[
-					'module_name' => 'linkPath',
-					'result_item' => 'linkPath',
-					'option' => [
-						'cat_aliase' => $catAliase,
-					],
-				], [
-					'module_name' => 'price_actual',
-					'result_item' => 'price_actual',
-					'option' => [
-						'labels' => false,
-					],
-				], [
-					'module_name' => 'salePrice',
-					'result_item' => 'salePrice',
-					'option' => [],
-				], [
-					'module_name' => 'photos',
-					'result_item' => 'photos',
-					'option' => [
-						'no_images_view' => 1,
-					],
-				], [
-					'module_name' => 'emptyPrice',
-					'result_item' => 'emptyPrice',
-					'option' => [
-						'labels' => false,
-					],
-				]],
-			];
-
-			$setFilters = []; // Запомнить установки выбора
-			if (isset($this->get['f']) && is_array($this->get['f'])) {
-
-				$f = $this->get['f'];
-				$fNew = [];
-				foreach ($f as $k => $v) {
-					foreach ($filter as $fv) {
-						if ($fv['variabled'] == $k) {
-							$fNew[] = [
-								'item' => $k,
-								'type' => $fv['type'],
-								'values' => explode('|', $v),
-							];
-						}
-					}
-				}
-
-				$option['setFilters'] = $fNew;
-
-				$setFilters = $fNew;
-			}
-
-			$r['brand'] = (isset($this->get['brand'])) ? $this->get['brand'] : '';
-
-			if (isset($this->get['brand'])) {
-				$b = $this->get['brand'];
-				$option['where']['set'][] = [
-					'item' => 'postavchik',
-					'value' => $b,
-				];
-			}
-
-			$r['sort'] = (isset($this->get['s'])) ? $this->get['s'] : 'pricemin';
-
-			//if( isset( $this->get['s'] ) ){
-
-			$sort = $r['sort'];
-
-			if ($sort === 'pop') {
-				$option['order_by'] = [
-					'item' => 'view',
-					'value' => 'DESC',
-				];
-			}
-
-			if ($sort === 'new') {
-				$option['order_by'] = [
-					'item' => 'id',
-					'value' => 'DESC',
-				];
-			}
-
-			if ($sort === 'upsells') {
-				$option['order_by'] = [
-					'item' => 'salle_procent',
-					'value' => 'DESC',
-				];
-			}
-
-			if ($sort === 'pricemin') {
-				$option['order_by'] = [
-					'item' => 'price_real',
-					'value' => 'ASC',
-				];
-			}
-
-			if ($sort === 'pricemax') {
-				$option['order_by'] = [
-					'item' => 'price_real',
-					'value' => 'DESC',
-				];
-			}
-
-			//}
-
-			$r['textSearch'] = '';
-			if (isset($this->get['t'])) {
-				$t = $r['textSearch'] = $this->get['t'];
-				$option['like'] = [
-					'math' => 'both', // '%before', 'after%' и '%both%' - опциональность поиска
-					'method' => 'AND', // AND (и) / OR(или) / NOT(за исключением и..) / OR_NOT(за исключением или)
-					'set' => [[
-						'item' => 'title',
-						'value' => $t,
-					]]  // [ 'item' => '', 'value' => '' ],[...]
-				];
-			}
-
-			$option['modules'][] = [
-				'module_name' => 'pagination',
-				'result_item' => 'pagination',
-				'option' => [
-					'path' => $_SERVER['REDIRECT_URL'],
-					'option_paginates' => [
-						'uri_segment' => 1,
-						'num_links' => 3,
-						'suffix' => $sffix,
-					],
-				],
-			];
-
-			$_r = $this->mdl_product->queryData($option);
-
-			$r['products'] = $_r['result'];
-			$r['products_pag'] = $_r['option']['pag'];
-
-//			$r['cena'] = [0, 90000];
-			$r['cena'] = [];
-			if (isset($this->get['f']['Cena'])) {
-				$r['cena'] = explode('|', $this->get['f']['Cena']);
-			}
-
-			$r['weight'] = [];
-			if (isset($this->get['f']['weight'])) {
-				$r['weight'] = explode('|', $this->get['f']['weight']);
-			}
-
-			foreach ($filter as $k => $v) {
-				foreach ($setFilters as $sfv) {
-					foreach ($v['data'] as $kData => $vData) {
-						$filter[$k]['data'][$kData]['check'] = 'off';
-					}
-				}
-			}
-
-			foreach ($filter as $k => $v) {
-				foreach ($setFilters as $sfv) {
-					if ($v['variabled'] === $sfv['item']) {
-
-						foreach ($v['data'] as $kData => $vData) {
-							if (in_array($vData['variabled'], $sfv['values'])) {
-								$filter[$k]['data'][$kData]['check'] = 'on';
-							} else {
-								$filter[$k]['data'][$kData]['check'] = 'off';
-							}
-						}
-
-					}
-				}
-			};
-
-			$r['filter'] = $filter;
-
 		}
+
+		$filter = $this->mdl_category->queryData([
+			'return_type' => 'ARR1',
+			'table_name' => 'products_filters',
+			'where' => [
+				'method' => 'AND',
+				'set' => [
+					['item' => 'id', 'value' => $cat_item ? $cat_item['filter_id'] : 11],
+				],
+			],
+			'labels' => ['id', 'labels'],
+			'module' => false,
+		]);
+
+		//$r['filter_id'] = ( $filter ) ? $filter['id']: false;
+
+		$filter = ($filter) ? json_decode($filter['labels'], true) : [];
+
+		$option = [
+			'return_type' => 'ARR2+',
+			'debug' => true,
+			'where' => [
+				'method' => 'AND',
+				'set' => [[
+					'item' => 'view >',
+					'value' => 0,
+				], [
+					'item' => 'qty >',
+					'value' => 0,
+				], [
+					'item' => 'moderate >',
+					'value' => 1,
+				]],
+			],
+			'group_by' => 'articul',
+			'distinct' => true,
+			'labels' => ['id', 'aliase', 'articul', 'title', 'seo_keys', 'seo_desc', 'seo_title', 'prices_empty', 'filters', 'salle_procent', 'modules'],
+			'pagination' => [
+				'on' => true,
+				'page' => (isset($this->get['page'])) ? $this->get['page'] : 1,
+				'limit' => (isset($this->get['l'])) ? $this->get['l'] : 40,
+			],
+			'module_queue' => [
+				'price_actual',
+				'limit', 'pagination',
+				'prices_all', 'photos', 'reviews', 'linkPath', 'salePrice',
+				'emptyPrice', 'qty_empty_status', 'paramsView',
+			],
+			'module' => true,
+			'modules' => [[
+				'module_name' => 'linkPath',
+				'result_item' => 'linkPath',
+//				'option' => [
+//					'cat_aliase' => $catAliase,
+//				],
+			], [
+				'module_name' => 'price_actual',
+				'result_item' => 'price_actual',
+				'option' => [
+					'labels' => false,
+				],
+			], [
+				'module_name' => 'salePrice',
+				'result_item' => 'salePrice',
+				'option' => [],
+			], [
+				'module_name' => 'photos',
+				'result_item' => 'photos',
+				'option' => [
+					'no_images_view' => 1,
+				],
+			], [
+				'module_name' => 'emptyPrice',
+				'result_item' => 'emptyPrice',
+				'option' => [
+					'labels' => false,
+				],
+			]],
+		];
+
+		$setFilters = []; // Запомнить установки выбора
+		if (isset($this->get['f']) && is_array($this->get['f'])) {
+
+			$f = $this->get['f'];
+			$fNew = [];
+			foreach ($f as $k => $v) {
+				foreach ($filter as $fv) {
+					if ($fv['variabled'] == $k) {
+						$fNew[$k] = [
+							'item' => $k,
+							'type' => $fv['type'],
+							'values' => explode('|', $v),
+						];
+					}
+				}
+			}
+
+			$setFilters = $fNew;
+
+			$option['setFilters'] = $setFilters;
+			$r['setFilters'] = $setFilters;
+		}
+
+		$r['brand'] = (isset($this->get['brand'])) ? $this->get['brand'] : '';
+
+		if ($catId) {
+			$option['where']['set'][] = [
+				'item' => 'cat',
+				'value' => $catId,
+			];
+		}
+
+		if (isset($this->get['brand'])) {
+			$b = $this->get['brand'];
+			$option['where']['set'][] = [
+				'item' => 'postavchik',
+				'value' => $b,
+			];
+		}
+
+		$r['sort'] = (isset($this->get['s'])) ? $this->get['s'] : 'pricemin';
+
+		//if( isset( $this->get['s'] ) ){
+
+		$sort = $r['sort'];
+
+		if ($sort === 'pop') {
+			$option['order_by'] = [
+				'item' => 'view',
+				'value' => 'DESC',
+			];
+		}
+
+		if ($sort === 'new') {
+			$option['order_by'] = [
+				'item' => 'id',
+				'value' => 'DESC',
+			];
+		}
+
+		if ($sort === 'upsells') {
+			$option['order_by'] = [
+				'item' => 'salle_procent',
+				'value' => 'DESC',
+			];
+		}
+
+		if ($sort === 'pricemin') {
+			$option['order_by'] = [
+				'item' => 'price_real',
+				'value' => 'ASC',
+			];
+		}
+
+		if ($sort === 'pricemax') {
+			$option['order_by'] = [
+				'item' => 'price_real',
+				'value' => 'DESC',
+			];
+		}
+
+		//}
+
+		$r['textSearch'] = '';
+		if (isset($this->get['t'])) {
+			$t = $r['textSearch'] = $this->get['t'];
+			$option['like'] = [
+				'math' => 'both', // '%before', 'after%' и '%both%' - опциональность поиска
+				'method' => 'AND', // AND (и) / OR(или) / NOT(за исключением и..) / OR_NOT(за исключением или)
+				'set' => [[
+					'item' => 'title',
+					'value' => $t,
+				]]  // [ 'item' => '', 'value' => '' ],[...]
+			];
+		}
+
+		$option['modules'][] = [
+			'module_name' => 'pagination',
+			'result_item' => 'pagination',
+			'option' => [
+				'path' => $_SERVER['REDIRECT_URL'],
+				'option_paginates' => [
+					'uri_segment' => 1,
+					'num_links' => 3,
+					'suffix' => $sffix,
+				],
+			],
+		];
+
+		$_r = $this->mdl_product->queryData($option);
+
+		$r['products'] = $_r['result'];
+		$r['products_pag'] = $_r['option']['pag'];
+
+		$filterTitle = '';
+//			$r['cena'] = [0, 90000];
+		$r['cena'] = [];
+		if (isset($this->get['f']['Cena'])) {
+			$prices = explode('|', $this->get['f']['Cena']);
+			$r['cena'] = $prices;
+			list($price_from, $price_to) = $prices;
+			$price_from = (int)$price_from;
+			$price_to = (int)$price_to;
+			if ($price_from || $price_to) {
+				$filterTitle .= 'ценой' . ($price_from ? ' от ' . $price_from : '') . ($price_to ? ' до ' . $price_to : '').' рублей';
+			}
+		}
+
+		$r['weight'] = [];
+		if (isset($this->get['f']['weight'])) {
+			$weights = explode('|', $this->get['f']['weight']);
+			$r['weight'] = $weights;
+			list($weight_from, $weight_to) = $weights;
+			$weight_from = (float)$weight_from;
+			$weight_to = (float)$weight_to;
+			if ($weight_from || $weight_to) {
+				$filterTitle .= ' весом' . ($weight_from ? ' от ' . $weight_from : '') . ($weight_to ? ' до ' . $weight_to : '').' граммов';
+			}
+		}
+
+		foreach ($filter as $k => $v) {
+			foreach ($setFilters as $sfv) {
+				foreach ($v['data'] as $kData => $vData) {
+					$filter[$k]['data'][$kData]['check'] = 'off';
+				}
+			}
+		}
+
+		foreach ($filter as $k => $v) {
+			$filterTitles = [];
+			foreach ($setFilters as $sfv) {
+				if ($v['variabled'] === $sfv['item']) {
+
+					foreach ($v['data'] as $kData => $vData) {
+						if (in_array($vData['variabled'], $sfv['values'])) {
+							$filter[$k]['data'][$kData]['check'] = 'on';
+							$filterTitles[] = isset($vData['metaTitle']) && $vData['metaTitle'] ? $vData['metaTitle'] : mb_strtolower($vData['title']);
+						} else {
+							$filter[$k]['data'][$kData]['check'] = 'off';
+						}
+					}
+
+				}
+			}
+			if (count($filterTitles)) {
+				$filterTitle .= isset($v['metaTitle']) && $v['metaTitle'] ? ' ' . $v['metaTitle'] . ' ' : ' ';
+				$filterTitle .= implode(' и ', $filterTitles);
+			}
+		}
+		$filterTitle = trim($filterTitle);
+
+		$r['filter'] = $filter;
+		$r['filterTitle'] = $filterTitle;
 
 		if ($j === true) {
 			$this->mdl_helper->__json($r);
