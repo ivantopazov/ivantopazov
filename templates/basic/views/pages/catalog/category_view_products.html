@@ -1,31 +1,38 @@
-{% for prod in items %} 
-<div class="col-xs-12 col-sm-6 col-md-4  col-lg-3 mb25">
+{% for prod in items %}
+<div class="col-xs-6 col-sm-6 col-md-4  col-lg-3 mb25 catalog-xs">
 	<div class="text_shad">
 		<div class="p15">
-                        
+
 			{% if prod.salle_procent > 0 %}
                 <span class="label label-pill label-danger" style="position: absolute;">- {{prod.salle_procent}} %</span>
+                {% if prod.salle_procent % 5 == 0 %}
+                    <span class="label label-pill label-danger" style='position: absolute;right: 17px;'>Хит продаж!</span>
+                {% endif %}
+                {% if prod.salle_procent % 5 == 3 %}
+                    <span class="label label-pill label-danger" style='position: absolute;right: 17px;'>Новинка!</span>
+                {% endif %}
 			{% endif %}
-            
-			<a href="{{prod.modules.linkPath}}"><img src="/uploads/products/250/{{prod.modules.photos[0].photo_name}}" alt="{{prod.title}}" width="100%"></a>
-            
+
+			<a href="{{prod.modules.linkPath}}" class="catalog-xs-img"><img src="/uploads/products/250/{{prod.modules.photos[0].photo_name}}" alt="{{prod.title}}" width="100%"></a>
+
 			<a href="{{prod.modules.linkPath}}"><h4 class="clearfix title_h Conv_CRC55">{{prod.title}}</h4></a>
-            
+
 			<span class="clearfix line_t clearfix">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-			<strong class="px20 clearfix">    
-                
+			<strong class="px20 clearfix">
+
                 {% if prod.salle_procent > 0 %}
-                    <small class="serebro_white px13" style="position: absolute; bottom: 80px;"><s>{{prod.modules.salePrice.VAL_00.orig}}   р.</s></small> 
-                    {{prod.modules.salePrice.VAL_00.salePrice}}  р.
+                    <small class="serebro_white px13" style="position:absolute; margin-top:-12px;"><s>{{prod.modules.salePrice.VAL_00.orig}} р.</s></small> 
+                    {{prod.modules.salePrice.VAL_00.salePrice}} р.
                 {% else %}
-                    {{prod.modules.price_actual.format}}  р.
-				{% endif %} 
+                    {{prod.modules.price_actual.format}} р.
+				{% endif %}
 			</strong>
-            
+
+
 		</div>
-			
+
 		<a href="#" class="btn-cart Conv_CRC55  btn-block text-center ZAG cart-anim" click="CART.add({ id:{{prod.id}}, title:'{{prod.title}}', price:{% if prod.salle_procent > 0 %}{{prod.modules.salePrice.COP.salePrice}}{% else %}{{prod.modules.price_actual.cop}}{% endif %}, qty:{type:'plus', value:1}, orig: { image:'{{prod.modules.photos[0].photo_name}}', articul:'{{prod.articul}}', link:'{{prod.modules.linkPath}}'}}, MAIN.addCartCallback );" >В корзину</a>
-	
+
     </div>
 </div>
-{% endfor %}    
+{% endfor %}
