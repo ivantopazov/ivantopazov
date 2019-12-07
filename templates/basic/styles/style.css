@@ -1113,12 +1113,48 @@ span.line_t {
 
 
 
+
 .plm15 {
 	padding-left: 15px !important;
 }
 
 
 }
+
+
+@media  (max-width: 767px) {
+    
+    .text_shad {
+        border:1px #ccc solid;
+    }
+	.text_shad .p15 {
+		padding: 5px;
+	}
+	.btn-cart {
+		display:none;
+	}
+	.catalog-xs h4 {
+	    margin-top: 5px;
+        margin-bottom: 5px;
+        font-size: 14px;
+        height: 30px;
+        max-height: 30px;
+	}
+	.catalog-xs.col-xs-6 {
+	    padding-right: 5px !important;
+        padding-left: 5px !important;
+        margin-bottom: 10px !important;
+	}
+	.catalog-xs .catalog-xs-img {
+	    text-align: center;
+        display: block;
+	}
+	.catalog-xs .catalog-xs-img img {
+	    width:70%;
+	}
+
+}
+
 
 
 /* Кнопка еффект */
