@@ -1,15 +1,16 @@
 {% if items |length > 0 %}
     <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-    
-        <ol class="carousel-indicators">
-            {% set foo = "active" %}
-            {% for key, item in items %}
-                <li data-target="#carousel-example-generic" data-slide-to="{{key}}" class="{{foo}} hidden-xs hidden-sm "></li>
-                {% set foo = "" %}
-            {% endfor %}
-        </ol>
-        
+
         <div class="carousel-inner" role="listbox">
+		
+			<ol class="carousel-indicators">
+				{% set foo = "active" %}
+				{% for key, item in items %}
+					<li data-target="#carousel-example-generic" data-slide-to="{{key}}" class="{{foo}} hidden-xs hidden-sm "></li>
+					{% set foo = "" %}
+				{% endfor %}
+			</ol>
+		
             {% set foo = "active" %}
             {% for item in items %}
                 <div class="item {{foo}}">
