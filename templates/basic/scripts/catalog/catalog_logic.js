@@ -15,6 +15,16 @@ $(function () {
             });
     });
 
+    $('.expandable').expander({
+        slicePoint: 40,
+        widow: 2,
+        expandText: '&hellip;',
+        expandPrefix: '',
+        userCollapse: false,
+        expandEffect: 'show',
+        startExpanded: false,
+    });
+
     var init = function () {
 
         window.Ev.catalog = {

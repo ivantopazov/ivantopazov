@@ -691,7 +691,9 @@ span.title_line_2::after {
     top: 49%;
     width: 10000px;
 }
-
+.details span.title_line_2::after {
+	content: none;
+}
 /*
 	span.title_line_2::before {
     border-bottom: 1px solid #dadada;
