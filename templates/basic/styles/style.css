@@ -1124,13 +1124,13 @@ span.line_t {
 
 @media  (max-width: 767px) {
     
-    .text_shad {
+    .catalog-xs .text_shad {
         border:1px #ccc solid;
     }
-	.text_shad .p15 {
+	.catalog-xs .text_shad .p15 {
 		padding: 5px;
 	}
-	.btn-cart {
+	.catalog-xs .btn-cart {
 		display:none;
 	}
 	.catalog-xs h4 {
