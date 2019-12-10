@@ -324,7 +324,7 @@ $(function () {
 						$('#messageCartSumma').removeClass('hidden');
 					} else {
 						var t = '';
-						t += 'Получите бесплатную доставку при заказе от 7000 рублей! <br/>';
+						t += 'Получите бесплатную доставку при заказе от 7000 рублей с учетом всех скидок на изделия.<br/>';
 						t += 'Сумма вашей корзины: ' + items.prices_rub + ' руб.';
 						$('#messageCartSumma').html(t);
 						$('#messageCartSumma').removeClass('hidden');
