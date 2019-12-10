@@ -632,13 +632,13 @@ class Catalog extends CI_Controller
 	}
 
 	// Получить данные о категории
-	public function getCatData($catId = false/*, $catAliase = false*/, $j = false)
+	public function getCatData($catId = false, $catAliase = false, $j = false)
 	{
 
 		$catId = (isset($this->post['cat_id'])) ? $this->post['cat_id'] : $catId;
-//		$catAliase = (isset($this->post['catAliase'])) ? $this->post['catAliase'] : $catAliase;
+		$catAliase = (isset($this->post['catAliase'])) ? $this->post['catAliase'] : $catAliase;
 
-		/*if ($catId === false) {
+		if ($catId === false && $catAliase) {
 			$queryCat = $this->mdl_category->queryData([
 				'return_type' => 'ARR1',
 				'where' => [
@@ -651,7 +651,7 @@ class Catalog extends CI_Controller
 				'module' => false,
 			]);
 			$catId = $queryCat['id'];
-		}*/
+		}
 
 		$r = [
 			'products' => [],
