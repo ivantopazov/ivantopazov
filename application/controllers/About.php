@@ -106,17 +106,17 @@ class About extends CI_Controller {
         
         $this->load->model('mdl_mail');			
         $this->mdl_mail->set_ot_kogo_from( 'order@ivantopazov.ru', 'IVAN TOPAZOV' );
-        //$this->mdl_mail->set_komu_to( 'korchma-kursk@yandex.ru', 'Покупатель');
+        $this->mdl_mail->set_komu_to( 'sale@ivantopazov.ru', 'SALE IVAN TOPAZOV');
         $this->mdl_mail->set_tema_subject( 'Заявка на обратный звонок - ' . date('d.m.Y H:i:s') );
         $this->mdl_mail->set_tema_message( $html_content );
-        //$this->mdl_mail->send();
-        
-        
-        $this->mdl_mail->set_komu_to( 'ivan.topazov@inbox.ru', 'Покупатель');
         $this->mdl_mail->send();
         
-        $this->mdl_mail->set_komu_to( 'topazovi@gmail.com', 'Покупатель');
-        $this->mdl_mail->send();
+        
+//        $this->mdl_mail->set_komu_to( 'ivan.topazov@inbox.ru', 'Покупатель');
+//        $this->mdl_mail->send();
+//
+//        $this->mdl_mail->set_komu_to( 'topazovi@gmail.com', 'Покупатель');
+//        $this->mdl_mail->send();
         
         $this->telegramCallBack($html_content);
         
