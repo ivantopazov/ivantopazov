@@ -163,10 +163,10 @@ class Cart extends CI_Controller
 			}
 			if ($v['name'] === 'phone') {
 				$user['phone'] = $v['value'];
-			}            /*
+			}            
             if( $v['name'] === 'email' ){
                 $user['email'] = $v['value'];
-            }            */
+            }            
 			if ($v['name'] === 'address') {
 				$user['address'] = $v['value'];
 			}
@@ -174,7 +174,7 @@ class Cart extends CI_Controller
 
 		$name = $user['fio'];
 		$phone = $user['phone'];
-		//$email = $user['email'];
+		$email = $user['email'];
 		$address = $user['address'];
 
 		$tovary = array();
@@ -292,7 +292,25 @@ class Cart extends CI_Controller
 			'name' => $name,
 			'phone' => $phone,
 			'traker' => $traker,
-			//'email' => $email,
+			'email' => $email,
+			'ulmLabels' => $this->mdl_tpl->view('email/ulmLabels/labelItems.html', $this->mdl_seo->getUtmData(), true),
+			'adress' => $address,
+			'date' => date('d.m.Y в H.i'),
+		), true);
+		
+
+		$html_content_user = $this->mdl_tpl->view('email/cart/newOrderUser.html', array(
+			'domen' => 'IVAN TOPAZOV',
+			'http' => 'http://' . $_SERVER['HTTP_HOST'],
+			'tovary' => $tovary,
+			'promocode' => !empty($promocode) ? "{$promocode['code']} (-{$promocodeValue})" : '',
+			'summa' => $summa,
+			'summaWithPromocode' => $summaWithPromocode,
+			'type' => $this->post['type'],
+			'name' => $name,
+			'phone' => $phone,
+			'traker' => $traker,
+			'email' => $email,
 			'ulmLabels' => $this->mdl_tpl->view('email/ulmLabels/labelItems.html', $this->mdl_seo->getUtmData(), true),
 			'adress' => $address,
 			'date' => date('d.m.Y в H.i'),
@@ -366,31 +384,20 @@ class Cart extends CI_Controller
 		// file_get_contents($urlsst);
 		/********** Telegram Bot **********/
 
+
 		$this->load->model('mdl_mail');
 		$this->mdl_mail->set_ot_kogo_from('order@ivantopazov.ru', 'IVAN TOPAZOV');
-		//$this->mdl_mail->set_komu_to( 'korchma-kursk@yandex.ru', 'Покупатель');
+		$this->mdl_mail->set_komu_to($email, $name);
+		$this->mdl_mail->set_tema_subject('Содержание Вашего заказа');
+		$this->mdl_mail->set_tema_message($html_content_user);
+		$this->mdl_mail->send();
+
+
+		$this->mdl_mail->set_ot_kogo_from('order@ivantopazov.ru', 'IVAN TOPAZOV');
 		$this->mdl_mail->set_tema_subject('Заказ на сумму ' . $summa . ' рублей - ' . date('d.m.Y H:i:s'));
 		$this->mdl_mail->set_tema_message($html_content);
+		$this->mdl_mail->set_komu_to('sale@ivantopazov.ru', 'Покупатель');
 		$this->mdl_mail->send();
-
-		// $this->mdl_mail->set_komu_to( '2Kem@mail.ru', 'Покупатель');
-		// $this->mdl_mail->send();
-		//
-		$this->mdl_mail->set_komu_to('ivan.topazov@inbox.ru', 'Покупатель');
-		$this->mdl_mail->send();
-
-		$this->mdl_mail->set_komu_to('topazovi@gmail.com', 'Покупатель');
-		$this->mdl_mail->send();
-		//
-		$this->mdl_mail->set_komu_to('info.nikoniki@yandex.ru', 'Покупатель');
-		$this->mdl_mail->send();
-
-		$this->mdl_mail->set_komu_to('dir.elit@gmail.com', 'Покупатель');
-		$this->mdl_mail->send();
-
-		//
-		// $this->mdl_mail->set_komu_to( 'dir.elit@gmail.com', 'Покупатель');
-		// $this->mdl_mail->send();
 
 		echo json_encode(array('err' => 0));
 		exit();
