@@ -386,14 +386,14 @@ class Cart extends CI_Controller
 
 
 		$this->load->model('mdl_mail');
-		$this->mdl_mail->set_ot_kogo_from('order@ivantopazov.ru', 'IVAN TOPAZOV');
+		$this->mdl_mail->set_ot_kogo_from('sale@ivantopazov.ru', 'IVAN TOPAZOV');
 		$this->mdl_mail->set_komu_to($email, $name);
 		$this->mdl_mail->set_tema_subject('Содержание Вашего заказа');
 		$this->mdl_mail->set_tema_message($html_content_user);
 		$this->mdl_mail->send();
 
 
-		$this->mdl_mail->set_ot_kogo_from('order@ivantopazov.ru', 'IVAN TOPAZOV');
+		$this->mdl_mail->set_ot_kogo_from('sale@ivantopazov.ru', 'IVAN TOPAZOV');
 		$this->mdl_mail->set_tema_subject('Заказ на сумму ' . $summa . ' рублей - ' . date('d.m.Y H:i:s'));
 		$this->mdl_mail->set_tema_message($html_content);
 		$this->mdl_mail->set_komu_to('sale@ivantopazov.ru', 'Покупатель');
