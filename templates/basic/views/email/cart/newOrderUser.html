@@ -1,0 +1,12 @@
+<h2 style="color: #337ab7; font-size:18px;">Содержание Вашего заказа:</h2>
+<p style="color:#777">==================================</p>
+{% for val in tovary %} 
+    <p><img src="{{http}}/uploads/products/100/{{val.image}}" width="50" style="vertical-align: middle;" /> {{val.articul}} - <a href="{{http}}{{val.link}}" style="color: #337ab7;" target="_blank">{{val.title}}</a> по цене: {{val.price}} руб. х {{val.qty}} ед. = {{val.summa}} руб.</p>
+{% endfor %}
+<p style="color:#777">==================================</p>
+<p><b>Общая сумма: {{summa}} руб.</b></p>
+<br />
+{% if promocode %}
+<p>Промокод: {{promocode}}</p>
+<p><b>Общая сумма  с учетом промокода: {{summaWithPromocode}} руб.</b></p>
+{% endif %}
