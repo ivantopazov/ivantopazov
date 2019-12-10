@@ -848,7 +848,7 @@ class Catalog extends CI_Controller
 			];
 		}
 
-		$r['sort'] = (isset($this->get['s'])) ? $this->get['s'] : 'pricemin';
+		$r['sort'] = (isset($this->get['s'])) ? $this->get['s'] : 'pop';
 
 		//if( isset( $this->get['s'] ) ){
 
