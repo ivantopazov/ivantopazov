@@ -12,7 +12,7 @@ $route['robots.txt'] = "seo/robots";
 $route['sitemap.xml'] = "seo/sitemap";
 $route['sitemapProductsCategory_(:num).xml'] = "seo/sitemapProducts/$1";
 
-//$route['catalog/podveski?f[metall]=serebro&f[Cena]=0|90000&s=new&l=30&t='] = 'catalog/podveski_iz_serebra'; 
+//$route['catalog/podveski?f[metall]=serebro&s=new&l=30&t='] = 'catalog/podveski_iz_serebra';
 
-//catalog/podveski?f[metall]=serebro&f[Cena]=0|90000&s=new&l=30&t=
+//catalog/podveski?f[metall]=serebro&s=new&l=30&t=
 //$route['catalog/(:any)'] = 'catalog/index/$1/1'; 
