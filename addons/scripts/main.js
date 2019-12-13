@@ -266,6 +266,7 @@ window.MAIN = {
 					}
 				}
 
+				/*
 				if (val.name === 'times') {
 					if (val.value.trim().length < 1) {
 						$(DOM.parent + ' input[name="times"]').css('outline', '1px solid red');
@@ -275,6 +276,7 @@ window.MAIN = {
 						err++;
 					}
 				}
+				*/
 
 				if (val.name === 'city') {
 					if (val.value.trim().length < 1) {
