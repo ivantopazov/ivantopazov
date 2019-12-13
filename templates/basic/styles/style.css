@@ -1123,6 +1123,7 @@ span.line_t {
 
 }
 
+.catalog_h1 {font-size: 25px; padding: 0 15px 30px;}
 
 @media  (max-width: 767px) {
     
@@ -1155,6 +1156,8 @@ span.line_t {
 	    width:70%;
 	}
 
+	.catalog_h1 {font-size: 20px; padding: 0 15px 30px; margin-top:0;}
+	.container.theme-showcase.mt10 {margin-top:0;}
 }
 
 
