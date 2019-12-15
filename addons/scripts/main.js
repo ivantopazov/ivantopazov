@@ -512,7 +512,7 @@ window.MAIN = {
 
 	},
 
-	// ОФОРМЛЕНИЕ КОРЗИНЫ
+	// Обратный звонок
 	callBackFORM: {
 
 		before: function (data) {
