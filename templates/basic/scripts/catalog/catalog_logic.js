@@ -16,7 +16,7 @@ $(function () {
 	});
 
 	$('.expandable').expander({
-		slicePoint: 40,
+		slicePoint: 70,
 		widow: 2,
 		expandText: '&hellip;',
 		expandPrefix: '',
