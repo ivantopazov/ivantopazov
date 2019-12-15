@@ -215,6 +215,7 @@
 </script>
 
 
+<script src="/{{addons_folder}}/scripts/jquery.cookie.opt.js"></script>
 <script src="/{{addons_folder}}/scripts/bootstrap.opt.js"></script>
 <script src="/{{addons_folder}}/assets/docs.min.js"></script>
 <script src="/{{addons_folder}}/assets/ie10-viewport-bug-workaround.js"></script>
@@ -256,7 +257,7 @@
 	function setCookie(name, value, expires, path, domain, secure) {
 		document.cookie = name + '=' + escape(value) +
 			((expires) ? '; expires=' + expires : '') +
-			((path) ? '; path=' + path : '') +
+			('; path=' + (path ? path : '/')) +
 			((domain) ? '; domain=' + domain : '') +
 			((secure) ? '; secure' : '');
 	}
@@ -287,16 +288,39 @@
 		document.cookie = name + '=; expires=' + cookie_date.toGMTString();
 	}
 
-	var interval = setInterval(function () {
-		var D = new Date();
-		if (!getCookie('alert')) setCookie('alert', D.getMinutes());
-		else if (D.getMinutes() - getCookie('alert') > 1) {
-			deleteCookie('alert');
-			setCookie('alert', '100');
-			callBackSale();
-			clearInterval(interval);
+	if (!getCookie('callBackModalCount')) {
+		var interval = setInterval(function () {
+			var timestamp = Math.floor(Date.now() / 1000); // seconds
+			if (!getCookie('callBackModalTime')) {
+				setCookie('callBackModalTime', timestamp);
+			} else {
+				if (timestamp - getCookie('callBackModalTime') > 30) {
+					deleteCookie('callBackModalTime');
+					setCookie('callBackModalCount', '1');
+					callBackSale();
+					clearInterval(interval);
+				}
+			}
+		}, 1000);
+	}
+	$('#modal_callback').on('hidden.bs.modal', function () {
+		if (getCookie('callBackModalCount') == '1') {
+			var interval = setInterval(function () {
+				var timestamp = Math.floor(Date.now() / 1000); // seconds
+				if (!getCookie('callBackModalTime')) {
+					setCookie('callBackModalTime', timestamp);
+				} else {
+					if (timestamp - getCookie('callBackModalTime') > 60) {
+						deleteCookie('callBackModalTime');
+						setCookie('callBackModalCount', '2');
+						callBackSale();
+						clearInterval(interval);
+					}
+				}
+			}, 1000);
 		}
-	}, 3600);
+	});
+
 </script>
 
 

@@ -21,7 +21,7 @@ class About extends CI_Controller {
     // Страница О КОМПАНИИ
     public function index(){
         
-        $start = microtime(true); 
+        $start = microtime(true);
         
         
 		$title = ( !empty( $this->store_info['seo_title'] ) ) ? $this->store_info['seo_title'] : $this->store_info['header'];
@@ -124,7 +124,7 @@ class About extends CI_Controller {
         $this->mdl_mail->send();*/
         
         echo json_encode(array( 'err' => 0));
-        
+        die;
     }
     
     // Уведомление в телеграм о заявке на обратный звонок

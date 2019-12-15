@@ -1051,7 +1051,7 @@ class Catalog extends CI_Controller
 
 				'content' => $this->mdl_tpl->view('pages/catalog/product_view.html', array(
 					'product' => $product,
-					'brand_desc' => $this->mdl_tpl->view('pages/catalog/brands_descriptions/' . $product['postavchik'] . '.html', array(), true),
+					'brand_desc' => $product['postavchik'] ? $this->mdl_tpl->view('pages/catalog/brands_descriptions/' . $product['postavchik'] . '.html', array(), true) : '',
 					'counter' => $dataItem['timerCount'],
 					'sizes' => $sizes,
 					'header_title' => $product['title'],
