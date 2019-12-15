@@ -538,14 +538,18 @@ window.MAIN = {
 					}
 				}
 			});
-			return (err < 1) ? true : false;
-
+			if (err < 1) {
+				FNC.set_cookie('callBackModalCount', '2');
+				$('#modal_callback').modal('hide');
+				return true;
+			}
+			return false;
 		},
 
 		success: function (json) {
 			if (json.err < 1) {
 				window.creditCart = [];
-				$('#modal_callback').modal('hide');
+				// $('#modal_callback').modal('hide');
 				FNC.alert('success', 'Ваша заявка на обратный звонок была успешно отправлена.');
 			} else {
 				alert('При заполнении формы заявки, была допущена ошибка.');
