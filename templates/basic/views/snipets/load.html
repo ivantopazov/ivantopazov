@@ -288,37 +288,30 @@
 		document.cookie = name + '=; expires=' + cookie_date.toGMTString();
 	}
 
-	if (!getCookie('callBackModalCount')) {
-		var interval = setInterval(function () {
-			var timestamp = Math.floor(Date.now() / 1000); // seconds
-			if (!getCookie('callBackModalTime')) {
-				setCookie('callBackModalTime', timestamp);
-			} else {
-				if (timestamp - getCookie('callBackModalTime') > 30) {
-					deleteCookie('callBackModalTime');
-					setCookie('callBackModalCount', '1');
-					callBackSale();
-					clearInterval(interval);
-				}
-			}
-		}, 1000);
-	}
-	$('#modal_callback').on('hidden.bs.modal', function () {
-		if (getCookie('callBackModalCount') == '1') {
+	function showCallBackPopup() {
+		if (!getCookie('callBackModalCount') || (getCookie('callBackModalCount') === '1')) {
+			var seconds = !getCookie('callBackModalCount') ? 30 : 60;
+			var callBackModalCount = !getCookie('callBackModalCount') ? '1' : '2';
 			var interval = setInterval(function () {
-				var timestamp = Math.floor(Date.now() / 1000); // seconds
+				var timestamp = Math.floor(Date.now() / 1000);
 				if (!getCookie('callBackModalTime')) {
 					setCookie('callBackModalTime', timestamp);
 				} else {
-					if (timestamp - getCookie('callBackModalTime') > 60) {
+					if (timestamp - getCookie('callBackModalTime') > seconds) {
 						deleteCookie('callBackModalTime');
-						setCookie('callBackModalCount', '2');
+						setCookie('callBackModalCount', callBackModalCount);
 						callBackSale();
 						clearInterval(interval);
 					}
 				}
 			}, 1000);
 		}
+	}
+
+	showCallBackPopup();
+
+	$('#modal_callback').on('hidden.bs.modal', function () {
+		showCallBackPopup();
 	});
 
 </script>
