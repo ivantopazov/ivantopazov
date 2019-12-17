@@ -1314,3 +1314,8 @@ a.hover-shadows:hover:before {
 .nav-justified > li > a {
     text-align: unset !important;
 }
+
+#callback_desctiption {
+	float: left;
+	line-height: 40px;
+}
