@@ -175,7 +175,7 @@ div.media.bot_border {
 
 .btn-mini {
     background-color: transparent;
-    border: 2px solid #dca35f;
+    border: 2px solid #69b2d3;
     color: #282828;
     font-size: 14px;
     padding: 4px 7px;
@@ -1326,5 +1326,5 @@ a.hover-shadows:hover:before {
 }
 
 .otherSize input:checked + label {
-	border-color: #dca35f;
+	border-color: #69b2d3;
 }
