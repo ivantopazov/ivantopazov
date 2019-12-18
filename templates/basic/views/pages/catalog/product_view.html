@@ -236,7 +236,7 @@
 				{% endif %}
 
 				{% if product.size > 0 %}
-				<h4 class="Conv_CRC55 black"><strong>Размеры в наличии:</strong></h3>
+				<h4 class="Conv_CRC55 black"><strong>Размеры в наличии:</strong></h4>
 
 					<div class="plr5">
 						<ul class="list-inline px17 pb15_li mb0 plr0_li">
@@ -251,6 +251,11 @@
 							</li>
 							{% endif %}
 							{% endfor %}
+							{% if otherSizes and otherSizes|length > 0 %}
+							<li>
+								<span class="btn-mini_default" data-toggle="modal" data-target="#modal_otherSize">Другой размер</span>
+							</li>
+							{% endif %}
 						</ul>
 					</div>
 
@@ -529,3 +534,63 @@
 		</div>
 	</div>
 </div>
+
+{% if otherSizes and otherSizes|length > 0 %}
+<div aria-hidden="true" role="dialog" tabindex="-1" id="modal_otherSize" class="modal inmodal fade">
+	<div class="modal-dialog modal-xs">
+		<div class="modal-content">
+
+			<form action="/cart/orderOtherSize" method="post" before="MAIN.otherSize.before"
+				  success="MAIN.otherSize.success" data_type="json">
+
+				<input type="hidden" name="productId" value="{{product.id}}" />
+
+				<div class="modal-header">
+					<button data-dismiss="modal" class="close" type="button">
+						<span aria-hidden="true">×</span><span class="sr-only">Close</span>
+					</button>
+					<h4 class="modal-title">Уведомить меня о появлении моего размера</h4>
+				</div>
+				<div class="modal-body ev-modal_data">
+					<h4 id="otherSizeTitle" class="Conv_CRC55 black"><strong>Выберите размер:</strong></h4>
+
+					<div class="plr5">
+						<ul class="list-inline px17 pb15_li mb0 plr0_li">
+							{% for otherSize in otherSizes %}
+							<li  class="otherSize">
+								<input type="radio" name="size" value="{{otherSize}}" id="otherSize{{otherSize}}" />
+								<label class="btn-mini_default" for="otherSize{{otherSize}}">{{otherSize}}</label>
+							</li>
+							{% endfor %}
+						</ul>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+							<p class="mb5"><input style="width: 100%;" class="form-control text-left  lato" name="fio"
+												  placeholder="Имя" type="text"></p>
+							{{utmLabels}}
+							<p class="mb5"><input style="width: 100%;" class="form-control phone-mask text-left  lato"
+												  name="phone" placeholder="Телефон в формате +7ХХХХХХХХХХ" type="text">
+							</p>
+						</div>
+						<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+							<p class="mb5">
+								<textarea style="width: 100%; min-height: 79px;" name="comment"
+										  class="input-style-2 h150 form-control"
+										  placeholder="Комментарий"></textarea>
+							</p>
+						</div>
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button class="btn-event Conv_Circe-Bold button hover-shadows" type="submit">Отправить заявку</button>
+
+				</div>
+
+			</form>
+
+		</div>
+	</div>
+</div>
+{% endif %}

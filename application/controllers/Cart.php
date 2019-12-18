@@ -163,10 +163,10 @@ class Cart extends CI_Controller
 			}
 			if ($v['name'] === 'phone') {
 				$user['phone'] = $v['value'];
-			}            
-            if( $v['name'] === 'email' ){
-                $user['email'] = $v['value'];
-            }            
+			}
+			if ($v['name'] === 'email') {
+				$user['email'] = $v['value'];
+			}
 			if ($v['name'] === 'address') {
 				$user['address'] = $v['value'];
 			}
@@ -297,7 +297,6 @@ class Cart extends CI_Controller
 			'adress' => $address,
 			'date' => date('d.m.Y в H.i'),
 		), true);
-		
 
 		$html_content_user = $this->mdl_tpl->view('email/cart/newOrderUser.html', array(
 			'domen' => 'IVAN TOPAZOV',
@@ -384,14 +383,12 @@ class Cart extends CI_Controller
 		// file_get_contents($urlsst);
 		/********** Telegram Bot **********/
 
-
 		$this->load->model('mdl_mail');
 		$this->mdl_mail->set_ot_kogo_from('sale@ivantopazov.ru', 'IVAN TOPAZOV');
 		$this->mdl_mail->set_komu_to($email, $name);
 		$this->mdl_mail->set_tema_subject('Содержание Вашего заказа');
 		$this->mdl_mail->set_tema_message($html_content_user);
 		$this->mdl_mail->send();
-
 
 		$this->mdl_mail->set_ot_kogo_from('sale@ivantopazov.ru', 'IVAN TOPAZOV');
 		$this->mdl_mail->set_tema_subject('Заказ на сумму ' . $summa . ' рублей - ' . date('d.m.Y H:i:s'));
@@ -401,6 +398,97 @@ class Cart extends CI_Controller
 
 		echo json_encode(array('err' => 0));
 		exit();
+	}
+
+	// Другой размер
+	public function orderOtherSize()
+	{
+		if (!isset($this->post)) {
+			exit();
+		}
+		if (!(int)$this->post['productId']) {
+			exit();
+		}
+
+		$option = [
+			'return_type' => 'ARR1',
+			'where' => [
+				'method' => 'AND',
+				'set' => [[
+					'item' => 'id',
+					'value' => $this->post['productId'],
+				]],
+			],
+			'labels' => [
+				'id', 'aliase', 'articul', 'title', 'description', 'cat',
+				'seo_title', 'seo_keys', 'seo_desc', 'qty', 'filters',
+				'price', 'modules', 'view', 'size', 'salle_procent', 'postavchik', 'drag',
+			],
+			'module' => true,
+			'modules' => [[
+				'module_name' => 'linkPath',
+				'result_item' => 'linkPath',
+				'option' => [
+				],
+			], [
+				'module_name' => 'price_actual',
+				'result_item' => 'price_actual',
+				'option' => [
+					'labels' => false,
+				],
+			], [
+				'module_name' => 'salePrice',
+				'result_item' => 'salePrice',
+				'option' => [],
+			], [
+				'module_name' => 'photos',
+				'result_item' => 'photos',
+				'option' => [
+					'no_images_view' => 1,
+				],
+			]],
+		];
+
+		$product = $this->mdl_product->queryData($option);
+
+		if (!$product) {
+			exit();
+		}
+
+		$html_content = $this->mdl_tpl->view('email/cart/otherSize.html', array(
+
+			'domen' => 'IVAN TOPAZOV',
+			'http' => 'http://' . $_SERVER['HTTP_HOST'],
+
+			'type' => 'Заявка на другой размер',
+			'name' => (isset($this->post['fio'])) ? $this->post['fio'] : '',
+			'phone' => (isset($this->post['phone'])) ? $this->post['phone'] : '',
+			'comment' => (isset($this->post['comment'])) ? $this->post['comment'] : '',
+			'product' => $product,
+
+			'ulmLabels' => $this->mdl_tpl->view('email/ulmLabels/labelItems.html', $this->mdl_seo->getUtmData(), true),
+
+			'date' => date('d.m.Y в H.i'),
+		), true);
+
+		$this->load->model('mdl_mail');
+		$this->mdl_mail->set_ot_kogo_from('order@ivantopazov.ru', 'IVAN TOPAZOV');
+		$this->mdl_mail->set_komu_to('sale@ivantopazov.ru', 'SALE IVAN TOPAZOV');
+		$this->mdl_mail->set_tema_subject('Заявка на другой размер - ' . date('d.m.Y H:i:s'));
+		$this->mdl_mail->set_tema_message($html_content);
+		$this->mdl_mail->send();
+
+//        $this->mdl_mail->set_komu_to( 'ivan.topazov@inbox.ru', 'Покупатель');
+//        $this->mdl_mail->send();
+//
+//        $this->mdl_mail->set_komu_to( 'topazovi@gmail.com', 'Покупатель');
+//        $this->mdl_mail->send();
+
+		/*$this->mdl_mail->set_komu_to( 'dmitry@naidich.ru', 'Покупатель');
+		$this->mdl_mail->send();*/
+
+		echo json_encode(array('err' => 0));
+		die;
 	}
 
 	/**

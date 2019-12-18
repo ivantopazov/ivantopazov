@@ -187,6 +187,7 @@ div.media.bot_border {
     color: #989898;
     font-size: 14px;
     padding: 4px 7px;
+	cursor: pointer;
 }
 
 .btn-mini_default:hover, btn-mini_default:focus  {
@@ -1318,4 +1319,12 @@ a.hover-shadows:hover:before {
 #callback_desctiption {
 	float: left;
 	line-height: 40px;
+}
+
+.otherSize input {
+	display: none;
+}
+
+.otherSize input:checked + label {
+	border-color: #dca35f;
 }

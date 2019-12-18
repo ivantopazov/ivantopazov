@@ -262,273 +262,273 @@ class Catalog extends CI_Controller
 
 	}
 
-/*	// Получить все товары для главной страницы
-	public function getCategoryHome($j = false)
-	{
-		$r = [
-			'products' => [],
-			'podcat' => [],
-			'collections' => [],
-		];
+	/*	// Получить все товары для главной страницы
+		public function getCategoryHome($j = false)
+		{
+			$r = [
+				'products' => [],
+				'podcat' => [],
+				'collections' => [],
+			];
 
-		$query_string = array();
-		$query_string = array_merge($query_string, $this->get);
-		$query_string = array_merge($query_string, $this->post);
+			$query_string = array();
+			$query_string = array_merge($query_string, $this->get);
+			$query_string = array_merge($query_string, $this->post);
 
-		unset($query_string['page']);
-		unset($query_string['limit']);
+			unset($query_string['page']);
+			unset($query_string['limit']);
 
-		$query_string = $this->mdl_helper->clear_array_0($query_string, array(
-			'f', 's', 'l', 't', 'brand',
-		));
+			$query_string = $this->mdl_helper->clear_array_0($query_string, array(
+				'f', 's', 'l', 't', 'brand',
+			));
 
-		$sffix = $query_string;
+			$sffix = $query_string;
 
-		$filter = $this->mdl_category->queryData([
-			'return_type' => 'ARR1',
-			'table_name' => 'products_filters',
-			'where' => [
-				'method' => 'AND',
-				'set' => [
-					['item' => 'id', 'value' => 11],
+			$filter = $this->mdl_category->queryData([
+				'return_type' => 'ARR1',
+				'table_name' => 'products_filters',
+				'where' => [
+					'method' => 'AND',
+					'set' => [
+						['item' => 'id', 'value' => 11],
+					],
 				],
-			],
-			'labels' => ['id', 'labels'],
-			'module' => false,
-		]);
+				'labels' => ['id', 'labels'],
+				'module' => false,
+			]);
 
-		$filter = ($filter) ? json_decode($filter['labels'], true) : [];
+			$filter = ($filter) ? json_decode($filter['labels'], true) : [];
 
-		$option = [
-			'return_type' => 'ARR2+',
-			'debug' => true,
-			'where' => [
-				'method' => 'AND',
-				'set' => [[
-					'item' => 'view >',
-					'value' => 0,
+			$option = [
+				'return_type' => 'ARR2+',
+				'debug' => true,
+				'where' => [
+					'method' => 'AND',
+					'set' => [[
+						'item' => 'view >',
+						'value' => 0,
+					], [
+						'item' => 'qty >',
+						'value' => 0,
+					], [
+						'item' => 'moderate >',
+						'value' => 1,
+					]],
+				],
+				'group_by' => 'articul',
+				'distinct' => true,
+				'labels' => ['id', 'aliase', 'articul', 'title', 'seo_keys', 'seo_desc', 'seo_title', 'prices_empty', 'filters', 'salle_procent', 'modules'],
+				'pagination' => [
+					'on' => true,
+					'page' => (isset($this->get['page'])) ? $this->get['page'] : 1,
+					'limit' => (isset($this->get['l'])) ? $this->get['l'] : 40,
+				],
+				'module_queue' => [
+					'price_actual',
+					'limit', 'pagination',
+					'prices_all', 'photos', 'reviews', 'linkPath', 'salePrice',
+					'emptyPrice', 'qty_empty_status', 'paramsView',
+				],
+				'module' => true,
+				'modules' => [[
+					'module_name' => 'linkPath',
+					'result_item' => 'linkPath',
+					'option' => [],
 				], [
-					'item' => 'qty >',
-					'value' => 0,
+					'module_name' => 'price_actual',
+					'result_item' => 'price_actual',
+					'option' => [
+						'labels' => false,
+					],
 				], [
-					'item' => 'moderate >',
-					'value' => 1,
+					'module_name' => 'salePrice',
+					'result_item' => 'salePrice',
+					'option' => [],
+				], [
+					'module_name' => 'photos',
+					'result_item' => 'photos',
+					'option' => [
+						'no_images_view' => 1,
+					],
+				], [
+					'module_name' => 'emptyPrice',
+					'result_item' => 'emptyPrice',
+					'option' => [
+						'labels' => false,
+					],
 				]],
-			],
-			'group_by' => 'articul',
-			'distinct' => true,
-			'labels' => ['id', 'aliase', 'articul', 'title', 'seo_keys', 'seo_desc', 'seo_title', 'prices_empty', 'filters', 'salle_procent', 'modules'],
-			'pagination' => [
-				'on' => true,
-				'page' => (isset($this->get['page'])) ? $this->get['page'] : 1,
-				'limit' => (isset($this->get['l'])) ? $this->get['l'] : 40,
-			],
-			'module_queue' => [
-				'price_actual',
-				'limit', 'pagination',
-				'prices_all', 'photos', 'reviews', 'linkPath', 'salePrice',
-				'emptyPrice', 'qty_empty_status', 'paramsView',
-			],
-			'module' => true,
-			'modules' => [[
-				'module_name' => 'linkPath',
-				'result_item' => 'linkPath',
-				'option' => [],
-			], [
-				'module_name' => 'price_actual',
-				'result_item' => 'price_actual',
-				'option' => [
-					'labels' => false,
-				],
-			], [
-				'module_name' => 'salePrice',
-				'result_item' => 'salePrice',
-				'option' => [],
-			], [
-				'module_name' => 'photos',
-				'result_item' => 'photos',
-				'option' => [
-					'no_images_view' => 1,
-				],
-			], [
-				'module_name' => 'emptyPrice',
-				'result_item' => 'emptyPrice',
-				'option' => [
-					'labels' => false,
-				],
-			]],
-		];
-
-		$setFilters = []; // Запомнить установки выбора
-		if (isset($this->get['f']) && is_array($this->get['f'])) {
-
-			$f = $this->get['f'];
-			$fNew = [];
-			foreach ($f as $k => $v) {
-				foreach ($filter as $fv) {
-					if ($fv['variabled'] == $k) {
-						$fNew[$k] = [
-							'item' => $k,
-							'type' => $fv['type'],
-							'values' => explode('|', $v),
-						];
-					}
-				}
-			}
-
-			$setFilters = $fNew;
-
-			$option['setFilters'] = $setFilters;
-			$r['setFilters'] = $setFilters;
-		}
-
-		$r['brand'] = (isset($this->get['brand'])) ? $this->get['brand'] : '';
-
-		if (isset($this->get['brand'])) {
-			$b = $this->get['brand'];
-			$option['where']['set'][] = [
-				'item' => 'postavchik',
-				'value' => $b,
 			];
-		}
 
-		$r['sort'] = (isset($this->get['s'])) ? $this->get['s'] : 'pricemin';
+			$setFilters = []; // Запомнить установки выбора
+			if (isset($this->get['f']) && is_array($this->get['f'])) {
 
-		$sort = $r['sort'];
-
-		if ($sort === 'pop') {
-			$option['order_by'] = [
-				'item' => 'view',
-				'value' => 'DESC',
-			];
-		}
-
-		if ($sort === 'new') {
-			$option['order_by'] = [
-				'item' => 'id',
-				'value' => 'DESC',
-			];
-		}
-
-		if ($sort === 'upsells') {
-			$option['order_by'] = [
-				'item' => 'salle_procent',
-				'value' => 'DESC',
-			];
-		}
-
-		if ($sort === 'pricemin') {
-			$option['order_by'] = [
-				'item' => 'price_real',
-				'value' => 'ASC',
-			];
-		}
-
-		if ($sort === 'pricemax') {
-			$option['order_by'] = [
-				'item' => 'price_real',
-				'value' => 'DESC',
-			];
-		}
-
-		$r['textSearch'] = '';
-		if (isset($this->get['t'])) {
-			$t = $r['textSearch'] = $this->get['t'];
-			$option['like'] = [
-				'math' => 'both', // '%before', 'after%' и '%both%' - опциональность поиска
-				'method' => 'AND', // AND (и) / OR(или) / NOT(за исключением и..) / OR_NOT(за исключением или)
-				'set' => [[
-					'item' => 'title',
-					'value' => $t,
-				]]  // [ 'item' => '', 'value' => '' ],[...]
-			];
-		}
-
-		$option['modules'][] = [
-			'module_name' => 'pagination',
-			'result_item' => 'pagination',
-			'option' => [
-				'path' => $_SERVER['REDIRECT_URL'],
-				'option_paginates' => [
-					'uri_segment' => 1,
-					'num_links' => 3,
-					'suffix' => $sffix,
-				],
-			],
-		];
-
-		$_r = $this->mdl_product->queryData($option);
-
-		$r['products'] = $_r['result'];
-		$r['products_pag'] = $_r['option']['pag'];
-
-		$filterTitle = '';
-//		$r['cena'] = [0, 90000];
-		$r['cena'] = [];
-		if (isset($this->get['f']['Cena'])) {
-			$prices = explode('|', $this->get['f']['Cena']);
-			$r['cena'] = $prices;
-			list($price_from, $price_to) = $prices;
-			$price_from = (int)$price_from;
-			$price_to = (int)$price_to;
-			if ($price_from || $price_to) {
-				$filterTitle .= 'ценой ' . ($price_from ? 'от ' . $price_from : '') . ($price_to ? 'до ' . $price_to : '');
-			}
-		}
-
-		$r['weight'] = [];
-		if (isset($this->get['f']['weight'])) {
-			$weights = explode('|', $this->get['f']['weight']);
-			$r['weight'] = $weights;
-			list($weight_from, $weight_to) = $weights;
-			$weight_from = (float)$weight_from;
-			$weight_to = (float)$weight_to;
-			if ($weight_from || $weight_to) {
-				$filterTitle .= ' весом ' . ($weight_from ? 'от ' . $weight_from : '') . ($weight_to ? 'до ' . $weight_to : '');
-			}
-		}
-
-		foreach ($filter as $k => $v) {
-			foreach ($setFilters as $sfv) {
-				foreach ($v['data'] as $kData => $vData) {
-					$filter[$k]['data'][$kData]['check'] = 'off';
-				}
-			}
-		}
-
-		foreach ($filter as $k => $v) {
-			$filterTitles = [];
-			foreach ($setFilters as $sfv) {
-				if ($v['variabled'] === $sfv['item']) {
-
-					foreach ($v['data'] as $kData => $vData) {
-						if (in_array($vData['variabled'], $sfv['values'])) {
-							$filter[$k]['data'][$kData]['check'] = 'on';
-							$filterTitles[] = isset($vData['metaTitle']) && $vData['metaTitle'] ? $vData['metaTitle'] : mb_strtolower($vData['title']);
-						} else {
-							$filter[$k]['data'][$kData]['check'] = 'off';
+				$f = $this->get['f'];
+				$fNew = [];
+				foreach ($f as $k => $v) {
+					foreach ($filter as $fv) {
+						if ($fv['variabled'] == $k) {
+							$fNew[$k] = [
+								'item' => $k,
+								'type' => $fv['type'],
+								'values' => explode('|', $v),
+							];
 						}
 					}
+				}
 
+				$setFilters = $fNew;
+
+				$option['setFilters'] = $setFilters;
+				$r['setFilters'] = $setFilters;
+			}
+
+			$r['brand'] = (isset($this->get['brand'])) ? $this->get['brand'] : '';
+
+			if (isset($this->get['brand'])) {
+				$b = $this->get['brand'];
+				$option['where']['set'][] = [
+					'item' => 'postavchik',
+					'value' => $b,
+				];
+			}
+
+			$r['sort'] = (isset($this->get['s'])) ? $this->get['s'] : 'pricemin';
+
+			$sort = $r['sort'];
+
+			if ($sort === 'pop') {
+				$option['order_by'] = [
+					'item' => 'view',
+					'value' => 'DESC',
+				];
+			}
+
+			if ($sort === 'new') {
+				$option['order_by'] = [
+					'item' => 'id',
+					'value' => 'DESC',
+				];
+			}
+
+			if ($sort === 'upsells') {
+				$option['order_by'] = [
+					'item' => 'salle_procent',
+					'value' => 'DESC',
+				];
+			}
+
+			if ($sort === 'pricemin') {
+				$option['order_by'] = [
+					'item' => 'price_real',
+					'value' => 'ASC',
+				];
+			}
+
+			if ($sort === 'pricemax') {
+				$option['order_by'] = [
+					'item' => 'price_real',
+					'value' => 'DESC',
+				];
+			}
+
+			$r['textSearch'] = '';
+			if (isset($this->get['t'])) {
+				$t = $r['textSearch'] = $this->get['t'];
+				$option['like'] = [
+					'math' => 'both', // '%before', 'after%' и '%both%' - опциональность поиска
+					'method' => 'AND', // AND (и) / OR(или) / NOT(за исключением и..) / OR_NOT(за исключением или)
+					'set' => [[
+						'item' => 'title',
+						'value' => $t,
+					]]  // [ 'item' => '', 'value' => '' ],[...]
+				];
+			}
+
+			$option['modules'][] = [
+				'module_name' => 'pagination',
+				'result_item' => 'pagination',
+				'option' => [
+					'path' => $_SERVER['REDIRECT_URL'],
+					'option_paginates' => [
+						'uri_segment' => 1,
+						'num_links' => 3,
+						'suffix' => $sffix,
+					],
+				],
+			];
+
+			$_r = $this->mdl_product->queryData($option);
+
+			$r['products'] = $_r['result'];
+			$r['products_pag'] = $_r['option']['pag'];
+
+			$filterTitle = '';
+	//		$r['cena'] = [0, 90000];
+			$r['cena'] = [];
+			if (isset($this->get['f']['Cena'])) {
+				$prices = explode('|', $this->get['f']['Cena']);
+				$r['cena'] = $prices;
+				list($price_from, $price_to) = $prices;
+				$price_from = (int)$price_from;
+				$price_to = (int)$price_to;
+				if ($price_from || $price_to) {
+					$filterTitle .= 'ценой ' . ($price_from ? 'от ' . $price_from : '') . ($price_to ? 'до ' . $price_to : '');
 				}
 			}
-			if (count($filterTitles)) {
-				$filterTitle .= isset($v['metaTitle']) && $v['metaTitle'] ? ' ' . $v['metaTitle'] . ' ' : ' ';
-				$filterTitle .= implode(' и ', $filterTitles);
+
+			$r['weight'] = [];
+			if (isset($this->get['f']['weight'])) {
+				$weights = explode('|', $this->get['f']['weight']);
+				$r['weight'] = $weights;
+				list($weight_from, $weight_to) = $weights;
+				$weight_from = (float)$weight_from;
+				$weight_to = (float)$weight_to;
+				if ($weight_from || $weight_to) {
+					$filterTitle .= ' весом ' . ($weight_from ? 'от ' . $weight_from : '') . ($weight_to ? 'до ' . $weight_to : '');
+				}
 			}
-		};
-		$filterTitle = trim($filterTitle);
 
-		$r['filter'] = $filter;
-		$r['filterTitle'] = $filterTitle;
+			foreach ($filter as $k => $v) {
+				foreach ($setFilters as $sfv) {
+					foreach ($v['data'] as $kData => $vData) {
+						$filter[$k]['data'][$kData]['check'] = 'off';
+					}
+				}
+			}
 
-		if ($j === true) {
-			$this->mdl_helper->__json($r);
-		} else {
-			return $r;
-		}
+			foreach ($filter as $k => $v) {
+				$filterTitles = [];
+				foreach ($setFilters as $sfv) {
+					if ($v['variabled'] === $sfv['item']) {
 
-	}*/
+						foreach ($v['data'] as $kData => $vData) {
+							if (in_array($vData['variabled'], $sfv['values'])) {
+								$filter[$k]['data'][$kData]['check'] = 'on';
+								$filterTitles[] = isset($vData['metaTitle']) && $vData['metaTitle'] ? $vData['metaTitle'] : mb_strtolower($vData['title']);
+							} else {
+								$filter[$k]['data'][$kData]['check'] = 'off';
+							}
+						}
+
+					}
+				}
+				if (count($filterTitles)) {
+					$filterTitle .= isset($v['metaTitle']) && $v['metaTitle'] ? ' ' . $v['metaTitle'] . ' ' : ' ';
+					$filterTitle .= implode(' и ', $filterTitles);
+				}
+			};
+			$filterTitle = trim($filterTitle);
+
+			$r['filter'] = $filter;
+			$r['filterTitle'] = $filterTitle;
+
+			if ($j === true) {
+				$this->mdl_helper->__json($r);
+			} else {
+				return $r;
+			}
+
+		}*/
 
 	// Вывести категорию или разделы и товары в ней
 	public function view_category($data)
@@ -932,7 +932,7 @@ class Catalog extends CI_Controller
 			$price_from = (int)$price_from;
 			$price_to = (int)$price_to;
 			if ($price_from || $price_to) {
-				$filterTitle .= 'ценой' . ($price_from ? ' от ' . $price_from : '') . ($price_to ? ' до ' . $price_to : '').' рублей';
+				$filterTitle .= 'ценой' . ($price_from ? ' от ' . $price_from : '') . ($price_to ? ' до ' . $price_to : '') . ' рублей';
 			}
 		}
 
@@ -944,7 +944,7 @@ class Catalog extends CI_Controller
 			$weight_from = (float)$weight_from;
 			$weight_to = (float)$weight_to;
 			if ($weight_from || $weight_to) {
-				$filterTitle .= ' весом' . ($weight_from ? ' от ' . $weight_from : '') . ($weight_to ? ' до ' . $weight_to : '').' граммов';
+				$filterTitle .= ' весом' . ($weight_from ? ' от ' . $weight_from : '') . ($weight_to ? ' до ' . $weight_to : '') . ' граммов';
 			}
 		}
 
@@ -1001,7 +1001,7 @@ class Catalog extends CI_Controller
 		if (!empty ($dataItem)) {
 
 			$product = $dataItem['product'];
-			$sizes = $dataItem['sizes'];
+
 			// 'seo_keys', 'seo_desc', 'seo_title',
 			$title = (!empty($product['seo_title'])) ? $product['seo_title'] : $product['title'];
 			$page_var = 'catalog';
@@ -1053,7 +1053,8 @@ class Catalog extends CI_Controller
 					'product' => $product,
 					'brand_desc' => $product['postavchik'] ? $this->mdl_tpl->view('pages/catalog/brands_descriptions/' . $product['postavchik'] . '.html', array(), true) : '',
 					'counter' => $dataItem['timerCount'],
-					'sizes' => $sizes,
+					'sizes' => $dataItem['sizes'],
+					'otherSizes' => $dataItem['otherSizes'],
 					'header_title' => $product['title'],
 					'oneString' => rand(2000, 1000000) . '_' . rand(2000, 1000000),
 					'addons_folder' => $this->mdl_stores->getСonfigFile('addons_folder'),
@@ -1179,48 +1180,105 @@ class Catalog extends CI_Controller
 				]],
 			];
 
-			$getItem = $this->mdl_product->queryData($option);
+			$product = $this->mdl_product->queryData($option);
 
-			if ($getItem) {
+			if ($product) {
 
-				$r['product'] = $getItem;
+				$r['product'] = $product;
 
-				$r['sizes'] = $this->mdl_product->queryData([
-					'retyrn_type' => 'ARR2',
-					'where' => [
-						'method' => 'AND',
-						'set' => [[
-							'item' => 'articul',
-							'value' => $getItem['articul'],
-						], [
-							'item' => 'postavchik',
-							'value' => $getItem['postavchik'],
-						], [
-							'item' => 'qty >',
-							'value' => 0,
+				if ($product['size']) {
+					$sizes = $this->mdl_product->queryData([
+						'retyrn_type' => 'ARR2',
+						'where' => [
+							'method' => 'AND',
+							'set' => [[
+								'item' => 'articul',
+								'value' => $product['articul'],
+							], [
+								'item' => 'postavchik',
+								'value' => $product['postavchik'],
+							], [
+								'item' => 'qty >',
+								'value' => 0,
+							]],
+						],
+						'order_by' => [
+							'item' => 'size',
+							'value' => 'acb',
+						],
+						'group_by' => 'size',
+						'distinct' => true,
+						'labels' => ['id', 'modules', 'size'],
+						'module' => true,
+						'modules' => [[
+							'module_name' => 'linkPath',
+							'result_item' => 'linkPath',
+							'option' => [],
 						]],
-					],
-					'order_by' => [
-						'item' => 'size',
-						'value' => 'acb',
-					],
-					'group_by' => 'size',
-					'distinct' => true,
-					'labels' => ['id', 'modules', 'size'],
-					'module' => true,
-					'modules' => [[
-						'module_name' => 'linkPath',
-						'result_item' => 'linkPath',
-						'option' => [],
-					]],
-				]);
+					]);
+
+					$r['sizes'] = $sizes;
+
+					if ($product['cat']) {
+						$category = $this->mdl_category->queryData([
+							'return_type' => 'ARR1',
+							'where' => [
+								'method' => 'AND',
+								'set' => [
+									['item' => 'id', 'value' => $product['cat']],
+								],
+							],
+							'labels' => ['id', 'filter_id'],
+							'module' => false,
+						]);
+					}
+
+					if ($category['filter_id']) {
+						$filter = $this->mdl_category->queryData([
+							'return_type' => 'ARR1',
+							'table_name' => 'products_filters',
+							'where' => [
+								'method' => 'AND',
+								'set' => [
+									['item' => 'id', 'value' => $category['filter_id']],
+								],
+							],
+							'labels' => ['id', 'labels'],
+							'module' => false,
+						]);
+					}
+
+					if (!empty($filter)) {
+						$filterData = json_decode($filter['labels'], true);
+						if (is_array($filterData)) {
+							$filterSizes = array_filter($filterData, function ($item) {
+								return $item['variabled'] == 'size';
+							});
+							$filterSizes = reset($filterSizes)['data'];
+
+							if (is_array($filterSizes)) {
+								$allSizes = array_map(function ($item) {
+									return str_replace('.0', '', str_replace(',', '.', trim($item['title'])));
+								}, $filterSizes);
+								$productSizes = array_map(function ($item) {
+									return str_replace('.0', '', str_replace(',', '.', trim($item['size'])));
+								}, $sizes);
+								$otherSizes = array_diff($allSizes, $productSizes);
+
+								if (count($otherSizes)) {
+									$r['otherSizes'] = $otherSizes;
+								}
+							}
+						}
+					}
+				}
 
 				$_time = time();
 				$start_day = mktime(0, 0, 0, date("m", $_time), date("d", $_time), date("y", $_time));
 				$r['timerCount'] = ($start_day + 86400) - time();
 
-				$this->mdl_db->_update_db("products", "id", $getItem['id'], [
-					'view' => ($getItem['view'] + 1),
+				$this->mdl_db->_update_db("products", "id", $product['id'], [
+					'view' => ($product['view'] + 1),
 				]);
 			}
 

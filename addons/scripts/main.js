@@ -372,7 +372,7 @@ window.MAIN = {
 
 	},
 
-	// ОФОРМЛЕНИЕ КОРЗИНЫ
+	// Быстрый заказ
 	SpeedFORM: {
 
 		requare: function (data, callback) {
@@ -409,7 +409,7 @@ window.MAIN = {
 					}
 				}
 				if (val.name === 'phone') {
-					if (FNC.validate('phone', val.value) === false) {
+					if (val.value.trim().length < 10 || FNC.validate('phone', val.value) === false) {
 						$(DOM.parent + ' input[name="phone"]').css('outline', '1px solid red');
 						setTimeout(function () {
 							$(DOM.parent + ' input[name="phone"]').css('outline', 'none');
@@ -437,6 +437,60 @@ window.MAIN = {
 				window.speedCart = [];
 				$('#modal_speedOrder').modal('hide');
 				FNC.alert('success', 'Ваш заказ был успешно отправлен.');
+			} else {
+				alert('При заполнении формы заказы, была допущена ошибка.');
+			}
+		},
+
+	},
+
+	// Другой размер
+	otherSize: {
+
+		before: function (data) {
+			var err = 0;
+			var sizeSelected = false;
+			for (var key in data) {
+				var val = data[key];
+				if (val.name === 'fio') {
+					if (!FNC.validate('string_cylric_plus', val.value)) {
+						$(DOM.parent + ' input[name="fio"]').css('outline', '1px solid red');
+						setTimeout(function () {
+							$(DOM.parent + ' input[name="fio"]').css('outline', 'none');
+						}, 5000);
+						err++;
+					}
+				}
+				if (val.name === 'phone') {
+					if (val.value.trim().length < 10 || FNC.validate('phone', val.value) === false) {
+						$(DOM.parent + ' input[name="phone"]').css('outline', '1px solid red');
+						setTimeout(function () {
+							$(DOM.parent + ' input[name="phone"]').css('outline', 'none');
+						}, 5000);
+						err++;
+					}
+				}
+				if (val.name === 'size' && val.value) {
+					sizeSelected = true;
+				}
+			}
+			if (!sizeSelected) {
+				$('#otherSizeTitle').css('color', 'red');
+				setTimeout(function () {
+					$('#otherSizeTitle').css('color', 'inherit');
+				}, 5000);
+				err++;
+			}
+
+			return (err < 1) ? true : false;
+
+		},
+
+		success: function (json) {
+			if (json.err < 1) {
+				window.speedCart = [];
+				$('#modal_otherSize').modal('hide');
+				FNC.alert('success', 'Ваш запрос был успешно отправлен.');
 			} else {
 				alert('При заполнении формы заказы, была допущена ошибка.');
 			}
@@ -480,7 +534,7 @@ window.MAIN = {
 					}
 				}
 				if (val.name === 'phone') {
-					if (FNC.validate('phone', val.value) === false) {
+					if (val.value.trim().length < 10 || FNC.validate('phone', val.value) === false) {
 						$(DOM.parent + ' input[name="phone"]').css('outline', '1px solid red');
 						setTimeout(function () {
 							$(DOM.parent + ' input[name="phone"]').css('outline', 'none');

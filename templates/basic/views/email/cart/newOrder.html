@@ -3,7 +3,7 @@
 ==================================<br />
 
 {% for val in tovary %} 
-    <img src="{{http}}/uploads/products/100/{{val.image}}" width="23" /> {{val.articul}} - <a href="{{http}}{{val.link}}" target="_blank">{{val.title}}</a> по цене: {{val.price}} руб. х {{val.qty}} ед. = {{val.summa}} руб. <br />
+    <img src="{{http}}/uploads/products/100/{{val.image}}" width="50" /> {{val.articul}} - <a href="{{http}}{{val.link}}" target="_blank">{{val.title}}</a> по цене: {{val.price}} руб. х {{val.qty}} ед. = {{val.summa}} руб. <br />
 {% endfor %}
 ------------------------------<br />
 Общая сумма: {{summa}} руб.<br />
