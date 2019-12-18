@@ -372,7 +372,7 @@ class Delta extends CI_Controller
 				'articul' => $item['articul'],
 				'cat' => $cat_ids[$item['vid_izdelia']],
 				'params' => json_encode($paramItem, JSON_UNESCAPED_UNICODE),
-				'size' => str_replace(",", ".", trim($item['size'])),
+				'size' => str_replace('.0', '', str_replace(',', '.', trim($item['size']))),
 				'filters' => json_encode($filterData, JSON_UNESCAPED_UNICODE),
 				'proba' => (int)preg_replace('/[^\d]+/', '', $item['proba']),
 				'seria' => $item['seria'],

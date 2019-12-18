@@ -165,7 +165,7 @@ class Trofimova extends CI_Controller
 				'parser' => 'Trofimova',
 				'proba' => $dt['probe'],
 				'params' => json_encode($params, JSON_UNESCAPED_UNICODE),
-				'size' => str_replace(",", ".", trim($dt['size'])),
+				'size' => str_replace('.0', '', str_replace(',', '.', trim($dt['size']))),
 				'filters' => json_encode($filter, JSON_UNESCAPED_UNICODE),
 				'moderate' => '2',
 				'lastUpdate' => time(),

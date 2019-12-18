@@ -649,7 +649,7 @@ class Alcor extends CI_Controller
 				'articul' => $item['articul'],
 				'cat' => $cat_ids[$item['vid_izdelia']],
 				'params' => json_encode($paramItem),
-				'size' => str_replace(",", ".", trim($item['size'])),
+				'size' => str_replace('.0', '', str_replace(',', '.', trim($item['size']))),
 				'filters' => json_encode($filterData),
 				'proba' => $item['proba'],
 				'seria' => trim(mb_strtolower($item['seria'])),

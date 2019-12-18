@@ -374,7 +374,7 @@ class Estet extends CI_Controller {
              $new[] = [
                 'articul' => $val['Artikul'],
                 'identifier' => $val['identifier'],
-                'size' => ((int)$val['size'] < 1) ? null : str_replace(",", ".", trim($val['size'])),
+                'size' => ((int)$val['size'] < 1) ? null : str_replace('.0', '', str_replace(',', '.', trim($val['size']))),
                 'proba' => ( (int)$val['Proba'] < 1 ) ? NULL : $val['Proba'],
                 'title' => $val['Typ'],
                 'vstavkiString' => (isset($val['Vstavki']))?$val['Vstavki']:'',

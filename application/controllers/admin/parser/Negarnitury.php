@@ -176,7 +176,7 @@ class Negarnitury extends CI_Controller
 					'parser' => 'Negarnitury',
 					'proba' => "585",
 					'params' => json_encode($params),
-					'size' => str_replace(",", ".", trim($sz)),
+					'size' => str_replace('.0', '', str_replace(',', '.', trim($sz))),
 					'filters' => json_encode($filter),
 					'moderate' => '2',
 					'lastUpdate' => time(),
