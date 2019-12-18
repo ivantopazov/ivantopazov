@@ -101,8 +101,6 @@ $(function () {
 				reviewVisibled: function () {
 					var list = this.getLSListReviews();
 
-					console.log(list);
-
 					$('#reviwsList > div').map(function (a, e) {
 						var code_item = $(e).attr('data-review-code');
 						for (var key in list) {
