@@ -438,7 +438,7 @@ class Sokolov extends CI_Controller {
                         'articul' => trim( $product['articul'] ),
                         'cat' => $item['cat'],
                         'params' => json_encode( $params ),
-                        'size' => str_replace( ",", ".", trim( $product['size'] )),
+						'size' => str_replace(",", ".", trim($product['size'])),
                         'filters' => json_encode( $filterData ),
                         'proba' => $product['proba'],
                         'description' => $item['description'],
