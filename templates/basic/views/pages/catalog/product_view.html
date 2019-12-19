@@ -48,15 +48,17 @@
 	<div class="container content">
 		<div class="bg-page">
 
-			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
-				<div style="text-align: center; border: 1px solid #cbcbcb; padding: 3px; margin-bottom: 10px">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+				<div style="text-align: center; margin-bottom: 10px">
 
 
 					{% if product.salle_procent > 0 %}
-					<span class="label label-pill label-danger"
-						  style="position: absolute; margin-top: 20px; font-size: 130%; right: 45px;">- {{product.salle_procent}}%</span>
+					<span class="label label-pill label-danger" style="position: absolute; background-color: #ffa800; margin-top: 50px; padding:8px 18px; font-size:24px; right: 45px;">- {{product.salle_procent}}%</span>
 					{% endif %}
 
+					{% if ( prod.modules.salePrice.VAL_00.salePrice|replace({' ': ''}) < 20000 or prod.modules.price_actual.format|replace({' ': ''}) < 20000 ) and product.id % 2 == 0 %}
+					<span class="label-hit" style='position: absolute; margin-top: 50px; padding: 4px 16px; left: 15px;  font-size:20px;'>Хит!</span>
+					{% endif %}
 
 					{% for photo in product.modules.photos %}
 					{% if photo.define == '1' %}
@@ -79,18 +81,12 @@
 					</div>
 					{% endfor %}
 				</div>
-				<div class="row">
-					<div class="col-xs-12">
-						<div class="px18 mt15 Conv_CRC55">
-							{{brand_desc}}
-						</div>
-					</div>
-				</div>
+
 			</div>
 
-			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
 
-				<h2 class="Conv_Circe-Bold mt10t">{{product.title}}</h2>
+				<h1 class="Conv_Circe-Bold mt10" style="color:#62a9d5;">{{product.title}}</h1>
 
 				<div class="pt10 mb15">
 					<div class="">
@@ -107,16 +103,16 @@
 
 					{% if product.salle_procent > 0 %}
 					<div class="borbot pb20">
-						<ul class="list-inline px28">
+						<ul class="list-inline">
 							<li>
-								<span class="title1 Conv_CRC55">
+								<span class="title1 px28">
 									<strong class="serebro">
                                         <s>{{product.modules.salePrice.VAL_00.orig}} р.</s>
 									</strong>
 								</span>
 							</li>
 							<li>
-								<span class="title1 Conv_Circe-ExtraBold">
+								<span class="title1 px36">
 									<strong class="zoloto">
 										{{product.modules.salePrice.VAL_00.salePrice}}  р.
 									</strong>
@@ -146,7 +142,9 @@
 					{% endif %}
 				</div>
 
+                
 				{% if product.salle_procent == 900 %}
+
 				<div class="serebro_border p15_timer mb15">
 					<div class="clearfix visible-xs">
 
@@ -233,10 +231,12 @@
 
 					</div>
 				</div>
+				
 				{% endif %}
+				
 
 				{% if product.size > 0 %}
-				<h4 class="Conv_CRC55 black"><strong>Размеры в наличии:</strong></h4>
+				<h4 class="Conv_CRC55 black"><strong>Размеры в наличии:</strong> <a href="/wiki/kak-vybrat-razmer" class="px17 black_2 clearfix" style="display: inline-block;"><u>Как выбрать размер?</u></a></h4>
 
 					<div class="plr5">
 						<ul class="list-inline px17 pb15_li mb0 plr0_li">
@@ -259,7 +259,7 @@
 						</ul>
 					</div>
 
-					<a href="/wiki/kak-vybrat-razmer" class="px17 black_2 clearfix"><u>Как выбрать размер?</u></a>
+					
 
 					{% endif %}
 
@@ -271,13 +271,16 @@
 					{% endif %}
 
 
-					<a href="#" class=" btn-cart Conv_CRC55  btn-block text-center ZAG p15 px20 mt15"
-					   click="CART.add({ id:{{product.id}}, title:'{{product.title}}', price:{{price}}, qty:{type:'plus', value:1}, orig: { image:'{{product.modules.photos[0].photo_name}}', articul:'{{product.articul}}', link:'{{product.modules.linkPath}}'}}, MAIN.addCartCallback );">Добавить
-						в корзину</a>
+
 
 					<div class="row">
-						<div class="col-xs-12">
-							<a href="#" class="btn-cart_default Conv_CRC55 btn-block text-center ZAG p15 px20 mt15"
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+							<a href="#" class=" btn-cart Conv_CRC55  btn-block text-center ZAG p15 px16 mt15" style="background:#ffa800; border:0;"
+							   click="CART.add({ id:{{product.id}}, title:'{{product.title}}', price:{{price}}, qty:{type:'plus', value:1}, orig: { image:'{{product.modules.photos[0].photo_name}}', articul:'{{product.articul}}', link:'{{product.modules.linkPath}}'}}, MAIN.addCartCallback );">Добавить
+								в корзину</a>
+						</div>
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+							<a href="#" class="btn-cart_default Conv_CRC55 btn-block text-center ZAG p15 px16 mt15"
 							   data-toggle="modal" data-target="#modal_speedOrder" href="#"
 							   click="MAIN.speedAddCart({ id:{{product.id}}, title:'{{product.title}}', price:{{price}}, qty:1, orig: { image:'{{product.modules.photos[0].photo_name}}', articul:'{{product.articul}}', link:'{{product.modules.linkPath}}'}});"
 							>
@@ -353,8 +356,7 @@
 				<ul class="nav nav-tabs nav-tabs_div" role="tablist">
 					<li role="presentation" class="active"><a href="#tab1" aria-controls="tab1" role="tab"
 															  data-toggle="tab">Параметры</a></li>
-					<li role="presentation"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">О
-						бренде</a></li>
+					<li role="presentation"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">Описание</a></li>
 					<li role="presentation"><a href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">Отзывы</a>
 					</li>
 				</ul>
