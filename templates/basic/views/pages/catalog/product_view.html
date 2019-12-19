@@ -56,7 +56,7 @@
 					<span class="label label-pill label-danger" style="position: absolute; background-color: #ffa800; margin-top: 50px; padding:8px 18px; font-size:24px; right: 45px;">- {{product.salle_procent}}%</span>
 					{% endif %}
 
-					{% if ( prod.modules.salePrice.VAL_00.salePrice|replace({' ': ''}) < 20000 or prod.modules.price_actual.format|replace({' ': ''}) < 20000 ) and product.id % 2 == 0 %}
+					{% if ( product.modules.salePrice.VAL_00.orig|replace({' ': ''}) < 20000 or product.modules.salePrice.VAL_00.salePrice|replace({' ': ''}) < 20000 ) and product.id % 2 == 0 %}
 					<span class="label-hit" style='position: absolute; margin-top: 50px; padding: 4px 16px; left: 15px;  font-size:20px;'>Хит!</span>
 					{% endif %}
 
