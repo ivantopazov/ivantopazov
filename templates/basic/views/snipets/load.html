@@ -246,7 +246,9 @@
 	function callBackSale() {
 		// if (ymaps.geolocation.city.length > 2) $('#callback_title').html('Ваш город ' + ymaps.geolocation.city + '? Закажите обратный звонок и получите скидку 40%! Не суммируется с другими скидками.');
 		// else
-		$('#callback_title').html('Закажите обратный звонок и получите скидку 40%!*');
+		$('#callback_title').html('Не нашли своего размера или нужной формы изделия?<br />\n' +
+			'На сайте представлена не вся продукция!<br />\n' +
+			'Мы поможем подобрать украшение и подарим скидку 40%*!');
 		$('#callback_desctiption').html('*Не суммируется с другими скидками.');
 
 		$('#callback_link').attr('data-triggered', 'click');
