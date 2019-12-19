@@ -464,6 +464,7 @@ class Cart extends CI_Controller
 			'name' => (isset($this->post['fio'])) ? $this->post['fio'] : '',
 			'phone' => (isset($this->post['phone'])) ? $this->post['phone'] : '',
 			'comment' => (isset($this->post['comment'])) ? $this->post['comment'] : '',
+			'size' => (isset($this->post['size'])) ? $this->post['size'] : '',
 			'product' => $product,
 
 			'ulmLabels' => $this->mdl_tpl->view('email/ulmLabels/labelItems.html', $this->mdl_seo->getUtmData(), true),
