@@ -124,6 +124,10 @@ class Search extends CI_Controller
 			'value' => 1,
 		]];
 
+		if (preg_match("/[0-9]/", $text)) {
+			$where[] = ['item' => 'id', 'value' => $text];
+		}
+		
 		$kamen = explode("с ", $text);
 		if (isset($kamen[1])) {
 			$where[] = ['item' => 'title LIKE', 'value' => "%" . $kamen[1] . "%"];
