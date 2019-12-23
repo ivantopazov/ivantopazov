@@ -1174,6 +1174,10 @@ span.line_t {
 	.container.theme-showcase.mt10 {margin-top:0;}
 	.container.theme-showcase.visible-xs {padding:0 !important;}
 	.display_none_767 {display:none;}
+	
+	h1 {font-size: 24px;}
+	.back-to-catalog{border: 2px solid #63a9d6; padding: 5px 10px; display: block;}
+	.choose-btn{border: 2px solid #63a9d6; background:#63a9d6 url("../images/choose_ico.png") no-repeat 5% center; background-size: 20px 20px; color:#fff; padding: 5px 10px 5px 25px; display: block;}
 
 }
 
