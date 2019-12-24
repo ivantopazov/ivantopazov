@@ -546,6 +546,10 @@ class Mdl_product extends CI_Model
 				$m = 0;
 				foreach ($products_photos as $pk => $pv) {
 					if ($pv['product_id'] === $v['id']) {
+						if (!file_exists('./uploads/products/250/'.$pv['photo_name'])) {
+							$pv['photo_name'] = '../../no_image.png';
+							$pv['define'] = '1';
+						}
 						$this->_query[$index]['result'][$k]['modules'][$item][] = ($labels !== false) ? $this->mdl_helper->clear_array_0($pv, $labels) : $pv;
 						$m++;
 					}
@@ -553,7 +557,7 @@ class Mdl_product extends CI_Model
 
 				if ($no_images_view > 0 && $m < 1) {
 					$this->_query[$index]['result'][$k]['modules'][$item][] = [
-						'photo_name' => 'no_images.jpg',
+						'photo_name' => 'no_image.png',
 						'define' => '1',
 					];
 				}
