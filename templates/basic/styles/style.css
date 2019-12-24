@@ -1138,7 +1138,9 @@ span.line_t {
 
 
 .catalog_h1 {font-size: 25px; padding: 0 15px 30px; color:#63a9d6;}
-
+@media  (min-width: 768px) {
+	#filter-block-show{display:block !important;}
+}
 @media  (max-width: 767px) {
     
     .catalog-xs .text_shad {
@@ -1176,9 +1178,11 @@ span.line_t {
 	.display_none_767 {display:none;}
 	
 	h1 {font-size: 24px;}
+	.search-catalog{border: 2px solid #63a9d6; padding: 5px 10px; display: block;}
 	.back-to-catalog{border: 2px solid #63a9d6; padding: 5px 10px; display: block;}
 	.choose-btn{border: 2px solid #63a9d6; background:#63a9d6 url("../images/choose_ico.png") no-repeat 5% center; background-size: 20px 20px; color:#fff; padding: 5px 10px 5px 25px; display: block;}
-
+	.filter-btn{border: 2px solid #63a9d6; background:#63a9d6 url("../images/choose_ico.png") no-repeat 5% center; background-size: 20px 20px; color:#fff; padding: 5px 10px 5px 25px; display: block;}
+	#filter-block-show{display:none;}
 }
 
 
