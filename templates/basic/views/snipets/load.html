@@ -240,6 +240,12 @@
 	$('#search').click(function () {
 		window.open('https://ivantopazov.ru/search?t=' + $('input[name="t-search"]').val(), '_blank');
 	});
+	$(function () {
+		$('.filter-btn').click(function () {
+			$('#filter-block-show').slideToggle();
+			return false;
+		});
+	});
 </script>
 
 <script>
