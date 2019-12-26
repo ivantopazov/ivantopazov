@@ -287,13 +287,13 @@
 
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
-							<a href="#" class=" btn-cart Conv_CRC55  btn-block text-center ZAG p15 px16 mt15" style="background:#ffa800; border:0;"
+							<a href="#" class=" btn-cart Conv_CRC55  btn-block text-center ZAG p15 px16 mt15" onclick="yaCounter45556173.reachGoal('cart-product');" style="background:#ffa800; border:0;"
 							   click="CART.add({ id:{{product.id}}, title:'{{product.title}}', price:{{price}}, qty:{type:'plus', value:1}, orig: { image:'{{product.modules.photos[0].photo_name}}', articul:'{{product.articul}}', link:'{{product.modules.linkPath}}'}}, MAIN.addCartCallback );">Добавить
 								в корзину</a>
 						</div>
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
-							<a href="#" class="btn-cart_default Conv_CRC55 btn-block text-center ZAG p15 px16 mt15"
-							   data-toggle="modal" data-target="#modal_speedOrder" href="#"
+							<a href="#" class="btn-cart_default Conv_CRC55 btn-block text-center ZAG p15 px16 mt15" onclick="yaCounter45556173.reachGoal('quick-order');"
+							   data-toggle="modal" data-target="#modal_speedOrder" href="#" 
 							   click="MAIN.speedAddCart({ id:{{product.id}}, title:'{{product.title}}', price:{{price}}, qty:1, orig: { image:'{{product.modules.photos[0].photo_name}}', articul:'{{product.articul}}', link:'{{product.modules.linkPath}}'}});"
 							>
 								Быстрый заказ
