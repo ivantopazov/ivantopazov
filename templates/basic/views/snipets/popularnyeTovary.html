@@ -34,7 +34,7 @@
 						{% endif %} 
 					</strong>
 				</div>
-				<a href="#" class=" btn-cart Conv_CRC55  btn-block text-center ZAG cart-anim" click="CART.add({ id:{{prod.id}}, title:'{{prod.title}}', price:{% if prod.salle_procent > 0 %}{{prod.modules.salePrice.COP.salePrice}}{% else %}{{prod.modules.price_actual.cop}}{% endif %}, qty:{type:'plus', value:1}, orig:{ image:'{{prod.modules.photos[0].photo_name}}', articul:'{{prod.articul}}', link:'{{prod.modules.linkPath}}'}}, MAIN.addCartCallback );">В корзину</a>
+				<a href="#" class=" btn-cart Conv_CRC55  btn-block text-center ZAG cart-anim"  onclick="yaCounter45556173.reachGoal('cart-catalog');" click="CART.add({ id:{{prod.id}}, title:'{{prod.title}}', price:{% if prod.salle_procent > 0 %}{{prod.modules.salePrice.COP.salePrice}}{% else %}{{prod.modules.price_actual.cop}}{% endif %}, qty:{type:'plus', value:1}, orig:{ image:'{{prod.modules.photos[0].photo_name}}', articul:'{{prod.articul}}', link:'{{prod.modules.linkPath}}'}}, MAIN.addCartCallback );">В корзину</a>
 			</div>
 		</div>
 		{% endfor %}            

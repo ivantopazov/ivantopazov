@@ -28,7 +28,7 @@
 	<div class="modal-dialog modal-xs">
 		<div class="modal-content">
 
-			<form action="/about/callBack" method="post" before="MAIN.callBackFORM.before"
+			<form action="/about/callBack" method="post" onsubmit="yaCounter45556173.reachGoal('call-order');" before="MAIN.callBackFORM.before"
 				  success="MAIN.callBackFORM.success" data_type="json">
 
 				<div class="modal-header">
@@ -113,7 +113,7 @@
 	<div class="modal-dialog modal-xs">
 		<div class="modal-content">
 
-			<form action="/cart/order" method="post" requare="MAIN.SpeedFORM.requare" before="MAIN.SpeedFORM.before"
+			<form action="/cart/order" method="post" onsubmit="yaCounter45556173.reachGoal('order-popup');" requare="MAIN.SpeedFORM.requare" before="MAIN.SpeedFORM.before"
 				  success="MAIN.SpeedFORM.success" data_type="json">
 
 				<div class="modal-header">
@@ -240,12 +240,15 @@
 	$('#search').click(function () {
 		window.open('https://ivantopazov.ru/search?t=' + $('input[name="t-search"]').val(), '_blank');
 	});
+	
 	$(function () {
 		$('.filter-btn').click(function () {
 			$('#filter-block-show').slideToggle();
 			return false;
 		});
 	});
+
+
 </script>
 
 <script>
