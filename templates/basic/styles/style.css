@@ -1075,8 +1075,8 @@ span.line_t {
 	}
 	
 	#navbar{background:#63a9d6;	max-height: none !important;}
-	#navbar li a {color:#fff}
-	#navbar li.open {background-color:#4499d0;}
+	#navbar li a {color:#fff !important}
+	#navbar li.open {background-color:#4499d0 !important;}
 	#navbar li.open .dropdown-menu {border-top: 1px solid #498ab5 !important;}
 
 	body{
