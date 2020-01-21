@@ -1116,9 +1116,9 @@ class Catalog extends CI_Controller
 					], [
 						'item' => 'aliase',
 						'value' => $Aliase,
-					], [
-						'item' => 'qty >',
-						'value' => 0,
+//					], [
+//						'item' => 'qty >',
+//						'value' => 0,
 					], [
 						'item' => 'moderate >',
 						'value' => 1,
