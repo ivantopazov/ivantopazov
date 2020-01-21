@@ -98,7 +98,7 @@ class Search extends CI_Controller
 
 		$text = (isset($this->get['t'])) ? $this->get['t'] : false;
 		$text = (isset($this->post['t'])) ? $this->post['t'] : $text;
-		$text = mb_strtolower($text);
+		$text = mb_strtolower(trim($text));
 
 		$query_string = array();
 		$query_string = array_merge($query_string, $this->get);
@@ -114,20 +114,19 @@ class Search extends CI_Controller
 		$sffix = $query_string;
 
 		$where = [[
-			'item' => 'view >',
-			'value' => 0,
-		], [
-			'item' => 'qty >',
-			'value' => 0,
-		], [
 			'item' => 'moderate >',
 			'value' => 1,
 		]];
 
-		if (preg_match("/[0-9]/", $text)) {
+		if (preg_match("/^[0-9]+$/", $text)) {
 			$where[] = ['item' => 'id', 'value' => $text];
+		} else {
+			$where[] = [
+				'item' => 'qty >',
+				'value' => 0,
+			];
 		}
-		
+
 		$kamen = explode("с ", $text);
 		if (isset($kamen[1])) {
 			$where[] = ['item' => 'title LIKE', 'value' => "%" . $kamen[1] . "%"];
