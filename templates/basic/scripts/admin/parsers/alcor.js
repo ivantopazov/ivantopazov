@@ -111,7 +111,7 @@ $(function () {
 			run_import: function () {
 
 				var send = {};
-				send.package_size = 10;
+				send.package_size = 100;
 				send.all_size = MEM.CSV.extract.length;
 				send.package_steps = (parseInt(send.all_size / send.package_size) + 1);
 				send.active_step = 1;

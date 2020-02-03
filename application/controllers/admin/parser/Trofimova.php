@@ -215,11 +215,12 @@ class Trofimova extends CI_Controller
 			}
 
 			// Проверка фото
-			if (file_exists($this->upload_path . $dt["article"] . ".jpg")) {
-				$ph_name = $dt["article"] . ".jpg";
+			$article = str_replace('/', '_', $dt["article"]);
+			if (file_exists($this->upload_path . $article . ".jpg")) {
+				$ph_name = $article . ".jpg";
 				$ph_ext = ".jpg";
-			} elseif (file_exists($this->upload_path . $dt["article"] . ".tif")) {
-				$ph_name = $dt["article"] . ".tif";
+			} elseif (file_exists($this->upload_path . $article . ".tif")) {
+				$ph_name = $article . ".tif";
 				$ph_ext = ".tif";
 			}
 
@@ -235,7 +236,7 @@ class Trofimova extends CI_Controller
 			$aliase = $this->mdl_product->aliase_translite($title) . '_' . trim($dt["article"]) . '_' . $id;
 			$this->mdl_db->_update_db($this->prod_table, "id", $id, ["aliase" => $aliase]);
 
-			$this->images($dt["article"], $ph_ext);
+			$this->images($article, $ph_ext);
 			$ph = [
 				"product_id" => $id,
 				"photo_name" => $ph_name, // Вместо алиаса по артиклу

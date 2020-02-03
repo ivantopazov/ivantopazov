@@ -283,12 +283,13 @@ class Delta extends CI_Controller
 			$products = $this->db->get('products')->result_array();
 		}
 		if (count($products) > 0) {
+			$goldPrice = (int)((float)$this->mdl_stores->getConfig('gold_price') * 100);
 			$upd = [];
 			foreach ($products as $product) {
 				if (isset($product['price_zac']) && (int)$product['price_zac'] > 0) {
 					$upd[] = [
 						'id' => $product['id'],
-						'price_roz' => (int)($product['price_zac']) * 2,
+						'price_roz' => (int)((int)($product['price_zac']) + ((float)$product['weight'] * $goldPrice)) * 2,
 						'salle_procent' => 20,
 					];
 				}

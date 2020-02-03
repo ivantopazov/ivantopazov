@@ -17,6 +17,7 @@ class Master extends CI_Controller
 	private $upload_path = "./uploads/products/master/";
 	private $type_cat = [
 		"Кольцо" => 1,
+		"Обручальные кольца" => 1,
 		"Серьги" => 10,
 		"Серьги детские" => 10,
 		"Пусеты" => 10,
@@ -25,6 +26,9 @@ class Master extends CI_Controller
 		"Брошь" => 35,
 		"Колье" => 36,
 		"Крест" => 37,
+		"Пирсинг" => 38,
+		"Запонки" => 42,
+		"Зажим для галстука" => 42,
 	];
 
 	public function __construct()
@@ -113,6 +117,7 @@ class Master extends CI_Controller
 
 	public function parse()
 	{
+		// Todo: отключать товары перед импортом
 		// Принимаем номер строки файла для обработки, считаем дубли и ошибки
 		$current_str = $_POST["str"];
 		$err = 0;
@@ -121,145 +126,157 @@ class Master extends CI_Controller
 		$file = file($this->upload_path . "/master.csv");
 		$data = array();
 
-		$file[$current_str] = mb_convert_encoding($file[$current_str], "utf8", "cp1251");
+//		$file[$current_str] = mb_convert_encoding($file[$current_str], "utf8", "cp1251");
 
 		$values = explode("\"", $file[$current_str]); // Для разделения дескрипшена и остальных данных
 		$val = explode(";", $values[0]); // Делим данные
 
-		$data[0]["article"] = $val[0];
-		$data[0]["shk"] = $val[1];
-		$data[0]["size"] = $val[2];
-		$data[0]["metal"] = $val[3];
-		$data[0]["metal_color"] = $val[4];
-		$data[0]["probe"] = $val[5];
-		$data[0]["type"] = $val[6];
-		$data[0]["weight"] = $val[7];
-		$data[0]["price"] = $val[8];
-		$data[0]["country"] = $val[9];
-		$data[0]["garniture"] = $val[10];
-		$data[0]["brand"] = $val[11];
-		$data[0]["descr"] = $values[1];
+		$data["article"] = trim($val[0]);
+		$data["shk"] = trim($val[1]);
+		$data["size"] = str_replace('.0', '', str_replace(',', '.', trim($val[2])));
+		$data["metal"] = trim($val[3]);
+		$data["metal_color"] = trim($val[4]);
+		$data["probe"] = trim($val[5]);
+		$data["type"] = trim($val[6]);
+		$data["weight"] = str_replace(",", ".", trim($val[7]));
+		$data["price"] = trim($val[8]);
+		$data["country"] = trim($val[9]);
+		$data["garniture"] = trim($val[10]);
+		$data["brand"] = trim($val[11]);
+		$data["descr"] = trim($values[1]);
 
-		foreach ($data as $key => $dt) {
-			$title = $this->title($dt);
-			$params = $this->params($dt);
-			$filter = $this->filter($dt, $params[2]["value"]);
-			$drag = $this->drag($dt["descr"]);
-			$caratsRanges = $this->getCaratsRanges($drag);
-
-			$item = [
-				'articul' => $dt['article'],
-				'cat' => $this->type_cat[$dt['type']],
-				'title' => $title,
-				'price_zac' => (int)str_replace(" ", "", $dt["price"]) * 100,
-				'price_roz' => (int)((int)str_replace(" ", "", $dt["price"]) * 2.5) * 100,
-				'current' => 'RUR',
-				'salle_procent' => rand(4, 8) * 5,
-				'view' => '1',
-				'qty' => '1',
-				'qty_empty' => '1',
-				'prices_empty' => '1',
-				'weight' => $dt["weight"],
-				'sex' => "woman",
-				'postavchik' => 'Master Brilliant',
-				'parser' => 'Master',
-				'proba' => $dt['probe'],
-				'params' => json_encode($params, JSON_UNESCAPED_UNICODE),
-				'size' => str_replace('.0', '', str_replace(',', '.', trim($dt['size']))),
-				'filters' => json_encode($filter, JSON_UNESCAPED_UNICODE),
-				'moderate' => '2',
-				'lastUpdate' => time(),
-				'optionLabel' => json_encode([
-					'collections' => $dt["brand"],
-					'options' => $dt['garniture'],
-					'vstavki' => str_replace(";", " ", str_replace("#", " ", $dt['descr'])),
-					'seria' => "",
-				], JSON_UNESCAPED_UNICODE),
-				'drag' => json_encode($drag, JSON_UNESCAPED_UNICODE),
-				'filter_carats' => json_encode($caratsRanges, JSON_UNESCAPED_UNICODE),
-			];
-
-			// Получаем итем с одинаковым артикулом и весом для обновления цены
-			$prods = $this->mdl_product->queryData([
-				'type' => 'ARR2',
-				'where' => [
-					'method' => 'AND',
-					'set' => [[
-						'item' => 'parser',
-						'value' => 'Master',
-					], [
-						'item' => 'articul',
-						'value' => $dt["article"],
-					]],
-				],
-				'labels' => ['id', 'weight', 'size'],
-				'table_name' => $this->prod_table,
-			]);
-
-			// Если есть такой же товар по артиклу и весу, то обновляем его цену, иначе вносим в базу новый
-			if (count($prods) > 0) {
-				foreach ($prods as $k => $v) {
-					if ($v["weight"] == $dt["weight"] and $v["size"] == $dt["size"]) {
-						$upd = [ // Сюда можно установить любые значения для обновления
-							/*"title" => $item["title"],
-							"price_zac" => $item["price_zac"],
-							"price_roz" => $item["price_roz"],*/
-							"params" => $item["params"],
-							"filters" => $item["filters"],
-						];
-						$this->mdl_db->_update_db($this->prod_table, "id", $v["id"], $upd);
-
-						$double++; // Считаем дубли с обновлениями
-
-						echo json_encode(["err" => $err, "double" => $double]);
-						return;
-					}
-				}
-			}
-
-			// Проверка фото
-			if (file_exists($this->upload_path . $dt["article"] . ".jpg")) $ph_name = $dt["article"] . ".jpg";
-
-			if (!$ph_name) {
-				$err++;
-				echo json_encode(["err" => $err, "double" => $double]);
-				return;
-			}
-
-			$this->db->insert($this->prod_table, $item);
-			$id = $this->db->insert_id();
-			if (!$id) $err++;
-			$aliase = $this->mdl_product->aliase_translite($title) . '_' . trim($dt["article"]) . '_' . $id;
-			$this->mdl_db->_update_db($this->prod_table, "id", $id, ["aliase" => $aliase]);
-
-			$this->images($dt["article"]);
-			$ph = [
-				"product_id" => $id,
-				"photo_name" => $dt["article"] . ".jpg", // Вместо алиаса по артиклу
-				"define" => 1,
-			];
-			$this->db->insert($this->ph_table, $ph);
-
+		$categoryId = $this->type_cat[$data["type"]];
+		if (!$categoryId) {
+			$err++;
 			echo json_encode(["err" => $err, "double" => $double]);
 			return;
 		}
+
+		$title = $this->title($data);
+		$params = $this->params($data);
+		$filter = $this->filter($data, $params[2]["value"]);
+		$drag = $this->drag($data["descr"]);
+		$caratsRanges = $this->getCaratsRanges($drag);
+
+		$price = (int)preg_replace("{[^\d]+}", "", $data["price"]) * 100;
+		$item = [
+			'articul' => $data['article'],
+			'seria' => $data['shk'],
+			'cat' => $this->type_cat[$data['type']],
+			'title' => $title,
+			'price_zac' => $price,
+			'price_roz' => (int)($price * 2.5),
+			'current' => 'RUR',
+			'salle_procent' => rand(4, 8) * 5,
+			'view' => '1',
+			'qty' => '1',
+			'qty_empty' => '1',
+			'prices_empty' => '1',
+			'weight' => $data["weight"],
+			'sex' => "woman",
+			'postavchik' => 'Master Brilliant',
+			'parser' => 'Master',
+			'proba' => $data['probe'],
+			'params' => json_encode($params, JSON_UNESCAPED_UNICODE),
+			'size' => str_replace('.0', '', str_replace(',', '.', trim($data['size']))),
+			'filters' => json_encode($filter, JSON_UNESCAPED_UNICODE),
+			'moderate' => '2',
+			'lastUpdate' => time(),
+			'optionLabel' => json_encode([
+				'collections' => $data["brand"],
+				'options' => $data['garniture'],
+				'vstavki' => str_replace(";", " ", str_replace("#", " ", $data['descr'])),
+				'seria' => "",
+			], JSON_UNESCAPED_UNICODE),
+			'drag' => json_encode($drag, JSON_UNESCAPED_UNICODE),
+			'filter_carats' => json_encode($caratsRanges, JSON_UNESCAPED_UNICODE),
+		];
+
+		// ToDo: потом переделать на поиск по полю 'seria', оно уникально
+		// Получаем итем с одинаковым артикулом и весом для обновления цены
+		$prods = $this->mdl_product->queryData([
+			'type' => 'ARR2',
+			'where' => [
+				'method' => 'AND',
+				'set' => [[
+					'item' => 'parser',
+					'value' => 'Master',
+				], [
+					'item' => 'articul',
+					'value' => $data["article"],
+				]],
+			],
+			'labels' => ['id', 'weight', 'size'],
+			'table_name' => $this->prod_table,
+		]);
+
+		// Если есть такой же товар по артиклу и весу, то обновляем его цену, иначе вносим в базу новый
+		if (count($prods) > 0) {
+			foreach ($prods as $k => $v) {
+				if ($v["weight"] == $data["weight"] and $v["size"] == $data["size"]) {
+//					$upd = [ // Сюда можно установить любые значения для обновления
+//						"title" => $item["title"],
+//						"price_zac" => $item["price_zac"],
+//						"price_roz" => $item["price_roz"],
+//						"lastUpdate" => $item["lastUpdate"],
+//						"params" => $item["params"],
+//						"filters" => $item["filters"],
+//					];
+					$upd = $item;
+					$this->mdl_db->_update_db($this->prod_table, "id", $v["id"], $upd);
+
+					$double++; // Считаем дубли с обновлениями
+
+					echo json_encode(["err" => $err, "double" => $double]);
+					return;
+				}
+			}
+		}
+
+		// Проверка фото
+		if (file_exists($this->upload_path . $data["article"] . ".jpg")) $ph_name = $data["article"] . ".jpg";
+
+		if (!$ph_name) {
+			$err++;
+			echo json_encode(["err" => $err, "double" => $double]);
+			return;
+		}
+
+		$this->db->insert($this->prod_table, $item);
+		$id = $this->db->insert_id();
+		if (!$id) $err++;
+		$aliase = $this->mdl_product->aliase_translite($title) . '_' . trim($data["article"]) . '_' . $id;
+		$this->mdl_db->_update_db($this->prod_table, "id", $id, ["aliase" => $aliase]);
+
+		$article = str_replace('/', '_', $data["article"]);
+		$this->images($article);
+		$ph = [
+			"product_id" => $id,
+			"photo_name" => $article . ".jpg", // Вместо алиаса по артиклу
+			"define" => 1,
+		];
+		$this->db->insert($this->ph_table, $ph);
+
+		echo json_encode(["err" => $err, "double" => $double]);
+		return;
 	}
 
-	private function title($dt)
+	private function title($data)
 	{
-		$title = $dt["type"] . " из ";
+		$title = $data["type"] . " из ";
 
-		if (trim($dt["metal_color"]) == "Желтый") $title .= "желтого ";
-		if (trim($dt["metal_color"]) == "Красный") $title .= "красного ";
-		if (trim($dt["metal_color"]) == "Белый") $title .= "белого ";
-		if (trim($dt["metal_color"]) == "Красный желтый белый") $title .= "красного, белого, желтого ";
+		if (trim($data["metal_color"]) == "Желтый") $title .= "желтого ";
+		if (trim($data["metal_color"]) == "Красный") $title .= "красного ";
+		if (trim($data["metal_color"]) == "Белый") $title .= "белого ";
+		if (trim($data["metal_color"]) == "Желтый белый") $title .= "белого, желтого ";
+		if (trim($data["metal_color"]) == "Красный желтый белый") $title .= "красного, белого, желтого ";
 		$title .= "золота";
 
-		if (strlen($dt["descr"]) < 3) return $title;
+		if (strlen($data["descr"]) < 3) return $title;
 
 		$len = strlen($title) + 3;
 		$title .= " с ";
-		$kamen = explode(";", $dt["descr"]);
+		$kamen = explode(";", $data["descr"]);
 		foreach ($kamen as $key => $val) {
 			if (preg_match("/Жемчуг/", $val) and !preg_match("/Жемчуг/", $title)) $title .= "Жемчугом, ";
 			if (preg_match("/Фианит/", $val) and !preg_match("/Фианит/", $title)) $title .= "Фианитом, ";
@@ -296,7 +313,7 @@ class Master extends CI_Controller
 		return $title;
 	}
 
-	private function params($dt = array())
+	private function params($data = array())
 	{
 		$params = [[
 			'variabled' => 'metall',
@@ -321,16 +338,17 @@ class Master extends CI_Controller
 			'value' => '-',
 		]];
 
-		if (trim($dt["metal_color"]) == "Желтый" or trim($dt["metal_color"]) == "Жёлтый") $metal = "Желтое ";
-		if (trim($dt["metal_color"]) == "Красный") $metal = "Красное ";
-		if (trim($dt["metal_color"]) == "Белый") $metal = "Белое ";
-		if (trim($dt["metal_color"]) == "Красный желтый белый") $metal = "Красное, белое, желтое ";
-		$metal .= $dt["metal"];
+		if (trim($data["metal_color"]) == "Желтый" or trim($data["metal_color"]) == "Жёлтый") $metal = "Желтое ";
+		if (trim($data["metal_color"]) == "Красный") $metal = "Красное ";
+		if (trim($data["metal_color"]) == "Белый") $metal = "Белое ";
+		if (trim($data["metal_color"]) == "Желтый белый") $metal = "Белое, желтое ";
+		if (trim($data["metal_color"]) == "Красный желтый белый") $metal = "Красное, белое, желтое ";
+		$metal .= $data["metal"];
 
 		$params[0]["value"] = $metal;
-		$params[1]["value"] = $dt["metal"];
+		$params[1]["value"] = $data["metal"];
 
-		$vstavka = explode(";", $dt["descr"]);
+		$vstavka = explode(";", $data["descr"]);
 		$vstavka_param = $vstavka[1];
 		if ($vstavka[4]) $vstavka_param .= ", " . $vstavka[4];
 		if ($vstavka[7]) $vstavka_param .= ", " . $vstavka[7];
@@ -347,14 +365,17 @@ class Master extends CI_Controller
 		if ($vstavka[16]) $vstavka_form .= ", " . $vstavka[17];
 		$params[3]["value"] = $vstavka_form;
 
-		$params[4]["value"] = $dt["weight"];
-		if ($dt["type"] == "Серьги детские") $params[5]["value"] = "Детям";
-		else $params[5]["value"] = "Женщинам";
+		$params[4]["value"] = $data["weight"];
+		if ($data["type"] == "Серьги детские") {
+			$params[5]["value"] = "Детям";
+		} else {
+			$params[5]["value"] = "Женщинам";
+		}
 
 		return $params;
 	}
 
-	private function filter($dt, $vstavka)
+	private function filter($data, $vstavka)
 	{
 		$filter = [[
 			'item' => 'metall',
@@ -373,17 +394,29 @@ class Master extends CI_Controller
 			'values' => [],
 		]];
 
-		if (trim($dt["metal_color"]) == "Красный") $filter[0]["values"][] = "krasnZoloto";
-		if (trim($dt["metal_color"]) == "Белый") $filter[0]["values"][] = "belZoloto";
-		if (trim($dt["metal_color"]) == "Желтый" or trim($dt["metal_color"]) == "Жёлтый") $filter[0]["values"][] = "JoltZoloto";
+		if (trim($data["metal_color"]) == "Красный") $filter[0]["values"][] = "krasnZoloto";
+		if (trim($data["metal_color"]) == "Белый") $filter[0]["values"][] = "belZoloto";
+		if (trim($data["metal_color"]) == "Желтый" or trim($data["metal_color"]) == "Жёлтый") $filter[0]["values"][] = "JoltZoloto";
+		if (trim($data["metal_color"]) == "Желтый белый") {
+			$filter[0]["values"][] = "belZoloto";
+			$filter[0]["values"][] = "JoltZoloto";
+		}
+		if (trim($data["metal_color"]) == "Красный желтый белый") {
+			$filter[0]["values"][] = "belZoloto";
+			$filter[0]["values"][] = "JoltZoloto";
+			$filter[0]["values"][] = "krasnZoloto";
+		}
 
 		$kamen = explode(",", $vstavka);
 		foreach ($kamen as $k => $v) $filter[1]["values"][] = $this->mdl_product->aliase_translite($v);
 
-		if ($dt["type"] == "Серьги детские") $filter[3]["values"][] = "kids";
-		else $filter[3]["values"][] = "woman";
+		if ($data["type"] == "Серьги детские") {
+			$filter[3]["values"][] = "kids";
+		} else {
+			$filter[3]["values"][] = "woman";
+		}
 
-		$filter[4]["values"][] = $dt["size"];
+		$filter[4]["values"][] = str_replace(".", "_", $data['size']);
 
 		return $filter;
 	}
@@ -436,11 +469,11 @@ class Master extends CI_Controller
 	{
 //		$prodictIds = [62284];
 //		$products = [];
-//		if (count($prodictIds) > 0) {
-//			$this->db->where_in('id', $prodictIds);
-			$this->db->where('postavchik', 'Master Brilliant');
-			$this->db->limit(10000, 30000);
-			$products = $this->db->get('products')->result_array();
+//		if (count($productIds) > 0) {
+//			$this->db->where_in('id', $productIds);
+		$this->db->where('postavchik', 'Master Brilliant');
+		$this->db->limit(10000, 30000);
+		$products = $this->db->get('products')->result_array();
 //		}
 
 		$upd = [];
@@ -470,9 +503,9 @@ class Master extends CI_Controller
 //		$products = [];
 //		if (count($prodictIds) > 0) {
 //			$this->db->where_in('id', $prodictIds);
-			$this->db->where('postavchik', 'Master Brilliant');
-			$this->db->limit(10000, 30000);
-			$products = $this->db->get('products')->result_array();
+		$this->db->where('postavchik', 'Master Brilliant');
+		$this->db->limit(10000, 30000);
+		$products = $this->db->get('products')->result_array();
 //		}
 
 		$upd = [];

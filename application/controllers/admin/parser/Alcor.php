@@ -686,12 +686,12 @@ class Alcor extends CI_Controller
 	{
 //		$productIds = [68359];
 		$products = [];
-//		if (count($productIds) > 0) {
-//			$this->db->where_in('id', $productIds);
+		if (count($productIds) > 0) {
+			$this->db->where_in('id', $productIds);
 			$this->db->where('postavchik', 'Alcor');
-			$this->db->limit(10000, 50000);
+//			$this->db->limit(10000, 50000);
 			$products = $this->db->get('products')->result_array();
-//		}
+		}
 		if (count($products) > 0) {
 			$propertyNamesForStones = [
 				'Агат зеленый' => ['Камень', 'Кол-во камней', 'Вес, Ct.', 'Форма огранки', 'Размер камня, мм', 'Кол-во граней'],
@@ -801,8 +801,8 @@ class Alcor extends CI_Controller
 
 			if (count($upd)) {
 				$this->db->update_batch('products', $upd, 'id');
-				var_dump(count($upd));
-				die;
+//				var_dump(count($upd));
+//				die;
 			}
 		}
 		return true;

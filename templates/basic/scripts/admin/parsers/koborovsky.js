@@ -161,6 +161,7 @@ $(function () {
 					}
 				}
 
+				var setClear = 1;
 				send.interval.intv = setInterval(function () {
 					if (send.interval.status) {
 						send.interval.status = false;
@@ -170,12 +171,14 @@ $(function () {
 								type: 'post',
 								url: '/admin/parser/kaborovsky/parseKaborovsky',
 								data: {
+									clear: setClear,
 									method: MEM.CSV.method,
 									pack: send.package_arrays[0],
 								},
 								dataType: 'json',
 								success: function (stat) {
 									if (stat.err < 1) {
+										setClear++;
 										console.log('success');
 										send.package_success.push(send.package_arrays[0]);
 										send.package_arrays.splice(0, 1);

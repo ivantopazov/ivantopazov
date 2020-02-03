@@ -1,7 +1,7 @@
 var count = 0;
-var current_str = 2; // Первую-вторую строку не учитываем
+var current_str = 1; // Первую-вторую строку не учитываем
 var err = 0;
-var success = 2; // Первая-вторая строка всегда ок
+var success = 1; // Первая-вторая строка всегда ок
 var double = 0;
 
 $("#get").click(function(){

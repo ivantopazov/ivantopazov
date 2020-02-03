@@ -99,8 +99,16 @@ class Kaborovsky extends CI_Controller
 	public function parseKaborovsky()
 	{
 
-		error_reporting(-1);
-		ini_set('display_errors', 1);
+//		error_reporting(-1);
+//		ini_set('display_errors', 1);
+
+		// Первоначальная прочистка остатков
+		$clear = (isset($this->post['clear'])) ? $this->post['clear'] : false;
+		if ($clear === '1') {
+			$this->mdl_db->_update_db("products", "postavchik", 'Kaborovsky', [
+				'qty' => 0,
+			]);
+		}
 
 		$packs = (isset($this->post['pack'])) ? $this->post['pack'] : [];
 
@@ -272,6 +280,7 @@ class Kaborovsky extends CI_Controller
 			'i' => count($INSERT),
 			'u' => count($UPDATE),
 		]);
+		die;
 
 	}
 
@@ -574,12 +583,12 @@ class Kaborovsky extends CI_Controller
 	{
 //		$productIds = [5696];
 //		$products = [];
-//		if (count($productIds) > 0) {
-//			$this->db->where_in('id', $productIds);
+		if (count($productIds) > 0) {
+			$this->db->where_in('id', $productIds);
 			$this->db->where('postavchik', 'Kaborovsky');
 //			$this->db->limit(10000, 50000);
 			$products = $this->db->get('products')->result_array();
-//		}
+		}
 		if (count($products) > 0) {
 			$propertyNamesForStones = [
 
@@ -687,8 +696,6 @@ class Kaborovsky extends CI_Controller
 
 			if (count($upd)) {
 				$this->db->update_batch('products', $upd, 'id');
-				var_dump(count($upd));
-				die;
 			}
 		}
 		return true;
