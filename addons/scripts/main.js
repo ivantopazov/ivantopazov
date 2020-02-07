@@ -14,6 +14,12 @@ window.MAIN = {
 			MAIN.updateView(response);
 		});
 	},
+	
+	updateHeaderInfo2: function () {
+		CART.favorite(function (response) {
+			MAIN.updateView2(response);
+		});
+	},
 
 	messagesDeliver: function () {
 		CART.list(function (response) {
@@ -54,12 +60,35 @@ window.MAIN = {
 
 		this.messagesDeliver();
 	},
+	
+	// Обновить информацию в шапке избранного
+	updateView2: function (response) {
+		var copy = [];
+		response.forEach(function(item){
+		  copy.push(item.id);
+		});
+
+		response = Array.from(new Set(copy));
+
+		var count = 0;
+		for (var key in response) {
+			count = Number(count + 1);
+		}
+		$('.favoriteSumma').html(count);
+	},
 
 	//Выполнить после обавления товара в корзину
 	addCartCallback: function (response) {
 		MAIN.updateView(response);
 		$('#modal_cart_addet').modal();
 	},
+	
+	//Выполнить после добавления в избраннное
+	addFavorite: function (response) {
+		CART.addFavorite(response);
+		$('#modal_cart_favorite').modal();
+		$('.favoriteSumma').html($('.favoriteSumma').html()*1+1);
+	},	
 
 	speedAddCart: function (item) {
 		window.speedCart = [];
@@ -84,7 +113,39 @@ window.MAIN = {
 			MAIN.setPromocodeInfo(response);
 		});
 	},
-
+	
+	// Загрузка позиций избранного
+	cartPagesWithRefreshFavorite: function () {
+		CART.favorite(function (response) {
+			$.ajax({
+				type: 'post',
+				url: '/favorite/refresh',
+				data: {
+					favorite: response,
+				},
+				dataType: 'json',
+				success: function (data) {
+					console.log(data);
+					if (data.success) {
+						TPL.GET_TPL('pages/favorite/items', {items: data.favorite}, function (t) {
+							$('.cartBlock .cartList').html(t);
+						});
+						$('.cartBlock').removeClass('hidden');
+						$('#emptyCart').addClass('hidden');
+					} else {
+						$('.cartBlock').addClass('hidden');
+						$('#emptyCart').removeClass('hidden');
+					}
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					FNC.errorConnect(errorThrown);
+				},
+			});
+			
+			MAIN.updateView2(response);
+		});
+	},
+	
 	// Загрузка позиций корзины с предварительным обновлением цен
 	cartPagesWithRefresh: function () {
 		var promocode = CART.promocode();
