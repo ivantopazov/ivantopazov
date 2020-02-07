@@ -44,7 +44,6 @@
 
 </style>
 
-
 <div class="row visible-xs" style="margin:0px;">
 	<div class="col-xs-6 col-sm-3 col-md-3  col-lg-2 text-center">
 		<a onclick="history.back(); return false;" href="#" class="back-to-catalog">Вернуться<br />в каталог</a>
@@ -55,17 +54,19 @@
 </div>
 <div class="clearfix">&nbsp;</div>
 
-
 <section class="hidden_overflow">
 	<div class="container content">
 		<div class="bg-page">
 
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+				<div class="visible-sm">
+					<a onclick="history.back(); return false;" href="#" class="back-to-catalog">&lt; Вернуться в каталог</a>
+				</div>
 				<div style="text-align: center; margin-bottom: 10px">
 
 
 					{% if product.salle_procent > 0 %}
-					<span class="label label-pill label-danger" style="position: absolute; background-color: #ffa800; margin-top: 50px; padding:8px 18px; font-size:24px; right: 45px;">- {{product.salle_procent}}%</span>
+					<span class="label label-pill label-danger" style="position: absolute; background-color: #ffa800; margin-top: 50px; padding:8px 18px; font-size:24px; right: 15px;">- {{product.salle_procent}}%</span>
 					{% endif %}
 
 					{% if ( product.modules.salePrice.VAL_00.orig|replace({' ': ''}) < 20000 or product.modules.salePrice.VAL_00.salePrice|replace({' ': ''}) < 20000 ) and product.id % 2 == 0 %}
@@ -286,20 +287,26 @@
 
 
 					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-4"> 
 							<a href="#" class=" btn-cart Conv_CRC55  btn-block text-center ZAG p15 px16 mt15" onclick="yaCounter45556173.reachGoal('cart-product');" style="background:#ffa800; border:0;"
 							   click="CART.add({ id:{{product.id}}, title:'{{product.title}}', price:{{price}}, qty:{type:'plus', value:1}, orig: { image:'{{product.modules.photos[0].photo_name}}', articul:'{{product.articul}}', link:'{{product.modules.linkPath}}'}}, MAIN.addCartCallback );">Добавить
 								в корзину</a>
 						</div>
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
 							<a href="#" class="btn-cart_default Conv_CRC55 btn-block text-center ZAG p15 px16 mt15" onclick="yaCounter45556173.reachGoal('quick-order');"
-							   data-toggle="modal" data-target="#modal_speedOrder" href="#" 
+							   data-toggle="modal" data-target="#modal_speedOrder" href="#"
 							   click="MAIN.speedAddCart({ id:{{product.id}}, title:'{{product.title}}', price:{{price}}, qty:1, orig: { image:'{{product.modules.photos[0].photo_name}}', articul:'{{product.articul}}', link:'{{product.modules.linkPath}}'}});"
 							>
 								Быстрый заказ
 							</a>
 						</div>
-
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+							<a href="#" class="btn-cart_default Conv_CRC55 btn-block text-center ZAG p15 px16 mt15" onclick="" 
+							   click="MAIN.addFavorite({ id:{{product.id}}, title:'{{product.title}}', price:{{product.modules.price_actual.cop}}, salePrice:{{product.modules.salePrice.COP.salePrice}}, orig: { image:'{{product.modules.photos[0].photo_name}}', articul:'{{product.articul}}', link:'{{product.modules.linkPath}}'}});"
+							>
+								&#9825;<br>Отложить
+							</a>
+						</div>
 						<!--div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 							<a href="#" class="btn-cart_default Conv_CRC55  btn-block text-center ZAG p15 px20 mt15"
 							data-toggle="modal" data-target="#modal_creditOrder" href="#" click="MAIN.CreditAddCart({ id:{{product.id}}, title:'{{product.title}}', price:{{product.modules.price_actual[0].l[0].v.cop}}, qty:1, orig: { image:'{{product.modules.photos[0].photo_name}}', articul:'{{product.articul}}', link:'{{product.modules.linkPath}}'}});"
