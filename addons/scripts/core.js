@@ -360,6 +360,36 @@ $(function () {
 					}
 
 				},
+				
+				favorite: function (callFnc, onlyIds) {
+
+					callFnc = callFnc || false;
+					onlyIds = !!onlyIds;
+					var response = [];
+
+					var _favorite = localStorage.getItem('favorite');
+					if (_favorite === 'undefined' || !_favorite) {
+						_favorite = '[]';
+						localStorage.setItem('favorite', _favorite);
+					}
+
+					var favorite = $.parseJSON(_favorite);
+
+					if (favorite.length > 0) {
+						for (var key in favorite) {
+							var val = favorite[key];
+							var x = (LS.fnc._type_of(val) === 'object') ? val : $.parseJSON(val);
+							response.push(onlyIds ? x.id : x);
+						}
+					}
+
+					if (callFnc) {
+						callFnc(response);
+					} else {
+						return response;
+					}
+
+				},
 
 				promocode: function (callFnc) {
 
@@ -397,6 +427,32 @@ $(function () {
                     orig : {} /// пользов. значения
 
                 */
+				addFavorite: function (AddItem) {
+					//localStorage.clear();
+					var AddItem = AddItem || false;
+					var callFnc = callFnc || false;
+					if (AddItem != false) {
+						var favorite = this.favorite(false);
+
+						var ID = (AddItem['id']) ? AddItem.id : false;
+						var TITLE = (AddItem['title']) ? AddItem.title : false;
+						var PRICE = (AddItem['price']) ? AddItem.price : false;
+						var SALEPRICE = (AddItem['salePrice']) ? AddItem.salePrice : false;
+						var ORIG = (AddItem['orig']) ? AddItem.orig : false;
+						
+						favorite.push({
+							id: ID,
+							title: TITLE,
+							price: PRICE,
+							salePrice: SALEPRICE,
+							orig: ORIG,
+						});
+						localStorage.setItem('favorite', LS.fnc._convert_value(favorite));
+						this.header_update();
+						if (callFnc !== false) callFnc(list);
+					}
+				},
+				
 				add: function (AddItem, callFnc) {
 
 					var AddItem = AddItem || false;
@@ -498,6 +554,33 @@ $(function () {
 						callFnc(newList);
 					} else {
 						return newList;
+					}
+
+				},
+				
+				removeFavorite: function (ID, callFnc) {
+
+					var callFnc = callFnc || false;
+					var favorite = this.favorite(false);
+					var newFavorite = [];
+
+					if (favorite.length > 0) {
+						for (var key in favorite) {
+							var val = favorite[key];
+							if (val.id.toString() !== ID.toString()) {
+								newFavorite.push(val);
+							}
+						}
+						localStorage.setItem('favorite', LS.fnc._convert_value(newFavorite));
+						if (callFnc !== false) callFnc(newFavorite);
+					}
+
+					this.header_update();
+console.log(newFavorite);
+					if (callFnc) {
+						callFnc(newFavorite);
+					} else {
+						return newFavorite;
 					}
 
 				},
