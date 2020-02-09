@@ -291,7 +291,7 @@ class Products extends CI_Controller
 					'description', 'seo_title', 'seo_desc',
 					'seo_keys', 'view', 'qty', 'salle_procent',
 					'salle_procent', 'sex', 'size', 'weight', //'filters',
-					'filter_metall', 'filter_kamen', 'filter_sex', 'filter_carats', 'filter_design',
+					'filter_zoloto', 'filter_kamen', 'filter_sex', 'filter_carats', 'filter_design',
 					'postavchik', 'parser', 'proba', 'modules'],
 				'module' => true,
 				'modules' => [[
@@ -358,7 +358,7 @@ class Products extends CI_Controller
 
 					$filterSettings = ($filterItem) ? json_decode($filterItem['labels'], true) : [];
 //					$setFilters = ($product['filters']) ? json_decode($product['filters'], true) : [];
-					$filterFields = ['metall', 'kamen', 'sex', 'carats', 'design']; // ,'forma_vstavki'
+					$filterFields = ['zoloto', 'kamen', 'sex', 'carats', 'design']; // ,'forma_vstavki'
 
 					foreach ($filterSettings as $k => $filterSetting) {
 						foreach ($filterSetting['data'] as $kData => $vData) {

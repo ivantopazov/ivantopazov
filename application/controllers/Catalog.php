@@ -1380,6 +1380,7 @@ class Catalog extends CI_Controller
 	}
 
 	// Блок вам понравится
+	// ToDo: если этот блок понадобится, нужно править данные для фильтров
 	public function getVamPonravitsa($prodID = false, $j = true)
 	{
 
