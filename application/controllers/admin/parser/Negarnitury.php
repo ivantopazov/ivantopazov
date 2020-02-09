@@ -299,15 +299,19 @@ class Negarnitury extends CI_Controller
 //		Сейчас цена полная
 		$price_zac = (float)str_replace(" ", "", $data['price']);
 		$price_zac = (int)($price_zac * 100);
+		$price_roz = (int)($price_zac * 2.5);
+		$salle_procent = rand(4, 8) * 5;
+		$price_real = (int)($price_roz * (100 - $salle_procent) / 100);
 
 		$item = [
 			'articul' => $data['article'],
 			'cat' => $categoryId,
 			'title' => $title,
 			'price_zac' => $price_zac,
-			'price_roz' => $price_zac * 2.5,
+			'price_roz' => $price_roz,
+			'price_real' => $price_real,
 			'current' => 'RUR',
-			'salle_procent' => rand(4, 8) * 5,
+			'salle_procent' => $salle_procent,
 			'view' => '1',
 			'qty' => '1',
 			'qty_empty' => '1',
@@ -319,7 +323,10 @@ class Negarnitury extends CI_Controller
 			'proba' => "585",
 			'params' => json_encode($params, JSON_UNESCAPED_UNICODE),
 			'size' => $data["size"],
-			'filters' => json_encode($filter, JSON_UNESCAPED_UNICODE),
+//			'filters' => json_encode($filter, JSON_UNESCAPED_UNICODE),
+			'filter_metall' => json_encode($filter['metall'], JSON_UNESCAPED_UNICODE),
+			'filter_kamen' => json_encode($filter['kamen'], JSON_UNESCAPED_UNICODE),
+			'filter_sex' => json_encode($filter['sex'], JSON_UNESCAPED_UNICODE),
 			'moderate' => '2',
 			'lastUpdate' => time(),
 			'optionLabel' => json_encode([
@@ -478,51 +485,42 @@ class Negarnitury extends CI_Controller
 
 	private function filter($data, $drag = [])
 	{
-		$filter = [[
-			'item' => 'metall',
-			'values' => [],
-		], [
-			'item' => 'kamen',
-			'values' => [],
-		], [
-			'item' => 'forma_vstavki',
-			'values' => [],
-		], [
-			'item' => 'sex',
-			'values' => [],
-		], [
-			'item' => 'size',
-			'values' => [],
-		]];
+		$filter = [
+			'metall' => [],
+			'kamen' => [],
+//			'forma_vstavki' => [],
+			'sex' => [],
+//			'size' => [],
+		];
 
-		$filter[0]["values"][] = "krasnZoloto";
+		$filter['metall'][] = "krasnZoloto";
 
 		foreach ($drag as $dragItem) {
 			foreach ($this->stones as $stone) {
 				$regexp = "/{$stone['title']}/i";
 				if (preg_match($regexp, $dragItem['kamen'])) {
-					$filter[1]["values"][] = $stone['translit'];
+					$filter['kamen'][] = $stone['translit'];
 					break;
 				}
 			}
 		}
 		// 'empty','no_empty'
-		if (count($filter[1]['values']) > 0) {
-			$filter[1]['values'][] = 'no_empty';
+		if (count($filter['kamen']) > 0) {
+			$filter['kamen'][] = 'no_empty';
 		} else {
-			$filter[1]['values'][] = 'empty';
+			$filter['kamen'][] = 'empty';
 		}
 
 		if ($data["type"] == "Серьги детские") {
-			$filter[3]["values"][] = "kids";
+			$filter['sex'][] = "kids";
 		} else {
-			$filter[3]["values"][] = "woman";
+			$filter['sex'][] = "woman";
 		}
 
-		$size = str_replace(",", "_", $data["size"]);
-		$size = str_replace(".", "_", $size);
-
-		$filter[4]["values"][] = $size;
+//		$size = str_replace(",", "_", $data["size"]);
+//		$size = str_replace(".", "_", $size);
+//
+//		$filter['size'][] = $size;
 
 		return $filter;
 	}
