@@ -36,6 +36,61 @@ class Catalog extends CI_Controller
 	}
 
 	// Серверное извлечение всех алиасов из URL
+
+	/**
+	 * получение фильтра по ID
+	 *
+	 * @param int $filterId
+	 * @return array
+	 */
+	protected function getFilter($filterId)
+	{
+		$filter = $this->mdl_category->queryData([
+			'return_type' => 'ARR1',
+			'table_name' => 'products_filters',
+			'where' => [
+				'method' => 'AND',
+				'set' => [
+					['item' => 'id', 'value' => $filterId],
+				],
+			],
+			'labels' => ['id', 'labels'],
+			'module' => false,
+		]);
+
+		//$r['filter_id'] = ( $filter ) ? $filter['id']: false;
+
+		return $filter ? json_decode($filter['labels'], true) : [];
+	}
+
+	/**
+	 * парсинг фильтра
+	 *
+	 * @param array $filter
+	 * @return array
+	 */
+	protected function parseFilter($filter)
+	{
+		$result = [];
+
+		foreach ($filter as $filterItem) {
+			if (!$filterItem['variabled']) {
+				continue;
+			}
+			$dataOrType = $filterItem['type'] == 'range-values' ? $filterItem['type'] :
+				(isset($filterItem['data']) && is_array($filterItem['data']) ?
+					array_flip(array_map(function ($dataItem) {
+						return $dataItem['variabled'];
+					}, $filterItem['data'])) :
+					[]
+				);
+
+			$result[$filterItem['variabled']] = $dataOrType;
+		}
+
+		return $result;
+	}
+
 	private function ExtractTree()
 	{
 
@@ -51,10 +106,8 @@ class Catalog extends CI_Controller
 		$logicData = $this->getLogicData($tree, false);
 
 		if ($logicData['error404'] !== true) {
-			if (!empty($logicData['item'])) {
-				$variable = 'view_' . $logicData['method'];
-				self::$variable($logicData);
-			}
+			$variable = $logicData['method'];
+			self::$variable($logicData);
 		} else {
 			redirect('/catalog');
 		}
@@ -68,7 +121,6 @@ class Catalog extends CI_Controller
 		$tree = (isset($this->post['tree'])) ? $this->post['tree'] : $tree;
 		$r = [
 			'item' => [],
-			'error404' => true,
 			'brb' => [
 				[
 					'name' => 'Каталог',
@@ -80,8 +132,8 @@ class Catalog extends CI_Controller
 
 		if (count($tree) > 0) {
 
-			$tovar = $this->mdl_product->queryData([
-				'return_type' => 'ARR2',
+			$product = $this->mdl_product->queryData([
+				'return_type' => 'ARR1',
 				'where' => [
 					'method' => 'AND',
 					'set' => [[
@@ -98,68 +150,119 @@ class Catalog extends CI_Controller
 				]],
 			]);
 
-			$link_bs = '/catalog';
-			foreach ($tree as $v) {
-				$link_bs .= '/' . $v;
-			}
+			$linkCurrent = '/catalog/' . implode('/', $tree);
 
-			if (count($tovar) > 0) {
+			if ($product) {
 				array_pop($tree);
-				$r['method'] = 'product';
-				$r['item'] = $tovar[0];
-				$r['error404'] = ($link_bs === $r['item']['modules']['linkPath']) ? false : true;
+				$r['method'] = 'view_product';
+				$r['item'] = $product;
+				$r['error404'] = ($linkCurrent === $r['item']['modules']['linkPath']) ? false : true;
 			} else {
-
-				$category = $this->mdl_category->queryData([
-					'return_type' => 'ARR2',
-					'where' => [
-						'method' => 'AND',
-						'set' => [
-							['item' => 'aliase', 'value' => $lastAliase],
-						],
-					],
-					'labels' => ['id', 'aliase', 'name', 'desription'],
-				]);
-
-				if (count($category) > 0) {
-					array_pop($tree);
-					$r['method'] = 'category';
-					$r['item'] = $category[0];
-					$link_par = $this->mdl_category->getParentCatsTree([$category[0]['id']]);
-					$r['error404'] = ($link_bs === $link_par[$category[0]['id']]) ? false : true;
-				}
-			}
-
-			if (count($tree) > 0) {
-
-				$cats = $this->mdl_category->queryData([
-					'return_type' => 'ARR2',
-					'in' => [
-						'method' => 'AND',
-						'set' => [
-							['item' => 'aliase', 'values' => $tree],
-						],
-					],
-					'labels' => false,
-				]);
-
+				// нас интересует категория последнего уровеня (сейчас каталог одноуровневый, но может быть и многоуровневым)
+				// родительские категории добавляются в хлебные крошки
+				$category = null;
+				$parentCategoryId = 0;
 				$link = '/catalog';
-				$par_id = 0;
-				foreach ($cats as $k => $v) {
-
-					if ($par_id == $v['parent_id']) {
-						$par_id = $v['id'];
-
-						$link .= '/' . $v['aliase'];
-
+				do {
+					$categoryAliase = reset($tree);
+					$categoryCurrent = $this->mdl_category->queryData([
+						'return_type' => 'ARR1',
+						'where' => [
+							'method' => 'AND',
+							'set' => [
+								['item' => 'aliase', 'value' => $categoryAliase],
+								['item' => 'parent_id', 'value' => $parentCategoryId],
+							],
+						],
+						'labels' => ['id', 'aliase', 'name', 'desription', 'filter_id'],
+					]);
+					if ($categoryCurrent) {
+						array_shift($tree);
+						$category = $categoryCurrent;
+						$parentCategoryId = $categoryCurrent['id'];
+						$link .= '/' . $categoryCurrent['aliase'];
 						$r['brb'][] = [
-							'name' => $v['name'],
+							'name' => $categoryCurrent['name'],
 							'link' => $link,
 						];
+					}
+				} while ($categoryCurrent);
 
+				// ToDo: для главной страницы доделать!
+				if ($category) {
+					// удаляем текущую категорию из хлебных крошек
+					array_pop($r['brb']);
+				}
+
+				if (count($tree) == 1) { // значит установлены фильтры (в последней части урла)
+
+					// значения фильтра в урле бывают в виде val-1-i-val2-filter1_val3-i-val4-filter2
+					// то есть группы фильтров разделены '_', имя фильтра в группе идет в конце через дефис
+					// значения фильтров разделены '-i-', сами значения могут содержать дефис
+
+					$filtersFromUrl = explode('_', trim(array_shift($tree)));
+
+					if (count($filtersFromUrl)) {
+
+						$filter = $this->getFilter($category ? $category['filter_id'] : 11);
+						$filter = $this->parseFilter($filter);
+
+						$filterSettings = [];
+
+						foreach ($filtersFromUrl as $urlPart) {
+							$filterParts = explode('-', $urlPart);
+							$filterName = array_pop($filterParts);
+
+							if (!isset($filter[$filterName]) || !count($filterParts)) {
+								$r['error404'] = true;
+								break;
+							}
+
+							$filterParts = implode('-', $filterParts);
+
+							if ($filter[$filterName] == 'range-values') {
+								preg_match('/^(?:from-(?<from>\d+))?-?(?:to-(?<to>\d+))?$/', $filterParts, $matches);
+
+								if (!isset($matches['from']) && !isset($matches['to'])) {
+									$r['error404'] = true;
+									break;
+								}
+
+								$filterSettings[$filterName] = $matches['from'] . '|' . (isset($matches['to']) ? $matches['to'] : '');
+							} else {
+								$filterParts = explode('-i-', $filterParts);
+
+								if (is_array($filter[$filterName])) {
+									foreach ($filterParts as $filterPart) {
+										if (!isset($filter[$filterName][$filterPart])) {
+											$r['error404'] = true;
+											break 2;
+										}
+									}
+									$filterSettings[$filterName] = implode('|', $filterParts);
+								}
+							}
+						}
+						$this->get['f'] = isset($this->get['f']) && is_array($this->get['f']) ?
+							array_merge($filterSettings, $this->get['f']) : $filterSettings;
+					} else {
+						$r['error404'] = true;
+					}
+				}
+				if (!isset($r['error404']) || !$r['error404']) {
+					$r['error404'] = false;
+					if ($category) {
+						$r['method'] = 'view_category';
+						$r['item'] = $category;
+					} else {
+						$r['method'] = 'index';
 					}
 				}
 			}
+		}
+
+		if (!isset($r['error404'])) {
+			$r['error404'] = false;
 		}
 
 		if ($j === true) {
@@ -173,7 +276,6 @@ class Catalog extends CI_Controller
 	// Вывести главную страницу каталога
 	public function index()
 	{
-
 		$start = microtime(true);
 
 		$page_var = 'catalog';
@@ -226,7 +328,7 @@ class Catalog extends CI_Controller
 			'content' => $this->mdl_tpl->view('pages/catalog/home.html', [
 				'blocks' => $this->mdl_tpl->view('pages/catalog/filters/items.html', [
 					'items' => $getData['filter'],
-					'Cena' => $getData['cena'],
+					'price' => $getData['cena'],
 					'weight' => $getData['weight'],
 				], true),
 				'textSearch' => $getData['textSearch'],
@@ -466,8 +568,8 @@ class Catalog extends CI_Controller
 			$filterTitle = '';
 	//		$r['cena'] = [0, 90000];
 			$r['cena'] = [];
-			if (isset($this->get['f']['Cena'])) {
-				$prices = explode('|', $this->get['f']['Cena']);
+			if (isset($this->get['f']['price'])) {
+				$prices = explode('|', $this->get['f']['price']);
 				$r['cena'] = $prices;
 				list($price_from, $price_to) = $prices;
 				$price_from = (int)$price_from;
@@ -591,7 +693,7 @@ class Catalog extends CI_Controller
 			'content' => $this->mdl_tpl->view('pages/catalog/home.html', [
 				'blocks' => $this->mdl_tpl->view('pages/catalog/filters/items.html', [
 					'items' => $getData['filter'],
-					'Cena' => $getData['cena'],
+					'price' => $getData['cena'],
 					'weight' => $getData['weight'],
 				], true),
 				//'snipets' => ($getData['snipet'] !== false) ? $this->mdl_tpl->view('pages/catalog/cats_snipets/' . $data['item']['aliase'] . '.html', array(), true) : '',
@@ -674,7 +776,7 @@ class Catalog extends CI_Controller
 
 		$sffix = $query_string;
 
-		$cat_item = false;
+		$category = false;
 
 		if ($catId !== false) {
 
@@ -717,7 +819,7 @@ class Catalog extends CI_Controller
 				'module' => false,
 			]);
 
-			$cat_item = $this->mdl_category->queryData([
+			$category = $this->mdl_category->queryData([
 				'return_type' => 'ARR1',
 				'where' => [
 					'method' => 'AND',
@@ -730,22 +832,7 @@ class Catalog extends CI_Controller
 			]);
 		}
 
-		$filter = $this->mdl_category->queryData([
-			'return_type' => 'ARR1',
-			'table_name' => 'products_filters',
-			'where' => [
-				'method' => 'AND',
-				'set' => [
-					['item' => 'id', 'value' => $cat_item ? $cat_item['filter_id'] : 11],
-				],
-			],
-			'labels' => ['id', 'labels'],
-			'module' => false,
-		]);
-
-		//$r['filter_id'] = ( $filter ) ? $filter['id']: false;
-
-		$filter = ($filter) ? json_decode($filter['labels'], true) : [];
+		$filter = $this->getFilter($category ? $category['filter_id'] : 11);
 
 		$option = [
 			'return_type' => 'ARR2+',
@@ -926,8 +1013,8 @@ class Catalog extends CI_Controller
 		$filterTitle = '';
 //			$r['cena'] = [0, 90000];
 		$r['cena'] = [];
-		if (isset($this->get['f']['Cena'])) {
-			$prices = explode('|', $this->get['f']['Cena']);
+		if (isset($this->get['f']['price'])) {
+			$prices = explode('|', $this->get['f']['price']);
 			$r['cena'] = $prices;
 			list($price_from, $price_to) = $prices;
 			$price_from = (int)$price_from;
@@ -1054,8 +1141,8 @@ class Catalog extends CI_Controller
 					'product' => $product,
 					'brand_desc' => $product['postavchik'] ? $this->mdl_tpl->view('pages/catalog/brands_descriptions/' . $product['postavchik'] . '.html', [], true) : '',
 					'counter' => $dataItem['timerCount'],
-					'sizes' => $dataItem['sizes'],
-					'otherSizes' => $dataItem['otherSizes'],
+					'sizes' => isset($dataItem['sizes']) ? $dataItem['sizes'] : [],
+					'otherSizes' => isset($dataItem['otherSizes']) ? $dataItem['otherSizes'] : [],
 					'header_title' => $product['title'],
 					'oneString' => rand(2000, 1000000) . '_' . rand(2000, 1000000),
 					'addons_folder' => $this->mdl_stores->getСonfigFile('addons_folder'),
@@ -1100,7 +1187,6 @@ class Catalog extends CI_Controller
 	// Получить данные о товаре
 	public function getProductData($productId = false, $productAliase = false, $j = true)
 	{
-
 		$Id = (isset($this->post['productId'])) ? $this->post['productId'] : $productId;
 		$Aliase = (isset($this->post['productAliase'])) ? $this->post['productAliase'] : $productAliase;
 
@@ -1369,7 +1455,7 @@ class Catalog extends CI_Controller
 				'labels' => ['id', 'aliase', 'title', 'salle_procent', 'sex', 'modules'],
 				'setFilters' => [
 					[
-						'item' => 'Cena',
+						'item' => 'price',
 						'type' => 'range-values',
 						'values' => [$price_ot, $price_do],
 					], [

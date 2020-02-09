@@ -267,22 +267,22 @@ class Products extends CI_Controller
 	}
 
 	// Информация о товаре для редактирования ( Или добавления )
-	public function getDataEdit($ProductID = false, $json = true)
+	public function getDataEdit($productID = false, $json = true)
 	{
 
 		$this->access_dynamic();
 
-		$ProductID = (isset($this->post['gid'])) ? $this->post['gid'] : $ProductID;
+		$productID = (isset($this->post['gid'])) ? $this->post['gid'] : $productID;
 
 		$r = [];
-		if ($ProductID > 0) {
-			$PROD = $this->mdl_product->queryData([
+		if ($productID > 0) {
+			$product = $this->mdl_product->queryData([
 				'return_type' => 'ARR1',
 				'where' => [
 					'method' => 'AND',
 					'set' => [[
 						'item' => 'id',
-						'value' => $ProductID,
+						'value' => $productID,
 					]],
 				],
 				'labels' => [
@@ -290,7 +290,8 @@ class Products extends CI_Controller
 					'qty_empty', 'prices_empty', 'title',
 					'description', 'seo_title', 'seo_desc',
 					'seo_keys', 'view', 'qty', 'salle_procent',
-					'salle_procent', 'sex', 'size', 'weight', 'filters',
+					'salle_procent', 'sex', 'size', 'weight', //'filters',
+					'filter_metall', 'filter_kamen', 'filter_sex', 'filter_carats', 'filter_design',
 					'postavchik', 'parser', 'proba', 'modules'],
 				'module' => true,
 				'modules' => [[
@@ -310,10 +311,10 @@ class Products extends CI_Controller
 				]],
 			]);
 
-			if ($PROD) {
+			if ($product) {
 
-				$r['product'] = $PROD;
-				$r['allCats'] = $this->mdl_category->allFindCats($PROD['cat'], [
+				$r['product'] = $product;
+				$r['allCats'] = $this->mdl_category->allFindCats($product['cat'], [
 					'id', 'name', 'parent_id', 'active',
 				]);
 				$r['qty_empty_status'] = $this->mdl_product->queryData([
@@ -329,20 +330,20 @@ class Products extends CI_Controller
 
 				$r['filter'] = [];
 
-				if ($PROD['cat'] > 0) {
+				if ($product['cat'] > 0) {
 					$cat_item = $this->mdl_category->queryData([
 						'return_type' => 'ARR1',
 						'where' => [
 							'method' => 'AND',
 							'set' => [
-								['item' => 'id', 'value' => $PROD['cat']],
+								['item' => 'id', 'value' => $product['cat']],
 							],
 						],
 						'labels' => ['id', 'filter_id'],
 						'module' => false,
 					]);
 
-					$filter = $this->mdl_category->queryData([
+					$filterItem = $this->mdl_category->queryData([
 						'return_type' => 'ARR1',
 						'table_name' => 'products_filters',
 						'where' => [
@@ -355,32 +356,39 @@ class Products extends CI_Controller
 						'module' => false,
 					]);
 
-					$filter = ($filter) ? json_decode($filter['labels'], true) : [];
-					$setFilters = ($PROD['filters']) ? json_decode($PROD['filters'], true) : [];
+					$filterSettings = ($filterItem) ? json_decode($filterItem['labels'], true) : [];
+//					$setFilters = ($product['filters']) ? json_decode($product['filters'], true) : [];
+					$filterFields = ['metall', 'kamen', 'sex', 'carats', 'design']; // ,'forma_vstavki'
 
-					foreach ($filter as $k => $v) {
-						foreach ($v['data'] as $kData => $vData) {
-							$filter[$k]['data'][$kData]['check'] = 'off';
+					foreach ($filterSettings as $k => $filterSetting) {
+						foreach ($filterSetting['data'] as $kData => $vData) {
+							$filterSettings[$k]['data'][$kData]['check'] = 'off';
 						}
 					}
 
-					foreach ($filter as $k => $v) {
-						foreach ($setFilters as $sfv) {
-							if ($v['variabled'] === $sfv['item']) {
+					foreach ($filterSettings as $k => $filterSetting) {
+						if (!in_array($filterSetting['variabled'], $filterFields)) {
+							unset($filterSettings[$k]);
+							continue;
+						}
+						$filterField = "filter_{$filterSetting['variabled']}";
+						$filterProductData = $product[$filterField] ? json_decode($product[$filterField], true) : [];
+//						foreach ($setFilters as $sfv) {
+//							if ($filterSetting['variabled'] === $sfv['item']) {
 
-								foreach ($v['data'] as $kData => $vData) {
-									if (in_array($vData['variabled'], $sfv['values'])) {
-										$filter[$k]['data'][$kData]['check'] = 'on';
-									} else {
-										$filter[$k]['data'][$kData]['check'] = 'off';
-									}
-								}
-
+						foreach ($filterSetting['data'] as $kData => $vData) {
+							if (in_array($vData['variabled'], $filterProductData)) {
+								$filterSettings[$k]['data'][$kData]['check'] = 'on';
+							} else {
+								$filterSettings[$k]['data'][$kData]['check'] = 'off';
 							}
 						}
+
+//							}
+//						}
 					};
 
-					$r['filter'] = $filter;
+					$r['filter'] = $filterSettings;
 
 				}
 
@@ -618,22 +626,38 @@ class Products extends CI_Controller
 
 	}
 
-	// Форма редактирования СЕО данных товара
+	// Форма редактирования данных для фильтров товара
 	public function actEditProductFilters()
 	{
 
 		$this->access_dynamic();
 		$r = ['err' => '1', 'mess' => 'Неизвестная ошибка. Перезагрузите страницу!'];
 		$setFiltersList = (isset($this->post['f'])) ? $this->post['f'] : [];
+
 		$product_id = (isset($this->post['product_id'])) ? $this->post['product_id'] : false;
+
 		if ($product_id !== false) {
-			$this->mdl_db->_update_db("products", "id", $product_id, [
-				'filters' => json_encode($setFiltersList),
-			]);
+
+			$newFilterSettings = [];
+			foreach($setFiltersList as $setFiltersItem) {
+				$filterField = "filter_{$setFiltersItem['item']}";
+
+				// каратность хранится в виде массива чисел, а не строк
+				if ($setFiltersItem['item'] == 'carats') {
+					$setFiltersItem['values'] = array_map(function($el) {
+						return (int)$el;
+					}, $setFiltersItem['values']);
+				}
+
+				$newFilterSettings[$filterField] = json_encode($setFiltersItem['values']);
+			}
+
+			$this->mdl_db->_update_db("products", "id", $product_id, $newFilterSettings);
+
 			$r = ['err' => '0', 'mess' => 'Установки фильтрации товара - обновлены'];
 		}
-		$this->mdl_helper->__json($r);
 
+		$this->mdl_helper->__json($r);
 	}
 
 	// Форма редактирования фотографий товара
