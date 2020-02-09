@@ -1,19 +1,23 @@
 $(function () {
 
+	var sendFilter = function() {
+		var db_block = $(this).parents('div[data-parent]').attr('data-parent');
+
+		setTimeout(function(){
+			Ev.catalog.getFiltersParam( db_block );
+		},100);
+	};
+
 	$.getScript('/addons/scripts/plugins/iCheck/icheck.min.js', function () {
 		$('input.i-checks')
-			/*.on('ifChanged', function (event) {
-				var db_block = $(this).parents('div[data-parent]').attr('data-parent');
-
-				setTimeout(function(){
-					Ev.catalog.getFiltersParam( db_block );
-				},100);
-			})*/
+			.on('ifChanged', sendFilter)
 			.iCheck({
 				checkboxClass: 'icheckbox_square-green',
 				radioClass: 'iradio_square-green',
 			});
 	});
+
+	$('input.form-control').on('blur', sendFilter);
 
 	$('.expandable').expander({
 		slicePoint: 70,
