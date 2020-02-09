@@ -56,7 +56,7 @@ class Mdl_product extends CI_Model
 				'limit', 'pagination',
 				'price_actual',
 				'prices_all', 'photos',
-				'reviews', 'linkPath', 'salePrice',
+				/*'reviews', */'linkPath', 'salePrice',
 				'emptyPrice', 'qty_empty_status', 'paramsView',
 			],
 			'module' => false,
@@ -281,7 +281,7 @@ class Mdl_product extends CI_Model
 				'limit', 'pagination',
 				'price_actual',
 				'prices_all', 'photos',
-				'reviews', 'linkPath', 'salePrice',
+				/*'reviews', */'linkPath', 'salePrice',
 				'emptyPrice', 'qty_empty_status', 'paramsView',
 			],
 			'module' => false,
@@ -615,7 +615,7 @@ class Mdl_product extends CI_Model
 
 	}
 
-	// Модуль возвращает все отзывы к товару
+	// Модуль подготавливает к выводу описание вставок
 	public function mod_drags($item = 'drags', $option = array())
 	{
 

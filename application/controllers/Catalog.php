@@ -861,7 +861,7 @@ class Catalog extends CI_Controller
 			'module_queue' => [
 				'price_actual',
 				'limit', 'pagination',
-				'prices_all', 'photos', 'reviews', 'linkPath', 'salePrice',
+				'prices_all', 'photos', /*'reviews', */'linkPath', 'salePrice',
 				'emptyPrice', 'qty_empty_status', 'paramsView',
 			],
 			'module' => true,
@@ -1242,11 +1242,11 @@ class Catalog extends CI_Controller
 					'option' => [
 						'no_images_view' => 1,
 					],
-				], [
+				],/* [
 					'module_name' => 'reviews',
 					'result_item' => 'reviews',
 					'option' => [],
-				], [
+				], */[
 					'module_name' => 'emptyPrice',
 					'result_item' => 'emptyPrice',
 					'option' => [

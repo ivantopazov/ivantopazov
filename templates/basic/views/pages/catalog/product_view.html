@@ -376,8 +376,10 @@
 					<li role="presentation" class="active"><a href="#tab1" aria-controls="tab1" role="tab"
 															  data-toggle="tab">Параметры</a></li>
 					<li role="presentation"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">Описание</a></li>
+<!--
 					<li role="presentation"><a href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">Отзывы</a>
 					</li>
+-->
 				</ul>
 			</div>
 			<!-- Tab panes -->
@@ -428,6 +430,7 @@
 					</div>
 				</div>
 
+<!--
 				<div role="tabpanel" class="tab-pane fade" id="tab3">
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 						<div class="px18 mt15 Conv_CRC55">
@@ -445,7 +448,7 @@
 									{% for item in product.modules.reviews %}
 
 									{% if item.moderate == 0 %}
-									<!--noindex-->
+									&lt;!&ndash;noindex&ndash;&gt;
 									{% endif %}
 
 									<div class="row {% if item.moderate < 1 %}hidden{% endif %}"
@@ -460,7 +463,7 @@
 									</div>
 
 									{% if item.moderate == 0 %}
-									<!--/noindex-->
+									&lt;!&ndash;/noindex&ndash;&gt;
 									{% endif %}
 
 									{% endfor %}
@@ -472,6 +475,7 @@
 						</div>
 					</div>
 				</div>
+-->
 			</div>
 
 
@@ -482,6 +486,7 @@
 	</div>
 </section>
 
+<!--
 <div aria-hidden="true" role="dialog" tabindex="-1" id="modal_new_otziv" class="modal inmodal fade">
 	<div class="modal-dialog modal-xs">
 		<div class="modal-content">
@@ -555,6 +560,7 @@
 		</div>
 	</div>
 </div>
+-->
 
 {% if otherSizes and otherSizes|length > 0 %}
 <div aria-hidden="true" role="dialog" tabindex="-1" id="modal_otherSize" class="modal inmodal fade">
