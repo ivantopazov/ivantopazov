@@ -302,6 +302,8 @@ class Negarnitury extends CI_Controller
 		$price_roz = (int)($price_zac * 2.5);
 		$salle_procent = rand(4, 8) * 5;
 		$price_real = (int)($price_roz * (100 - $salle_procent) / 100);
+		// округляем до 10
+		$price_real = (int)(round($price_real / 10) * 10);
 
 		$item = [
 			'articul' => $data['article'],
