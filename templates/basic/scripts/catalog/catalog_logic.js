@@ -73,6 +73,10 @@ $(function () {
 				};
 
 				var filter = {};
+				var filterNames = [];
+				$('div[data-block_name]').map(function (a, e) {
+					filterNames.push($(e).attr('data-block_name'));
+				});
 
 				$(DOM.parent + ' div[data-parent="' + db_block + '"] input[type="checkbox"]:checked').map(function (a, e) {
 					var parentBlock = $(e).parents('div[data-block_name]').attr('data-block_name');
@@ -111,7 +115,7 @@ $(function () {
 
 				if (getParam['l']) arr.l = getParam.l;
 
-				var setUrl = getPathWithFilter(filter) + '?' + decodeURIComponent($.param(arr));
+				var setUrl = getPathWithFilter(filter, filterNames) + '?' + decodeURIComponent($.param(arr));
 
 				FNC._set_url(setUrl);
 
@@ -121,11 +125,20 @@ $(function () {
 
 			},
 
+			resetFiltersParam: function (db_block) {
+				var db_block = db_block || 'filter-block';
+
+				$(DOM.parent + ' div[data-parent="' + db_block + '"] input[type="checkbox"]').prop("checked", false);
+				$(DOM.parent + '  div[data-parent="' + db_block + '"] input.form-control').val('');
+
+				Ev.catalog.getFiltersParam( db_block );
+			},
+
 		};
 
 	};
 
-	var getPathWithFilter = function (filter) {
+	var getPathWithFilter = function (filter, filterNames) {
 		// значения фильтра в урле бывают в виде val-1-i-val2-filter1_val3-i-val4-filter2
 		// то есть группы фильтров разделены '_', имя фильтра в группе идет в конце через дефис
 		// значения фильтров разделены '-i-', сами значения могут содержать дефис
@@ -144,7 +157,7 @@ $(function () {
 			var filterParts = pathPart.split('-');
 			var filterName = filterParts.pop();
 
-			return filter[filterName] && filterParts.length;
+			return filterNames.includes(filterName) && filterParts.length;
 		});
 
 		if (!filtersFromUrl.length) { // в урле нет значений фильтров

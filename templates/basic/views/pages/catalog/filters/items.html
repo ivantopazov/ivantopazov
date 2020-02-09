@@ -14,7 +14,7 @@
 					<div class="col-xs-12">
 						<div class="pull-right">
 							<span class="control-label">
-								<input type="text" id="{{link.variabled}}" name="{{link.variabled}}" class="form-control" value="{{ _context[item.variabled][kk] }}" placeholder="{{link.title}}" />
+								<input type="text" id="{{link.variabled}}" name="{{link.variabled}}" class="form-control" value="{{ _context[item.variabled][kk] }}" placeholder="{{link.title}}" autocomplete="off" />
 							</span>
 						</div>
 					</div>
@@ -36,7 +36,7 @@
 					<div class="pull-left">  
 						<div class="pull-right">
 							<span class="control-label">
-								<input type="checkbox" id="{{link.variabled}}" name="{{link.variabled}}" {% if link.check == 'on' %} checked {% endif %} class="i-checks" />
+								<input type="checkbox" id="{{link.variabled}}" name="{{link.variabled}}" {% if link.check == 'on' %} checked {% endif %} class="i-checks" autocomplete="off" />
 							</span>
 						</div>
 					</div>
