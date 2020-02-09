@@ -174,8 +174,8 @@ class Cart extends CI_Controller
 
 		$name = $user['fio'];
 		$phone = $user['phone'];
-		$email = $user['email'];
-		$address = $user['address'];
+//		$email = $user['email'];
+//		$address = $user['address'];
 
 		$tovary = array();
 		$summa = 0;
@@ -267,7 +267,7 @@ class Cart extends CI_Controller
 			'products_list' => json_encode($tovary),
 			'summa' => $summa,
 			'summa_with_promocode' => $summaWithPromocode,
-			'adress' => $address,
+//			'adress' => $address,
 			'time' => time(),
 			'date' => date("Y-m-d H:i:s"),
 			'status' => 0,
@@ -292,9 +292,9 @@ class Cart extends CI_Controller
 			'name' => $name,
 			'phone' => $phone,
 			'traker' => $traker,
-			'email' => $email,
+//			'email' => $email,
 			'ulmLabels' => $this->mdl_tpl->view('email/ulmLabels/labelItems.html', $this->mdl_seo->getUtmData(), true),
-			'adress' => $address,
+//			'adress' => $address,
 			'date' => date('d.m.Y в H.i'),
 		), true);
 
@@ -309,9 +309,9 @@ class Cart extends CI_Controller
 			'name' => $name,
 			'phone' => $phone,
 			'traker' => $traker,
-			'email' => $email,
+//			'email' => $email,
 			'ulmLabels' => $this->mdl_tpl->view('email/ulmLabels/labelItems.html', $this->mdl_seo->getUtmData(), true),
-			'adress' => $address,
+//			'adress' => $address,
 			'date' => date('d.m.Y в H.i'),
 		), true);
 
@@ -384,12 +384,13 @@ class Cart extends CI_Controller
 		/********** Telegram Bot **********/
 
 		$this->load->model('mdl_mail');
+/*
 		$this->mdl_mail->set_ot_kogo_from('sale@ivantopazov.ru', 'IVAN TOPAZOV');
 		$this->mdl_mail->set_komu_to($email, $name);
 		$this->mdl_mail->set_tema_subject('Содержание Вашего заказа');
 		$this->mdl_mail->set_tema_message($html_content_user);
 		$this->mdl_mail->send();
-
+*/
 		$this->mdl_mail->set_ot_kogo_from('sale@ivantopazov.ru', 'IVAN TOPAZOV');
 		$this->mdl_mail->set_tema_subject('Заказ на сумму ' . $summa . ' рублей - ' . date('d.m.Y H:i:s'));
 		$this->mdl_mail->set_tema_message($html_content);
