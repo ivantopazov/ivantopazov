@@ -408,7 +408,7 @@
 			$r = [
             'type' => 'range-values',
             'title' => 'Цена',
-            'variabled' => 'Cena',
+            'variabled' => 'price',
             'impact' => 'price',
             'data' => [[
 			'title' => 'Цена от:',

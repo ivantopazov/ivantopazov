@@ -947,6 +947,11 @@ class Mdl_product extends CI_Model
 			$this->db->where_in('postavchik', $filter['values']);
 		} elseif ($filter['item'] === 'proba') {
 			$this->db->where_in('proba', $filter['values']);
+		} elseif ($filter['item'] === 'size') {
+			// ToDo: заменить в настройках фильтров в размерах "_" на ".", и убрать отсюда array_map
+			$this->db->where_in('size', array_map(function($size) {
+				return str_replace('_', '.', $size);
+			}, $filter['values']));
 		} elseif ($filter['item'] === 'category') {
 			foreach ($filter["values"] as $key => $fl) {
 				switch ($fl) {
@@ -1000,7 +1005,7 @@ class Mdl_product extends CI_Model
 
 	public function setFilterRange($filter)
 	{
-		if ($filter['item'] === 'Cena') {
+		if ($filter['item'] === 'price') {
 			list($price_from, $price_to) = $filter['values'];
 			$price_from = intval($price_from) * 100;
 			$price_to = intval($price_to) * 100;

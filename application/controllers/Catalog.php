@@ -7,11 +7,11 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/application/libraries/ReCaptcha.php";
 class Catalog extends CI_Controller
 {
 
-	protected $user_info = array();
-	protected $store_info = array();
+	protected $user_info = [];
+	protected $store_info = [];
 
-	protected $post = array();
-	protected $get = array();
+	protected $post = [];
+	protected $get = [];
 
 	public function __construct()
 	{
@@ -26,34 +26,88 @@ class Catalog extends CI_Controller
 	}
 
 	// Предворительная обработка системными средствами
-	public function _remap($method, $params = array())
+	public function _remap($method, $params = [])
 	{
 		if (method_exists($this, $method)) {
-			return call_user_func_array(array($this, $method), $params);
+			return call_user_func_array([$this, $method], $params);
 		} else {
-			return call_user_func_array(array($this, "ExtractTree"), func_get_args());
+			return call_user_func_array([$this, "ExtractTree"], func_get_args());
 		}
 	}
 
 	// Серверное извлечение всех алиасов из URL
+
+	/**
+	 * получение фильтра по ID
+	 *
+	 * @param int $filterId
+	 * @return array
+	 */
+	protected function getFilter($filterId)
+	{
+		$filter = $this->mdl_category->queryData([
+			'return_type' => 'ARR1',
+			'table_name' => 'products_filters',
+			'where' => [
+				'method' => 'AND',
+				'set' => [
+					['item' => 'id', 'value' => $filterId],
+				],
+			],
+			'labels' => ['id', 'labels'],
+			'module' => false,
+		]);
+
+		//$r['filter_id'] = ( $filter ) ? $filter['id']: false;
+
+		return $filter ? json_decode($filter['labels'], true) : [];
+	}
+
+	/**
+	 * парсинг фильтра
+	 *
+	 * @param array $filter
+	 * @return array
+	 */
+	protected function parseFilter($filter)
+	{
+		$result = [];
+
+		foreach ($filter as $filterItem) {
+			if (!$filterItem['variabled']) {
+				continue;
+			}
+			$dataOrType = $filterItem['type'] == 'range-values' ? $filterItem['type'] :
+				(isset($filterItem['data']) && is_array($filterItem['data']) ?
+					array_flip(array_map(function ($dataItem) {
+						return $dataItem['variabled'];
+					}, $filterItem['data'])) :
+					[]
+				);
+
+			$result[$filterItem['variabled']] = $dataOrType;
+		}
+
+		return $result;
+	}
+
 	private function ExtractTree()
 	{
 
 		$argList = func_get_args();
-		$arg_list = ($argList !== false) ? $argList : array();
+		$arg_list = ($argList !== false) ? $argList : [];
 		$item = (count($arg_list[1]) > 0) ? $arg_list[1][(count($arg_list[1]) - 1)] : $arg_list[0];
-		$tree = array();
+		$tree = [];
 		$tree[] = $arg_list[0];
-		foreach ($arg_list[1] as $v) $tree[] = $v;
-
+		foreach ($arg_list[1] as $v) {
+			$tree[] = $v;
+		}
 		// Передача алиасов и получение информации и инструкций...
 		$logicData = $this->getLogicData($tree, false);
 
 		if ($logicData['error404'] !== true) {
-			if (!empty($logicData['item'])) {
-				$variable = 'view_' . $logicData['method'];
-				self::$variable($logicData);
-			}
+			$variable = $logicData['method'];
+			self::$variable($logicData);
 		} else {
 			redirect('/catalog');
 		}
@@ -61,13 +115,12 @@ class Catalog extends CI_Controller
 	}
 
 	// Получение информации и инструкций [ сервер / json ]
-	public function getLogicData($tree = array(), $j = true)
+	public function getLogicData($tree = [], $j = true)
 	{
 
 		$tree = (isset($this->post['tree'])) ? $this->post['tree'] : $tree;
 		$r = [
 			'item' => [],
-			'error404' => true,
 			'brb' => [
 				[
 					'name' => 'Каталог',
@@ -79,8 +132,8 @@ class Catalog extends CI_Controller
 
 		if (count($tree) > 0) {
 
-			$tovar = $this->mdl_product->queryData([
-				'return_type' => 'ARR2',
+			$product = $this->mdl_product->queryData([
+				'return_type' => 'ARR1',
 				'where' => [
 					'method' => 'AND',
 					'set' => [[
@@ -97,68 +150,119 @@ class Catalog extends CI_Controller
 				]],
 			]);
 
-			$link_bs = '/catalog';
-			foreach ($tree as $v) {
-				$link_bs .= '/' . $v;
-			}
+			$linkCurrent = '/catalog/' . implode('/', $tree);
 
-			if (count($tovar) > 0) {
+			if ($product) {
 				array_pop($tree);
-				$r['method'] = 'product';
-				$r['item'] = $tovar[0];
-				$r['error404'] = ($link_bs === $r['item']['modules']['linkPath']) ? false : true;
+				$r['method'] = 'view_product';
+				$r['item'] = $product;
+				$r['error404'] = ($linkCurrent === $r['item']['modules']['linkPath']) ? false : true;
 			} else {
-
-				$category = $this->mdl_category->queryData([
-					'return_type' => 'ARR2',
-					'where' => [
-						'method' => 'AND',
-						'set' => [
-							['item' => 'aliase', 'value' => $lastAliase],
-						],
-					],
-					'labels' => ['id', 'aliase', 'name', 'desription'],
-				]);
-
-				if (count($category) > 0) {
-					array_pop($tree);
-					$r['method'] = 'category';
-					$r['item'] = $category[0];
-					$link_par = $this->mdl_category->getParentCatsTree([$category[0]['id']]);
-					$r['error404'] = ($link_bs === $link_par[$category[0]['id']]) ? false : true;
-				}
-			}
-
-			if (count($tree) > 0) {
-
-				$cats = $this->mdl_category->queryData([
-					'return_type' => 'ARR2',
-					'in' => [
-						'method' => 'AND',
-						'set' => [
-							['item' => 'aliase', 'values' => $tree],
-						],
-					],
-					'labels' => false,
-				]);
-
+				// нас интересует категория последнего уровеня (сейчас каталог одноуровневый, но может быть и многоуровневым)
+				// родительские категории добавляются в хлебные крошки
+				$category = null;
+				$parentCategoryId = 0;
 				$link = '/catalog';
-				$par_id = 0;
-				foreach ($cats as $k => $v) {
-
-					if ($par_id == $v['parent_id']) {
-						$par_id = $v['id'];
-
-						$link .= '/' . $v['aliase'];
-
-						$r['brb'][] = array(
-							'name' => $v['name'],
+				do {
+					$categoryAliase = reset($tree);
+					$categoryCurrent = $this->mdl_category->queryData([
+						'return_type' => 'ARR1',
+						'where' => [
+							'method' => 'AND',
+							'set' => [
+								['item' => 'aliase', 'value' => $categoryAliase],
+								['item' => 'parent_id', 'value' => $parentCategoryId],
+							],
+						],
+						'labels' => ['id', 'aliase', 'name', 'desription', 'filter_id'],
+					]);
+					if ($categoryCurrent) {
+						array_shift($tree);
+						$category = $categoryCurrent;
+						$parentCategoryId = $categoryCurrent['id'];
+						$link .= '/' . $categoryCurrent['aliase'];
+						$r['brb'][] = [
+							'name' => $categoryCurrent['name'],
 							'link' => $link,
-						);
+						];
+					}
+				} while ($categoryCurrent);
 
+				// ToDo: для главной страницы доделать!
+				if ($category) {
+					// удаляем текущую категорию из хлебных крошек
+					array_pop($r['brb']);
+				}
+
+				if (count($tree) == 1) { // значит установлены фильтры (в последней части урла)
+
+					// значения фильтра в урле бывают в виде val-1-i-val2-filter1_val3-i-val4-filter2
+					// то есть группы фильтров разделены '_', имя фильтра в группе идет в конце через дефис
+					// значения фильтров разделены '-i-', сами значения могут содержать дефис
+
+					$filtersFromUrl = explode('_', trim(array_shift($tree)));
+
+					if (count($filtersFromUrl)) {
+
+						$filter = $this->getFilter($category ? $category['filter_id'] : 11);
+						$filter = $this->parseFilter($filter);
+
+						$filterSettings = [];
+
+						foreach ($filtersFromUrl as $urlPart) {
+							$filterParts = explode('-', $urlPart);
+							$filterName = array_pop($filterParts);
+
+							if (!isset($filter[$filterName]) || !count($filterParts)) {
+								$r['error404'] = true;
+								break;
+							}
+
+							$filterParts = implode('-', $filterParts);
+
+							if ($filter[$filterName] == 'range-values') {
+								preg_match('/^(?:from-(?<from>\d+))?-?(?:to-(?<to>\d+))?$/', $filterParts, $matches);
+
+								if (!isset($matches['from']) && !isset($matches['to'])) {
+									$r['error404'] = true;
+									break;
+								}
+
+								$filterSettings[$filterName] = $matches['from'] . '|' . (isset($matches['to']) ? $matches['to'] : '');
+							} else {
+								$filterParts = explode('-i-', $filterParts);
+
+								if (is_array($filter[$filterName])) {
+									foreach ($filterParts as $filterPart) {
+										if (!isset($filter[$filterName][$filterPart])) {
+											$r['error404'] = true;
+											break 2;
+										}
+									}
+									$filterSettings[$filterName] = implode('|', $filterParts);
+								}
+							}
+						}
+						$this->get['f'] = isset($this->get['f']) && is_array($this->get['f']) ?
+							array_merge($filterSettings, $this->get['f']) : $filterSettings;
+					} else {
+						$r['error404'] = true;
+					}
+				}
+				if (!isset($r['error404']) || !$r['error404']) {
+					$r['error404'] = false;
+					if ($category) {
+						$r['method'] = 'view_category';
+						$r['item'] = $category;
+					} else {
+						$r['method'] = 'index';
 					}
 				}
 			}
+		}
+
+		if (!isset($r['error404'])) {
+			$r['error404'] = false;
 		}
 
 		if ($j === true) {
@@ -172,7 +276,6 @@ class Catalog extends CI_Controller
 	// Вывести главную страницу каталога
 	public function index()
 	{
-
 		$start = microtime(true);
 
 		$page_var = 'catalog';
@@ -192,71 +295,71 @@ class Catalog extends CI_Controller
 			</p>";
 		} else $descr = "";
 
-		$this->mdl_tpl->view('templates/doctype_catalog.html', array(
+		$this->mdl_tpl->view('templates/doctype_catalog.html', [
 
 			'title' => $title,
 			'addons_folder' => $this->mdl_stores->getСonfigFile('addons_folder'),
 			'config_styles_path' => $this->mdl_stores->getСonfigFile('config_styles_path'),
 			'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
 
-			'seo' => $this->mdl_tpl->view('snipets/seo_tools.html', array(
+			'seo' => $this->mdl_tpl->view('snipets/seo_tools.html', [
 				'mk' => (!empty($this->store_info['seo_keys'])) ? $this->store_info['seo_keys'] : '',
 				'md' => (!empty($this->store_info['seo_desc'])) ? $this->store_info['seo_desc'] : '',
-			), true),
+			], true),
 
-			'navTop' => $this->mdl_tpl->view('snipets/navTop.html', array(
+			'navTop' => $this->mdl_tpl->view('snipets/navTop.html', [
 				'store' => $this->store_info,
 				'active' => 'home',
 				'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
-			), true),
+			], true),
 
-			'header' => $this->mdl_tpl->view('snipets/header.html', array(
+			'header' => $this->mdl_tpl->view('snipets/header.html', [
 				'store' => $this->store_info,
 				'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
-			), true),
+			], true),
 
-			'navMenu' => $this->mdl_tpl->view('snipets/navMenu.html', array(
+			'navMenu' => $this->mdl_tpl->view('snipets/navMenu.html', [
 				'store' => $this->store_info,
 				'active' => 'home',
 				'itemsTree' => $this->mdl_category->getTreeMenu(),
 				'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
-			), true),
+			], true),
 
-			'content' => $this->mdl_tpl->view('pages/catalog/home.html', array(
-				'blocks' => $this->mdl_tpl->view('pages/catalog/filters/items.html', array(
+			'content' => $this->mdl_tpl->view('pages/catalog/home.html', [
+				'blocks' => $this->mdl_tpl->view('pages/catalog/filters/items.html', [
 					'items' => $getData['filter'],
-					'Cena' => $getData['cena'],
+					'price' => $getData['cena'],
 					'weight' => $getData['weight'],
-				), true),
+				], true),
 				'textSearch' => $getData['textSearch'],
 				'sort' => $getData['sort'],
 				'header_title' => $title,
-				'collections' => $this->mdl_tpl->view('pages/catalog/category_view_collections.html', array(
+				'collections' => $this->mdl_tpl->view('pages/catalog/category_view_collections.html', [
 					'items' => $getData['collections'],
-				), true),
-				'products' => $this->mdl_tpl->view('pages/catalog/category_view_products.html', array(
+				], true),
+				'products' => $this->mdl_tpl->view('pages/catalog/category_view_products.html', [
 					'items' => $getData['products'],
-				), true),
+				], true),
 				'pagination' => $getData['products_pag'],
 				'description' => $descr,
-			), true),
+			], true),
 
-			'footer' => $this->mdl_tpl->view('snipets/footer.html', array(
+			'footer' => $this->mdl_tpl->view('snipets/footer.html', [
 				'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
-			), true),
+			], true),
 
-			'load' => $this->mdl_tpl->view('snipets/load.html', array(
+			'load' => $this->mdl_tpl->view('snipets/load.html', [
 				'addons_folder' => $this->mdl_stores->getСonfigFile('addons_folder'),
 				'utmLabels' => $this->mdl_tpl->view('snipets/utmLabels.html', $this->mdl_seo->utmLabels($this->get), true),
-			), true),
+			], true),
 
-			'resorses' => $this->mdl_tpl->view('resorses/catalog/cats_head.html', array(
+			'resorses' => $this->mdl_tpl->view('resorses/catalog/cats_head.html', [
 				'addons_folder' => $this->mdl_stores->getСonfigFile('addons_folder'),
 				'config_styles_path' => $this->mdl_stores->getСonfigFile('config_styles_path'),
 				'config_scripts_path' => $this->mdl_stores->getСonfigFile('config_scripts_path'),
-			), true),
+			], true),
 
-		), false);
+		], false);
 
 		// echo '<p style="background: yellow none repeat scroll 0% 0%; margin: 20px 0px 0px; position: fixed; bottom: 0px;">Время выполнения скрипта: '.(microtime(true) - $start).' сек.</p>';
 
@@ -465,8 +568,8 @@ class Catalog extends CI_Controller
 			$filterTitle = '';
 	//		$r['cena'] = [0, 90000];
 			$r['cena'] = [];
-			if (isset($this->get['f']['Cena'])) {
-				$prices = explode('|', $this->get['f']['Cena']);
+			if (isset($this->get['f']['price'])) {
+				$prices = explode('|', $this->get['f']['price']);
 				$r['cena'] = $prices;
 				list($price_from, $price_to) = $prices;
 				$price_from = (int)$price_from;
@@ -551,81 +654,81 @@ class Catalog extends CI_Controller
 		//$title = ( !empty( $this->store_info['seo_title'] ) ) ? $this->store_info['seo_title'] : $this->store_info['header'];
 		$page_var = 'catalog';
 
-		$this->mdl_tpl->view('templates/doctype_catalog.html', array(
+		$this->mdl_tpl->view('templates/doctype_catalog.html', [
 
 			'title' => $title,
 			'addons_folder' => $this->mdl_stores->getСonfigFile('addons_folder'),
 			'config_styles_path' => $this->mdl_stores->getСonfigFile('config_styles_path'),
 			'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
 
-			'seo' => $this->mdl_tpl->view('snipets/seo_tools.html', array(
+			'seo' => $this->mdl_tpl->view('snipets/seo_tools.html', [
 				'mk' => (!empty($this->store_info['seo_keys'])) ? $this->store_info['seo_keys'] : '',
 				'md' => (!empty($this->store_info['seo_desc'])) ? $this->store_info['seo_desc'] : '',
-			), true),
+			], true),
 
-			'navTop' => $this->mdl_tpl->view('snipets/navTop.html', array(
+			'navTop' => $this->mdl_tpl->view('snipets/navTop.html', [
 				'store' => $this->store_info,
 				'active' => 'home',
 				'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
-			), true),
+			], true),
 
-			'header' => $this->mdl_tpl->view('snipets/header.html', array(
+			'header' => $this->mdl_tpl->view('snipets/header.html', [
 				'store' => $this->store_info,
 				'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
-			), true),
+			], true),
 
-			'navMenu' => $this->mdl_tpl->view('snipets/navMenu.html', array(
+			'navMenu' => $this->mdl_tpl->view('snipets/navMenu.html', [
 				'store' => $this->store_info,
 				'active' => 'home',
 				'itemsTree' => $this->mdl_category->getTreeMenu(),
 				'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
-			), true),
+			], true),
 
-			'breadcrumb' => $this->mdl_tpl->view('snipets/breadcrumb.html', array(
+			'breadcrumb' => $this->mdl_tpl->view('snipets/breadcrumb.html', [
 				'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
 				'title' => $data['item']['name'],
 				'array' => $data['brb'],
-			), true),
+			], true),
 
-			'content' => $this->mdl_tpl->view('pages/catalog/home.html', array(
-				'blocks' => $this->mdl_tpl->view('pages/catalog/filters/items.html', array(
+			'content' => $this->mdl_tpl->view('pages/catalog/home.html', [
+				'blocks' => $this->mdl_tpl->view('pages/catalog/filters/items.html', [
 					'items' => $getData['filter'],
-					'Cena' => $getData['cena'],
+					'price' => $getData['cena'],
 					'weight' => $getData['weight'],
-				), true),
+				], true),
 				//'snipets' => ($getData['snipet'] !== false) ? $this->mdl_tpl->view('pages/catalog/cats_snipets/' . $data['item']['aliase'] . '.html', array(), true) : '',
 				'textSearch' => $getData['textSearch'],
 				'sort' => $getData['sort'],
 				'header_title' => $title,
-				'collections' => $this->mdl_tpl->view('pages/catalog/category_view_collections.html', array(
+				'collections' => $this->mdl_tpl->view('pages/catalog/category_view_collections.html', [
 					'items' => $getData['collections'],
-				), true),
-				'podcat' => $this->mdl_tpl->view('pages/catalog/category_view_podcat.html', array(
+				], true),
+				'podcat' => $this->mdl_tpl->view('pages/catalog/category_view_podcat.html', [
 					'items' => $getData['podcat'],
-				), true),
-				'products' => $this->mdl_tpl->view('pages/catalog/category_view_products.html', array(
+				], true),
+				'products' => $this->mdl_tpl->view('pages/catalog/category_view_products.html', [
 					'items' => $getData['products'],
-				), true),
+				], true),
 				'pagination' => $getData['products_pag'],
 				'description' => $descr //$data['item']['desription'],
-			), true),
+			], true),
 
-			'footer' => $this->mdl_tpl->view('snipets/footer.html', array(
+			'footer' => $this->mdl_tpl->view('snipets/footer.html', [
 				'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
-			), true),
+			], true),
 
-			'load' => $this->mdl_tpl->view('snipets/load.html', array(
+			'load' => $this->mdl_tpl->view('snipets/load.html', [
 				'addons_folder' => $this->mdl_stores->getСonfigFile('addons_folder'),
 				'utmLabels' => $this->mdl_tpl->view('snipets/utmLabels.html', $this->mdl_seo->utmLabels($this->get), true),
-			), true),
+			], true),
 
-			'resorses' => $this->mdl_tpl->view('resorses/catalog/cats_head.html', array(
+			'resorses' => $this->mdl_tpl->view('resorses/catalog/cats_head.html', [
 				'addons_folder' => $this->mdl_stores->getСonfigFile('addons_folder'),
 				'config_styles_path' => $this->mdl_stores->getСonfigFile('config_styles_path'),
 				'config_scripts_path' => $this->mdl_stores->getСonfigFile('config_scripts_path'),
-			), true),
+			], true),
 
-		), false);
+		], false);
 
 		//echo '<p style="background: yellow none repeat scroll 0% 0%; margin: 20px 0px 0px; position: fixed; bottom: 0px; right: 0;">Время выполнения скрипта: '.(microtime(true) - $start).' сек.</p>';
 
@@ -659,21 +762,21 @@ class Catalog extends CI_Controller
 			'collections' => [],
 		];
 
-		$query_string = array();
+		$query_string = [];
 		$query_string = array_merge($query_string, $this->get);
 		$query_string = array_merge($query_string, $this->post);
 
 		unset($query_string['page']);
 		unset($query_string['limit']);
 
-		$query_string = $this->mdl_helper->clear_array_0($query_string, array(
+		$query_string = $this->mdl_helper->clear_array_0($query_string, [
 			'f', 's', 'l', 't', 'brand'
 			//'set_id', 'cat_id', 'project_id', 'user_id', 'search'
-		));
+		]);
 
 		$sffix = $query_string;
 
-		$cat_item = false;
+		$category = false;
 
 		if ($catId !== false) {
 
@@ -716,7 +819,7 @@ class Catalog extends CI_Controller
 				'module' => false,
 			]);
 
-			$cat_item = $this->mdl_category->queryData([
+			$category = $this->mdl_category->queryData([
 				'return_type' => 'ARR1',
 				'where' => [
 					'method' => 'AND',
@@ -729,22 +832,7 @@ class Catalog extends CI_Controller
 			]);
 		}
 
-		$filter = $this->mdl_category->queryData([
-			'return_type' => 'ARR1',
-			'table_name' => 'products_filters',
-			'where' => [
-				'method' => 'AND',
-				'set' => [
-					['item' => 'id', 'value' => $cat_item ? $cat_item['filter_id'] : 11],
-				],
-			],
-			'labels' => ['id', 'labels'],
-			'module' => false,
-		]);
-
-		//$r['filter_id'] = ( $filter ) ? $filter['id']: false;
-
-		$filter = ($filter) ? json_decode($filter['labels'], true) : [];
+		$filter = $this->getFilter($category ? $category['filter_id'] : 11);
 
 		$option = [
 			'return_type' => 'ARR2+',
@@ -925,8 +1013,8 @@ class Catalog extends CI_Controller
 		$filterTitle = '';
 //			$r['cena'] = [0, 90000];
 		$r['cena'] = [];
-		if (isset($this->get['f']['Cena'])) {
-			$prices = explode('|', $this->get['f']['Cena']);
+		if (isset($this->get['f']['price'])) {
+			$prices = explode('|', $this->get['f']['price']);
 			$r['cena'] = $prices;
 			list($price_from, $price_to) = $prices;
 			$price_from = (int)$price_from;
@@ -1006,14 +1094,14 @@ class Catalog extends CI_Controller
 			$title = (!empty($product['seo_title'])) ? $product['seo_title'] : $product['title'];
 			$page_var = 'catalog';
 
-			$this->mdl_tpl->view('templates/doctype_catalog.html', array(
+			$this->mdl_tpl->view('templates/doctype_catalog.html', [
 
 				'title' => $title,
 				'addons_folder' => $this->mdl_stores->getСonfigFile('addons_folder'),
 				'config_styles_path' => $this->mdl_stores->getСonfigFile('config_styles_path'),
 				'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
 
-				'seo' => $this->mdl_tpl->view('snipets/seo_tools.html', array(
+				'seo' => $this->mdl_tpl->view('snipets/seo_tools.html', [
 					'oggMetta' => [
 						'title' => $title,
 						'url' => $this->mdl_helper->PROTOCOL(true) . $_SERVER['SERVER_NAME'] . $data['item']['modules']['linkPath'],
@@ -1023,72 +1111,72 @@ class Catalog extends CI_Controller
 					],
 					'mk' => (!empty($dataItem['product']['seo_keys'])) ? $dataItem['product']['seo_keys'] : "",
 					'md' => (!empty($dataItem['product']['seo_desc'])) ? $dataItem['product']['seo_desc'] : (!empty($dataItem['product']['description'])) ? mb_substr($dataItem['product']['description'], 0, 250) : $title . " по разумной цене в магазине «IVAN TOPAZOV»: ✔продажа украшений в Москве с доставкой по России ✔привлекательные цены ✔выгодный в кредит ✔пожизненная гарантия. Звоните круглосуточно: ☎ +7 (4 95 ) 230 26 83",
-				), true),
+				], true),
 
-				'navTop' => $this->mdl_tpl->view('snipets/navTop.html', array(
+				'navTop' => $this->mdl_tpl->view('snipets/navTop.html', [
 					'store' => $this->store_info,
 					'active' => 'home',
 					'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
-				), true),
+				], true),
 
-				'header' => $this->mdl_tpl->view('snipets/header.html', array(
+				'header' => $this->mdl_tpl->view('snipets/header.html', [
 					'store' => $this->store_info,
 					'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
-				), true),
+				], true),
 
-				'navMenu' => $this->mdl_tpl->view('snipets/navMenu.html', array(
+				'navMenu' => $this->mdl_tpl->view('snipets/navMenu.html', [
 					'store' => $this->store_info,
 					'active' => 'home',
 					'itemsTree' => $this->mdl_category->getTreeMenu(),
 					'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
-				), true),
+				], true),
 
-				'breadcrumb' => $this->mdl_tpl->view('snipets/breadcrumb.html', array(
+				'breadcrumb' => $this->mdl_tpl->view('snipets/breadcrumb.html', [
 					'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
 					'title' => $product['title'],
 					'array' => $data['brb'],
-				), true),
+				], true),
 
-				'content' => $this->mdl_tpl->view('pages/catalog/product_view.html', array(
+				'content' => $this->mdl_tpl->view('pages/catalog/product_view.html', [
 					'product' => $product,
-					'brand_desc' => $product['postavchik'] ? $this->mdl_tpl->view('pages/catalog/brands_descriptions/' . $product['postavchik'] . '.html', array(), true) : '',
+					'brand_desc' => $product['postavchik'] ? $this->mdl_tpl->view('pages/catalog/brands_descriptions/' . $product['postavchik'] . '.html', [], true) : '',
 					'counter' => $dataItem['timerCount'],
-					'sizes' => $dataItem['sizes'],
-					'otherSizes' => $dataItem['otherSizes'],
+					'sizes' => isset($dataItem['sizes']) ? $dataItem['sizes'] : [],
+					'otherSizes' => isset($dataItem['otherSizes']) ? $dataItem['otherSizes'] : [],
 					'header_title' => $product['title'],
 					'oneString' => rand(2000, 1000000) . '_' . rand(2000, 1000000),
 					'addons_folder' => $this->mdl_stores->getСonfigFile('addons_folder'),
 					'config_scripts_path' => $this->mdl_stores->getСonfigFile('config_scripts_path'),
-				), true),
+				], true),
 
-				'komplect' => $this->mdl_tpl->view('snipets/komplect.html', array(
+				'komplect' => $this->mdl_tpl->view('snipets/komplect.html', [
 					'items' => $this->getKomplect($product['id'], false),
-				), true),
+				], true),
 
 				/*'VamPonravitsa' => $this->mdl_tpl->view('snipets/VamPonravitsa.html', array(
 					'items' => $this->getVamPonravitsa($product['id'], false),
 				), true),*/
 
-				'preimushchestva' => $this->mdl_tpl->view('snipets/preimushchestva.html', array(
+				'preimushchestva' => $this->mdl_tpl->view('snipets/preimushchestva.html', [
 					'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
-				), true),
+				], true),
 
-				'footer' => $this->mdl_tpl->view('snipets/footer.html', array(
+				'footer' => $this->mdl_tpl->view('snipets/footer.html', [
 					'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
-				), true),
+				], true),
 
-				'load' => $this->mdl_tpl->view('snipets/load.html', array(
+				'load' => $this->mdl_tpl->view('snipets/load.html', [
 					'addons_folder' => $this->mdl_stores->getСonfigFile('addons_folder'),
 					'utmLabels' => $this->mdl_tpl->view('snipets/utmLabels.html', $this->mdl_seo->utmLabels($this->get), true),
-				), true),
+				], true),
 
-				'resorses' => $this->mdl_tpl->view('resorses/catalog/product_view_head.html', array(
+				'resorses' => $this->mdl_tpl->view('resorses/catalog/product_view_head.html', [
 					'addons_folder' => $this->mdl_stores->getСonfigFile('addons_folder'),
 					'config_styles_path' => $this->mdl_stores->getСonfigFile('config_styles_path'),
 					'config_scripts_path' => $this->mdl_stores->getСonfigFile('config_scripts_path'),
-				), true),
+				], true),
 
-			), false);
+			], false);
 
 		} else {
 			redirect('/search?t=' . $data['item']['title']);
@@ -1099,7 +1187,6 @@ class Catalog extends CI_Controller
 	// Получить данные о товаре
 	public function getProductData($productId = false, $productAliase = false, $j = true)
 	{
-
 		$Id = (isset($this->post['productId'])) ? $this->post['productId'] : $productId;
 		$Aliase = (isset($this->post['productAliase'])) ? $this->post['productAliase'] : $productAliase;
 
@@ -1368,7 +1455,7 @@ class Catalog extends CI_Controller
 				'labels' => ['id', 'aliase', 'title', 'salle_procent', 'sex', 'modules'],
 				'setFilters' => [
 					[
-						'item' => 'Cena',
+						'item' => 'price',
 						'type' => 'range-values',
 						'values' => [$price_ot, $price_do],
 					], [

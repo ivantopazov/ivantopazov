@@ -355,7 +355,7 @@ class Delta extends CI_Controller
 				'values' => [],
 			], [
 				'item' => 'size',
-				'values' => [str_replace(",", ".", $item['size'])],
+				'values' => [str_replace(",", "_", $item['size'])],
 			]];
 			$paramItem = [[
 				'variabled' => 'metall',
