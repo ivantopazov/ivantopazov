@@ -80,7 +80,7 @@ class Alcor extends CI_Controller
 		$packs = ( isset( $this->post['pack'] ) ) ? $this->post['pack'] : [];
 		$clear = ( isset( $this->post['clear'] ) ) ? $this->post['clear'] : false;
 		if( $clear === '1' ){
-			$this->mdl_db->_update_db( "products", "postavchik", 'Alcor', [
+			$this->mdl_db->_update_db( "products", "postavchik", 'alcor', [
 				'qty' => 0
 			]);
 		}
@@ -109,7 +109,7 @@ class Alcor extends CI_Controller
 					'method' => 'AND',
 					'set' => [[
 						'item' => 'postavchik',
-						'value' => 'Alcor'
+						'value' => 'alcor'
 					]]
 				],
 				'labels' => ['id', 'aliase', 'title', 'articul']
@@ -210,7 +210,7 @@ class Alcor extends CI_Controller
 		// Первоначальная прочистка остатков
 		$clear = (isset($this->post['clear'])) ? $this->post['clear'] : false;
 		if ($clear === '1') {
-			$this->mdl_db->_update_db("products", "postavchik", 'Alcor', [
+			$this->mdl_db->_update_db("products", "postavchik", 'alcor', [
 				'qty' => 0,
 			]);
 		}
@@ -243,7 +243,7 @@ class Alcor extends CI_Controller
 					'method' => 'AND',
 					'set' => [[
 						'item' => 'postavchik',
-						'value' => 'Alcor',
+						'value' => 'alcor',
 					]],
 				],
 				'labels' => ['id', 'aliase', 'title', 'seria', 'articul', 'aliase'],
@@ -653,8 +653,8 @@ class Alcor extends CI_Controller
 				'filters' => json_encode($filterData),
 				'proba' => $item['proba'],
 				'seria' => trim(mb_strtolower($item['seria'])),
-				'postavchik' => 'Alcor',
-				'parser' => 'Alcor',
+				'postavchik' => 'alcor',
+				'parser' => 'alcor',
 				'weight' => str_replace(",", ".", $item['weight']),
 				'qty_empty' => '1',
 				'prices_empty' => '1',
@@ -688,7 +688,7 @@ class Alcor extends CI_Controller
 		$products = [];
 		if (count($productIds) > 0) {
 			$this->db->where_in('id', $productIds);
-			$this->db->where('postavchik', 'Alcor');
+			$this->db->where('postavchik', 'alcor');
 //			$this->db->limit(10000, 50000);
 			$products = $this->db->get('products')->result_array();
 		}

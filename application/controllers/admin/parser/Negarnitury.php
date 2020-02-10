@@ -232,7 +232,7 @@ class Negarnitury extends CI_Controller
 		// Первоначальная прочистка остатков
 		$clear = $current_str == 1;
 		if ($clear) {
-			$this->mdl_db->_update_db($this->prod_table, 'postavchik', 'Yuvelirnye Traditsii', [
+			$this->mdl_db->_update_db($this->prod_table, 'postavchik', 'yuvelirnye-tradicii', [
 				'qty' => 0,
 			]);
 		}
@@ -320,7 +320,7 @@ class Negarnitury extends CI_Controller
 			'prices_empty' => '1',
 			'weight' => $data["weight"],
 			'sex' => "woman",
-			'postavchik' => 'Yuvelirnye Traditsii',
+			'postavchik' => 'yuvelirnye-tradicii',
 			'parser' => 'Negarnitury',
 			'proba' => "585",
 			'params' => json_encode($params, JSON_UNESCAPED_UNICODE),
@@ -667,7 +667,7 @@ class Negarnitury extends CI_Controller
 		$products = [];
 		if (count($productIds) > 0) {
 			$this->db->where_in('id', $productIds);
-//		$this->db->where('postavchik', 'Yuvelirnye Traditsii');
+//		$this->db->where('postavchik', 'yuvelirnye-tradicii');
 //		$this->db->limit(10000, 30000);
 //		$products = $this->db->get('products')->result_array();
 		}

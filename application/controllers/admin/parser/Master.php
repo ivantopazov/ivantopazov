@@ -174,7 +174,7 @@ class Master extends CI_Controller
 			'prices_empty' => '1',
 			'weight' => $data["weight"],
 			'sex' => "woman",
-			'postavchik' => 'Master Brilliant',
+			'postavchik' => 'master-brilliant',
 			'parser' => 'Master',
 			'proba' => $data['probe'],
 			'params' => json_encode($params, JSON_UNESCAPED_UNICODE),
@@ -471,7 +471,7 @@ class Master extends CI_Controller
 //		$products = [];
 //		if (count($productIds) > 0) {
 //			$this->db->where_in('id', $productIds);
-		$this->db->where('postavchik', 'Master Brilliant');
+		$this->db->where('postavchik', 'master-brilliant');
 		$this->db->limit(10000, 30000);
 		$products = $this->db->get('products')->result_array();
 //		}
@@ -503,7 +503,7 @@ class Master extends CI_Controller
 //		$products = [];
 //		if (count($prodictIds) > 0) {
 //			$this->db->where_in('id', $prodictIds);
-		$this->db->where('postavchik', 'Master Brilliant');
+		$this->db->where('postavchik', 'master-brilliant');
 		$this->db->limit(10000, 30000);
 		$products = $this->db->get('products')->result_array();
 //		}

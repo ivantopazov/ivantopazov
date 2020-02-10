@@ -108,7 +108,7 @@ class Alcor extends CI_Controller
         $clear = ( isset( $this->post['clear'] ) ) ? $this->post['clear'] : false;
 
         if( $clear === '1' ){
-            $this->mdl_db->_update_db( "products", "postavchik", 'Alcor', [
+            $this->mdl_db->_update_db( "products", "postavchik", 'alcor', [
                 'qty' => 0
             ]);
         }
@@ -141,7 +141,7 @@ class Alcor extends CI_Controller
                     'method' => 'AND',
                     'set' => [[
                         'item' => 'postavchik',
-                        'value' => 'Alcor'
+                        'value' => 'alcor'
                     ]]
                 ],
                 'labels' => ['id', 'aliase', 'title', 'articul']
@@ -272,7 +272,7 @@ class Alcor extends CI_Controller
         // Первоначальная прочистка остатков
         if( isset( $this->post['clear'] ) && (int)$this->post['clear'] === '1' )
         {
-            $this->mdl_db->_update_db( "products", "postavchik", 'Alcor', [
+            $this->mdl_db->_update_db( "products", "postavchik", 'alcor', [
                 'qty' => 0
             ]);
         }
@@ -310,7 +310,7 @@ class Alcor extends CI_Controller
                     'method' => 'AND',
                     'set' => [[
                         'item' => 'postavchik',
-                        'value' => 'Alcor'
+                        'value' => 'alcor'
                     ]]
                 ],
                 'labels' => ['id', 'aliase', 'title', 'seria', 'articul']
@@ -743,8 +743,8 @@ class Alcor extends CI_Controller
                 'filters' => json_encode( $filterData ),
                 'proba' => $item['proba'],
                 'seria' => trim(mb_strtolower($item['seria'])),
-                'postavchik' => 'Alcor',
-                'parser' => 'Alcor',
+                'postavchik' => 'alcor',
+                'parser' => 'alcor',
                 'weight' => str_replace( ",", ".", $item['weight'] ),
                 'qty_empty' => '1',
                 'prices_empty' => '1',

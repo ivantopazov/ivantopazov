@@ -88,7 +88,7 @@ class Delta extends CI_Controller
 		// Первоначальная прочистка остатков
 		$clear = (isset($this->post['clear'])) ? $this->post['clear'] : false;
 		if ($clear === '1') {
-			$this->mdl_db->_update_db("products", "postavchik", 'Delta', [
+			$this->mdl_db->_update_db("products", "postavchik", 'delta', [
 				'qty' => 0,
 			]);
 		}
@@ -140,7 +140,7 @@ class Delta extends CI_Controller
 					'method' => 'AND',
 					'set' => [[
 						'item' => 'postavchik',
-						'value' => 'Delta',
+						'value' => 'delta',
 					]],
 				],
 				'labels' => ['id', 'aliase', 'title', 'seria', 'articul', 'aliase'],
@@ -377,8 +377,8 @@ class Delta extends CI_Controller
 				'filters' => json_encode($filterData, JSON_UNESCAPED_UNICODE),
 				'proba' => (int)preg_replace('/[^\d]+/', '', $item['proba']),
 				'seria' => $item['seria'],
-				'postavchik' => 'Delta',
-				'parser' => 'Delta',
+				'postavchik' => 'delta',
+				'parser' => 'delta',
 				'weight' => str_replace(",", ".", $item['weight']),
 				'qty_empty' => '1',
 				'prices_empty' => '1',

@@ -161,7 +161,7 @@ class Trofimova extends CI_Controller
 				'prices_empty' => '1',
 				'weight' => $dt["weight"],
 				'sex' => "woman",
-				'postavchik' => 'Trofimova jewellery',
+				'postavchik' => 'trofimova-jewellery',
 				'parser' => 'Trofimova',
 				'proba' => $dt['probe'],
 				'params' => json_encode($params, JSON_UNESCAPED_UNICODE),
@@ -170,7 +170,7 @@ class Trofimova extends CI_Controller
 				'moderate' => '2',
 				'lastUpdate' => time(),
 				'optionLabel' => json_encode([
-					'collections' => "Trofimova jewellery",
+					'collections' => 'trofimova-jewellery',
 					'options' => "-",
 					'vstavki' => str_replace(" ", " ", str_replace(",", " ", $dt['vstavka'])),
 					'seria' => "",
@@ -433,7 +433,7 @@ class Trofimova extends CI_Controller
 //		$products = [];
 //		if (count($prodictIds) > 0) {
 //			$this->db->where_in('id', $prodictIds);
-			$this->db->where('postavchik', 'Trofimova jewellery');
+			$this->db->where('postavchik', 'trofimova-jewellery');
 //			$this->db->limit(10000, 30000);
 			$products = $this->db->get('products')->result_array();
 //		}

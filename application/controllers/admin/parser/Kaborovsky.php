@@ -105,7 +105,7 @@ class Kaborovsky extends CI_Controller
 		// Первоначальная прочистка остатков
 		$clear = (isset($this->post['clear'])) ? $this->post['clear'] : false;
 		if ($clear === '1') {
-			$this->mdl_db->_update_db("products", "postavchik", 'Kaborovsky', [
+			$this->mdl_db->_update_db("products", "postavchik", 'kaborovsky', [
 				'qty' => 0,
 			]);
 		}
@@ -140,7 +140,7 @@ class Kaborovsky extends CI_Controller
 					'method' => 'AND',
 					'set' => [[
 						'item' => 'postavchik',
-						'value' => 'Kaborovsky',
+						'value' => 'kaborovsky',
 					]],
 				],
 				'labels' => ['id', 'aliase', 'title', 'seria', 'articul'],
@@ -538,8 +538,8 @@ class Kaborovsky extends CI_Controller
 				'size' => str_replace('.0', '', str_replace(',', '.', trim($item['size']))),
 				'filters' => json_encode($filterData),
 				'proba' => $item['proba'],
-				'postavchik' => 'Kaborovsky',
-				'parser' => 'Kaborovsky',
+				'postavchik' => 'kaborovsky',
+				'parser' => 'kaborovsky',
 				'weight' => str_replace(",", ".", $item['weight']),
 				'qty_empty' => '1',
 				'prices_empty' => '1',
@@ -585,7 +585,7 @@ class Kaborovsky extends CI_Controller
 //		$products = [];
 		if (count($productIds) > 0) {
 			$this->db->where_in('id', $productIds);
-			$this->db->where('postavchik', 'Kaborovsky');
+			$this->db->where('postavchik', 'kaborovsky');
 //			$this->db->limit(10000, 50000);
 			$products = $this->db->get('products')->result_array();
 		}
