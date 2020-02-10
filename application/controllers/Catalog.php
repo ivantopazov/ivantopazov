@@ -58,9 +58,22 @@ class Catalog extends CI_Controller
 			'module' => false,
 		]);
 
-		//$r['filter_id'] = ( $filter ) ? $filter['id']: false;
+		$filterData = $filter ? json_decode($filter['labels'], true) : [];
 
-		return $filter ? json_decode($filter['labels'], true) : [];
+		$filterData = array_map(function ($filterItem) {
+			if (isset($filterItem['data']) && is_array($filterItem['data'])) {
+				$filterItem['data'] = array_filter($filterItem['data'], function ($filterDataItem) {
+					return !isset($filterDataItem['hidden']) || !$filterDataItem['hidden'];
+				});
+			}
+			return $filterItem;
+		}, $filterData);
+
+		$filterData = array_filter($filterData, function ($filterItem) {
+			return !isset($filterItem['hidden']) || !$filterItem['hidden'];
+		});
+
+		return $filterData;
 	}
 
 	/**
@@ -861,7 +874,8 @@ class Catalog extends CI_Controller
 			'module_queue' => [
 				'price_actual',
 				'limit', 'pagination',
-				'prices_all', 'photos', /*'reviews', */'linkPath', 'salePrice',
+				'prices_all', 'photos', /*'reviews', */
+				'linkPath', 'salePrice',
 				'emptyPrice', 'qty_empty_status', 'paramsView',
 			],
 			'module' => true,
@@ -1246,25 +1260,26 @@ class Catalog extends CI_Controller
 					'module_name' => 'reviews',
 					'result_item' => 'reviews',
 					'option' => [],
-				], */[
-					'module_name' => 'emptyPrice',
-					'result_item' => 'emptyPrice',
-					'option' => [
-						'labels' => false,
-					],
-				], [
-					'module_name' => 'qtyEmptyStatus',
-					'result_item' => 'qtyEmptyStatus',
-					'option' => [
-						'labels' => false,
-					],
-				], [
-					'module_name' => 'paramsView',
-					'result_item' => 'paramsView',
-					'option' => [
-						'labels' => false,
-					],
-				]],
+				], */
+					[
+						'module_name' => 'emptyPrice',
+						'result_item' => 'emptyPrice',
+						'option' => [
+							'labels' => false,
+						],
+					], [
+						'module_name' => 'qtyEmptyStatus',
+						'result_item' => 'qtyEmptyStatus',
+						'option' => [
+							'labels' => false,
+						],
+					], [
+						'module_name' => 'paramsView',
+						'result_item' => 'paramsView',
+						'option' => [
+							'labels' => false,
+						],
+					]],
 			];
 
 			$product = $this->mdl_product->queryData($option);
