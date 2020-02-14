@@ -1357,7 +1357,7 @@ class Mdl_product extends CI_Model
 	 *
 	 * @return array
 	 */
-	public function getCaratsRanges()
+	public function caratsRanges()
 	{
 		return $this->caratsRanges;
 	}
@@ -1384,4 +1384,59 @@ class Mdl_product extends CI_Model
 		return $rangeId;
 	}
 
+	/**
+	 * Получение градаций каратности по значению поля drag
+	 *
+	 * @param array $drag
+	 * @return array
+	 */
+	public function getCaratsRanges($drag)
+	{
+		$caratsRanges = [];
+		foreach ($drag as $item) {
+			foreach ($item['data'] as $stoneProperty) {
+
+				if ($stoneProperty['name'] == 'Вес, Ct.') {
+					$value = str_replace('Ct', '', $stoneProperty['value']);
+					$caratsRange = $this->getCaratsRange($value);
+					if ($caratsRange && !in_array($caratsRange, $caratsRanges)) {
+						$caratsRanges[] = $caratsRange;
+					}
+				}
+			}
+		}
+		return $caratsRanges;
+	}
+
+	/**
+	 * Получение градаций каратности, сгруппированных по виду камня, по значению поля drag
+	 *
+	 * @param array $drag
+	 * @return array
+	 */
+	public function getCaratsRangesByStone($drag)
+	{
+		$caratsRangesByStone = [];
+		foreach ($drag as $item) {
+			$stoneCode = $item['kamenCode'];
+			if (!$stoneCode) {
+				break;
+			}
+			foreach ($item['data'] as $stoneProperty) {
+				if ($stoneProperty['name'] == 'Вес, Ct.') {
+					$value = str_replace('Ct', '', $stoneProperty['value']);
+					$caratsRange = $this->getCaratsRange($value);
+					if ($caratsRange) {
+						if (!isset($caratsRangesByStone[$stoneCode])) {
+							$caratsRangesByStone[$stoneCode] = [];
+						}
+						if (!in_array($caratsRange, $caratsRangesByStone[$stoneCode])) {
+							$caratsRangesByStone[$stoneCode][] = $caratsRange;
+						}
+					}
+				}
+			}
+		}
+		return $caratsRangesByStone;
+	}
 }
