@@ -4,10 +4,10 @@ DirectoryIndex index.php
  
 RewriteEngine on
  
-RewriteCond %{HTTPS} off [OR]
-RewriteCond %{HTTP_HOST} ^www\. [NC]
-RewriteCond %{HTTP_HOST} ^(?:www\.)?(.+)$ [NC]
-RewriteRule ^ https://%1%{REQUEST_URI} [L,NE,R=301]
+#RewriteCond %{HTTPS} off [OR]
+#RewriteCond %{HTTP_HOST} ^www\. [NC]
+#RewriteCond %{HTTP_HOST} ^(?:www\.)?(.+)$ [NC]
+#RewriteRule ^ https://%1%{REQUEST_URI} [L,NE,R=301]
 
 RewriteCond %{REQUEST_URI} ^system.*
 RewriteRule ^(.*)$ /index.php/$1 [L]
@@ -16,8 +16,8 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php/$1 [L]
 
-Redirect 301 /index.html https://ivantopazov.ru/
-Redirect 301 /index.htm https://ivantopazov.ru/
+Redirect 301 /index.html /
+Redirect 301 /index.htm /
 
 Redirect 301 /kabarovsky/kolca /catalog/kolca/?f[brand]=Kaborovsky
 Redirect 301 /kabarovsky/sergi /catalog/sergi/?f[brand]=Kaborovsky
