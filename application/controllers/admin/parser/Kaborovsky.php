@@ -1,9 +1,18 @@
 <?php
 
+require_once APPPATH.'controllers/admin/parser/BaseParser.php';
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Kaborovsky extends CI_Controller
+class Kaborovsky extends BaseParser
 {
+	protected $parserCode = 'alcor';
+	protected $parserTitle = 'Выгрузка Kaborovsky';
+
+	protected $uploadPath = './uploads/products/kaborovsky/';
+
+	protected $fileName = 'kaborovsky.csv';
+	protected $postavchik = 'kaborovsky';
 
 	protected $user_info = array();
 	protected $store_info = array();

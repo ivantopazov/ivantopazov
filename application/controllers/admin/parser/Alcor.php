@@ -1,8 +1,19 @@
 <?php
+
+require_once APPPATH.'controllers/admin/parser/BaseParser.php';
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Alcor extends CI_Controller
+class Alcor extends BaseParser
 {
+	protected $parserCode = 'alcor';
+	protected $parserTitle = 'Выгрузка Алькор';
+
+	protected $uploadPath = './uploads/products/alcor/';
+
+	protected $fileName = 'alcor.csv';
+	protected $postavchik = 'alkor';
+
 	protected $user_info = array();
 	protected $store_info = array();
 	protected $post = array();

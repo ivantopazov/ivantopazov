@@ -7,7 +7,7 @@ var double = 0;
 $("#get").click(function(){
    $.ajax({
       type: 'post',
-      url: '/admin/parser/master/countMaster',
+      url: '/admin/parser/master/count',
       data: 1,
       dataType: 'json',
       success: function(c){

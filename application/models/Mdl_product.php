@@ -10,65 +10,54 @@ class Mdl_product extends CI_Model
 	}
 
 	// Выполнение запросов
-	protected $_query = array();
+	protected $_query = [];
 
-	// верхние грацицы диапазонов каратности
-	protected $caratsRanges = [
-		'1' => 0.25,
-		'2' => 0.5,
-		'3' => 1,
-		'4' => 2,
-		'5' => 3,
-		'6' => 4,
-		'7' => 5,
-		'8' => false,
-	];
-
-	public function queryData($settings = array())
+	public function queryData($settings = [])
 	{
 
 		$index = rand(1, 1000);
-		$_query = array(
-			'where' => array(
+		$_query = [
+			'where' => [
 				'method' => 'AND', // AND (и) / OR(или)
-				'set' => array() // [ 'item' => '', 'value' => '' ],[...]
-			),
-			'in' => array(
+				'set' => [] // [ 'item' => '', 'value' => '' ],[...]
+			],
+			'in' => [
 				'method' => 'AND', // AND (и) / OR(или) / NOT(за исключением и..) / OR_NOT(за исключением или)
-				'set' => array()  // [ 'item' => '', 'values' => '' ],[...]
-			),
-			'like' => array(
+				'set' => []  // [ 'item' => '', 'values' => '' ],[...]
+			],
+			'like' => [
 				'math' => 'both', // '%before', 'after%' и '%both%' - опциональность поиска
 				'method' => 'AND', // AND (и) / OR(или) / NOT(за исключением и..) / OR_NOT(за исключением или)
-				'set' => array()  // [ 'item' => '', 'value' => '' ],[...]
-			),
+				'set' => []  // [ 'item' => '', 'value' => '' ],[...]
+			],
 			'group_by' => false, // "title"
 			'order_by' => [], // [ item -> , value -> ]
 			'distinct' => false, // +DISTINCT
 			'limit' => false, // 10 || "10, 2"
 			'setFilters' => false,
 			'labels' => false,
-			'result' => array(), // Хранилище для обработки
-			'result_option' => array(), // Резервное. хранилище
+			'result' => [], // Хранилище для обработки
+			'result_option' => [], // Резервное. хранилище
 			'return_type' => 'ARR2', // ARR1 - одном. массив || ARR2 - многом. массив || ARR1+,ARR2+  - Упаковать с резервным хранилищем
 			'debug' => false, // Диагностическая линия ( Необходим активный "+" в "return_type" )
 			'module_queue' => [
 				'limit', 'pagination',
 				'price_actual',
 				'prices_all', 'photos',
-				/*'reviews', */'linkPath', 'salePrice',
+				/*'reviews', */
+				'linkPath', 'salePrice',
 				'emptyPrice', 'qty_empty_status', 'paramsView',
 			],
 			'module' => false,
-			'modules' => array(),
-			'pagination' => array(
+			'modules' => [],
+			'pagination' => [
 				'on' => false,
 				'page' => 1,
 				'limit' => 'all',
 				'count_all' => 0,
-			),
+			],
 			'table_name' => 'products',
-		);
+		];
 
 		$this->db->start_cache();
 
@@ -136,17 +125,17 @@ class Mdl_product extends CI_Model
 			$this->db->group_by($this->_query[$index]['group_by']);
 		}
 
-		if (isset($this->_query[$index]['order_by']['item'])) {
-			//if( !$this->_query[$index]['order_by']  ) {
-			$this->db->order_by($this->_query[$index]['order_by']['item'], $this->_query[$index]['order_by']['value']);
-		}
-
 		if ($this->_query[$index]['distinct'] !== false) {
 			$this->db->distinct();
 		}
 
 		if ($this->_query[$index]['setFilters'] !== false) {
 			$this->setFilters($this->_query[$index]['setFilters']);
+		}
+
+		if (isset($this->_query[$index]['order_by']['item'])) {
+			//if( !$this->_query[$index]['order_by']  ) {
+			$this->db->order_by($this->_query[$index]['order_by']['item'], $this->_query[$index]['order_by']['value']);
 		}
 
 		$this->db->stop_cache();
@@ -180,7 +169,7 @@ class Mdl_product extends CI_Model
 				$this->_query[$index]['modules'][] = [
 					'module_name' => 'pagination',
 					'result_item' => 'pagination',
-					'option' => array(),
+					'option' => [],
 				];
 			} else {
 				$m = 0;
@@ -193,14 +182,14 @@ class Mdl_product extends CI_Model
 					$this->_query[$index]['modules'][] = [
 						'module_name' => 'pagination',
 						'result_item' => 'pagination',
-						'option' => array(),
+						'option' => [],
 					];
 				}
 			}
 
 		}
 
-		$this->_query[$index]['result'] = array();
+		$this->_query[$index]['result'] = [];
 		$this->_query[$index]['result'] = $this->mdl_db->_all_query_db();
 
 		$this->db->flush_cache();
@@ -226,7 +215,7 @@ class Mdl_product extends CI_Model
 		if ($this->_query[$index]['module'] !== false && count($this->_query[$index]['modules']) > 0) {
 			foreach ($this->_query[$index]['modules'] as $v) {
 				$variable = 'mod_' . $v['module_name'];
-				$option = (isset($v['option'])) ? $v['option'] : array();
+				$option = (isset($v['option'])) ? $v['option'] : [];
 				if (!in_array('index', $option)) $option['index'] = $index;
 				self::$variable($v['result_item'], $option);
 			}
@@ -237,24 +226,24 @@ class Mdl_product extends CI_Model
 		}
 
 		// Вернуть результат....
-		$returnData = array();
+		$returnData = [];
 
 		// Одномерный массив
 		if ($this->_query[$index]['return_type'] === 'ARR1' || $this->_query[$index]['return_type'] === 'ARR1+') {
-			$returnData = (count($this->_query[$index]['result']) > 0) ? $this->_query[$index]['result'][0] : array();
+			$returnData = (count($this->_query[$index]['result']) > 0) ? $this->_query[$index]['result'][0] : [];
 		}
 
 		// Многомерный массив
 		if ($this->_query[$index]['return_type'] === 'ARR2' || $this->_query[$index]['return_type'] === 'ARR2+') {
-			$returnData = (count($this->_query[$index]['result']) > 0) ? $this->_query[$index]['result'] : array();
+			$returnData = (count($this->_query[$index]['result']) > 0) ? $this->_query[$index]['result'] : [];
 		}
 
 		// Массив с доп параметрами. ( напр: Режимом отладки )
 		if ($this->_query[$index]['return_type'] === 'ARR1+' || $this->_query[$index]['return_type'] === 'ARR2+') {
-			$returnData = array(
+			$returnData = [
 				'result' => $returnData,
 				'option' => $this->_query[$index]['result_option'],
-			);
+			];
 
 			if ($this->_query[$index]['debug'] !== false) {
 				$returnData['option']['debug'] = $this->_query[$index];
@@ -266,37 +255,38 @@ class Mdl_product extends CI_Model
 	}
 
 	// Получение и обработка данных
-	public function queryX($get = array(), $settings = array())
+	public function queryX($get = [], $settings = [])
 	{
 
 		$index = rand(1, 1000);
-		$_query = array(
+		$_query = [
 			'limit' => false, // 10 || "10, 2"
 			'labels' => false,
-			'result' => array(), // Хранилище для обработки
-			'result_option' => array(), // Резервное. хранилище
+			'result' => [], // Хранилище для обработки
+			'result_option' => [], // Резервное. хранилище
 			'return_type' => 'ARR2', // ARR1 - одном. массив || ARR2 - многом. массив || ARR1+,ARR2+  - Упаковать с резервным хранилищем
 			'debug' => false, // Диагностическая линия ( Необходим активный "+" в "return_type" )
 			'module_queue' => [
 				'limit', 'pagination',
 				'price_actual',
 				'prices_all', 'photos',
-				/*'reviews', */'linkPath', 'salePrice',
+				/*'reviews', */
+				'linkPath', 'salePrice',
 				'emptyPrice', 'qty_empty_status', 'paramsView',
 			],
 			'module' => false,
-			'modules' => array(),
-			'pagination' => array(
+			'modules' => [],
+			'pagination' => [
 				'on' => false,
 				'page' => 1,
 				'limit' => 'all',
 				'count_all' => 0,
-			),
-		);
+			],
+		];
 
 		$this->_query[$index] = array_merge($_query, $settings);
 
-		$this->_query[$index]['result'] = array();
+		$this->_query[$index]['result'] = [];
 		$this->_query[$index]['result'] = $get->result_array();
 
 		$this->_query[$index]['pagination']['count_all'] = count($this->_query[$index]['result']);
@@ -311,7 +301,7 @@ class Mdl_product extends CI_Model
 				$this->_query[$index]['modules'][] = [
 					'module_name' => 'pagination',
 					'result_item' => 'pagination',
-					'option' => array(),
+					'option' => [],
 				];
 			} else {
 				$m = 0;
@@ -324,7 +314,7 @@ class Mdl_product extends CI_Model
 					$this->_query[$index]['modules'][] = [
 						'module_name' => 'pagination',
 						'result_item' => 'pagination',
-						'option' => array(),
+						'option' => [],
 					];
 				}
 			}
@@ -353,7 +343,7 @@ class Mdl_product extends CI_Model
 			foreach ($this->_query[$index]['modules'] as $v) {
 				$variable = 'mod_' . $v['module_name'];
 				//echo $variable . '<br />';
-				$option = (isset($v['option'])) ? $v['option'] : array();
+				$option = (isset($v['option'])) ? $v['option'] : [];
 				if (!in_array('index', $option)) $option['index'] = $index;
 				self::$variable($v['result_item'], $option);
 			}
@@ -364,24 +354,24 @@ class Mdl_product extends CI_Model
 		}
 
 		// Вернуть результат....
-		$returnData = array();
+		$returnData = [];
 
 		// Одномерный массив
 		if ($this->_query[$index]['return_type'] === 'ARR1' || $this->_query[$index]['return_type'] === 'ARR1+') {
-			$returnData = (count($this->_query[$index]['result']) > 0) ? $this->_query[$index]['result'][0] : array();
+			$returnData = (count($this->_query[$index]['result']) > 0) ? $this->_query[$index]['result'][0] : [];
 		}
 
 		// Многомерный массив
 		if ($this->_query[$index]['return_type'] === 'ARR2' || $this->_query[$index]['return_type'] === 'ARR2+') {
-			$returnData = (count($this->_query[$index]['result']) > 0) ? $this->_query[$index]['result'] : array();
+			$returnData = (count($this->_query[$index]['result']) > 0) ? $this->_query[$index]['result'] : [];
 		}
 
 		// Массив с доп параметрами. ( напр: Режимом отладки )
 		if ($this->_query[$index]['return_type'] === 'ARR1+' || $this->_query[$index]['return_type'] === 'ARR2+') {
-			$returnData = array(
+			$returnData = [
 				'result' => $returnData,
 				'option' => $this->_query[$index]['result_option'],
-			);
+			];
 
 			if ($this->_query[$index]['debug'] !== false) {
 				$returnData['option']['debug'] = $this->_query[$index];
@@ -393,7 +383,7 @@ class Mdl_product extends CI_Model
 	}
 
 	// Модуль для работы с пагинацией ( return_type === + )
-	public function mod_pagination($item = 'pagination', $option = array())
+	public function mod_pagination($item = 'pagination', $option = [])
 	{
 
 		// Сбор данных
@@ -469,7 +459,7 @@ class Mdl_product extends CI_Model
 	}
 
 	// Модуль создает цену для отображения в редактировании
-	public function mod_price_actual($item = 'price_actual', $option = array())
+	public function mod_price_actual($item = 'price_actual', $option = [])
 	{
 
 		$index = (isset($option['index'])) ? $option['index'] : false;
@@ -504,11 +494,11 @@ class Mdl_product extends CI_Model
 	}
 
 	// Модуль создает цену для отображения
-	public function mod_photos($item = 'photos', $option = array())
+	public function mod_photos($item = 'photos', $option = [])
 	{
 
 		$labels = (isset($option['labels'])) ? $option['labels'] : false;
-		$modules = (isset($option['modules'])) ? $option['modules'] : array();
+		$modules = (isset($option['modules'])) ? $option['modules'] : [];
 		$index = (isset($option['index'])) ? $option['index'] : false;
 		$no_images_view = (isset($option['no_images_view'])) ? $option['no_images_view'] : 0;
 
@@ -519,7 +509,7 @@ class Mdl_product extends CI_Model
 			$this->_query[$index]['module'] = true;
 		}
 
-		$GIDs = array();
+		$GIDs = [];
 		foreach ($this->_query[$index]['result'] as $k => $v) {
 			if (!in_array($v['id'], $GIDs)) $GIDs[] = $v['id'];
 		}
@@ -541,12 +531,12 @@ class Mdl_product extends CI_Model
 
 		if (count($this->_query[$index]['result']) > 0) {
 			foreach ($this->_query[$index]['result'] as $k => $v) {
-				$this->_query[$index]['result'][$k]['modules'][$item] = array();
+				$this->_query[$index]['result'][$k]['modules'][$item] = [];
 
 				$m = 0;
 				foreach ($products_photos as $pk => $pv) {
 					if ($pv['product_id'] === $v['id']) {
-						if (!file_exists('./uploads/products/250/'.$pv['photo_name'])) {
+						if (!file_exists('./uploads/products/250/' . $pv['photo_name'])) {
 							$pv['photo_name'] = '../../no_image.png';
 							$pv['define'] = '1';
 						}
@@ -569,13 +559,13 @@ class Mdl_product extends CI_Model
 	}
 
 	// Модуль возвращает все отзывы к товару
-	public function mod_reviews($item = 'reviews', $option = array())
+	public function mod_reviews($item = 'reviews', $option = [])
 	{
 
 		$labels = (isset($option['labels'])) ? $option['labels'] : false;
 		$index = (isset($option['index'])) ? $option['index'] : false;
 
-		$GIDs = array();
+		$GIDs = [];
 		foreach ($this->_query[$index]['result'] as $k => $v) {
 			if (!in_array($v['id'], $GIDs)) $GIDs[] = $v['id'];
 		}
@@ -599,7 +589,7 @@ class Mdl_product extends CI_Model
 
 		if (count($this->_query[$index]['result']) > 0) {
 			foreach ($this->_query[$index]['result'] as $k => $v) {
-				$this->_query[$index]['result'][$k]['modules'][$item] = array();
+				$this->_query[$index]['result'][$k]['modules'][$item] = [];
 
 				foreach ($products_reviews as $pk => $pv) {
 					if ($pv['product_id'] === $v['id']) {
@@ -616,20 +606,20 @@ class Mdl_product extends CI_Model
 	}
 
 	// Модуль подготавливает к выводу описание вставок
-	public function mod_drags($item = 'drags', $option = array())
+	public function mod_drags($item = 'drags', $option = [])
 	{
 
 		$labels = (isset($option['labels'])) ? $option['labels'] : false;
 		$index = (isset($option['index'])) ? $option['index'] : false;
 
-		$GIDs = array();
+		$GIDs = [];
 		foreach ($this->_query[$index]['result'] as $k => $v) {
 			if (!in_array($v['id'], $GIDs)) $GIDs[] = $v['id'];
 		}
 
 		if (count($this->_query[$index]['result']) > 0) {
 			foreach ($this->_query[$index]['result'] as $k => $v) {
-				$this->_query[$index]['result'][$k]['modules'][$item] = array();
+				$this->_query[$index]['result'][$k]['modules'][$item] = [];
 				if ($v['drag']) {
 					$this->_query[$index]['result'][$k]['modules'][$item] = json_decode($v['drag'], true);
 				}
@@ -640,7 +630,7 @@ class Mdl_product extends CI_Model
 	}
 
 	// Модуль собирает буквенный путь-ссылку для товара(ов)
-	public function mod_linkPath($item = 'linkPath', $option = array())
+	public function mod_linkPath($item = 'linkPath', $option = [])
 	{
 
 		$labels = (isset($option['labels'])) ? $option['labels'] : false;
@@ -673,7 +663,7 @@ class Mdl_product extends CI_Model
 
 	// Модуль формирует сумму с учетом статичной скидки
 	// Зависимости: price_actual
-	public function mod_salePrice($item = 'salePrice', $option = array())
+	public function mod_salePrice($item = 'salePrice', $option = [])
 	{
 
 		$modules = (isset($option['modules'])) ? $option['modules'] : false;
@@ -739,7 +729,7 @@ class Mdl_product extends CI_Model
 	}
 
 	// Модуль собирает буквенный путь-ссылку для товара(ов)
-	public function mod_emptyPrice($item = 'emptyPrice', $option = array())
+	public function mod_emptyPrice($item = 'emptyPrice', $option = [])
 	{
 
 		$labels = (isset($option['labels'])) ? $option['labels'] : false;
@@ -774,7 +764,7 @@ class Mdl_product extends CI_Model
 	}
 
 	// Модуль собирает буквенный путь-ссылку для товара(ов)
-	public function mod_qtyEmptyStatus($item = 'emptyQty', $option = array())
+	public function mod_qtyEmptyStatus($item = 'emptyQty', $option = [])
 	{
 
 		$labels = (isset($option['labels'])) ? $option['labels'] : false;
@@ -811,7 +801,7 @@ class Mdl_product extends CI_Model
 	}
 
 	// Модуль для отображения параметров
-	public function mod_paramsView($item = 'paramsView', $option = array())
+	public function mod_paramsView($item = 'paramsView', $option = [])
 	{
 
 		$labels = (isset($option['labels'])) ? $option['labels'] : false;
@@ -928,6 +918,10 @@ class Mdl_product extends CI_Model
 	{
 		if (count($filters) > 0) {
 
+			if (isset($filters['kamen']) && isset($filters['carats'])) {
+				$this->setFilterKamenAndCarats($filters['kamen'], $filters['carats']);
+				unset($filters['kamen'], $filters['carats']);
+			}
 			foreach ($filters as $filter) {
 				if ($filter['type'] === 'checkbox-group') {
 					$this->setFilterCheckboxes($filter);
@@ -948,10 +942,11 @@ class Mdl_product extends CI_Model
 		} elseif ($filter['item'] === 'proba') {
 			$this->db->where_in('proba', $filter['values']);
 		} elseif ($filter['item'] === 'size') {
-			// ToDo: заменить в настройках фильтров в размерах "_" на ".", и убрать отсюда array_map
-			$this->db->where_in('size', array_map(function($size) {
-				return str_replace('_', '.', $size);
+//			$this->db->where_in('size', $filter['values']);
+			$condition = implode(" OR ", array_map(function ($value) {
+				return "(size = '$value' OR size_min <= '$value' AND size_max >= '$value')";
 			}, $filter['values']));
+			$this->db->where("($condition)");
 		} elseif ($filter['item'] === 'category') {
 			foreach ($filter["values"] as $key => $fl) {
 				switch ($fl) {
@@ -979,6 +974,9 @@ class Mdl_product extends CI_Model
 					case "pirsing":
 						$cat_id[] = 38;
 						break;
+					case "cepochki":
+						$cat_id[] = 40;
+						break;
 					case "zaponki":
 						$cat_id[] = 41;
 						break;
@@ -1000,7 +998,26 @@ class Mdl_product extends CI_Model
 			}, $filter['values']));
 
 			$this->db->where("($condition)");
+
+			// Если в фильтре выбран только один камень, вначале выдаются товары, где встречается только этот камень,
+			// потом товары, где этот камень крупнее остальных
+			if ($filter['item'] == 'kamen' && count($filter['values']) == 1) {
+				$kamen = trim(reset($filter['values']));
+				$this->db->order_by("if(JSON_LENGTH(filter_kamen) = 2, 0, 1), JSON_SEARCH(products.filter_kamen, 'one', '{$kamen}')");
+			}
 		}
+	}
+
+	public function setFilterKamenAndCarats($filterKamen, $filterCarats)
+	{
+		$conditions = [];
+		foreach ($filterKamen['values'] as $filterKamenValue) {
+			foreach ($filterCarats['values'] as $filterCaratsValue) {
+				$conditions[] = "JSON_CONTAINS(JSON_EXTRACT(filter_kamen_carats, '$.{$filterKamenValue}'), '$filterCaratsValue')";
+			}
+		}
+		$condition = implode(" OR ", $conditions);
+		$this->db->where("($condition)");
 	}
 
 	public function setFilterRange($filter)
@@ -1104,7 +1121,7 @@ class Mdl_product extends CI_Model
 	public function aliase_translite($string = false)
 	{
 		if ($string !== false) {
-			$replace = array(
+			$replace = [
 				"'" => "",
 				"`" => "",
 				"а" => "a", "А" => "a",
@@ -1143,7 +1160,7 @@ class Mdl_product extends CI_Model
 				"і" => "i", "І" => "i",
 				"ї" => "yi", "Ї" => "yi",
 				"є" => "e", "Є" => "e",
-			);
+			];
 			$str = iconv("UTF-8", "UTF-8//IGNORE", strtr($string, $replace));
 			$str = preg_replace("/[^a-z0-9-]/i", " ", $str);
 			$str = preg_replace("/ +/", "-", trim($str));
@@ -1352,91 +1369,4 @@ class Mdl_product extends CI_Model
 
 	}
 
-	/**
-	 * Список градаций каратности
-	 *
-	 * @return array
-	 */
-	public function caratsRanges()
-	{
-		return $this->caratsRanges;
-	}
-
-	/**
-	 * Код градации каратности по значению
-	 *
-	 * @param $carats
-	 * @return int
-	 */
-	public function getCaratsRange($carats)
-	{
-		$rangeId = null;
-		if (preg_match('/^[0-9.,]+$/', $carats)) {
-			$carats = (double)str_replace(',', '.', $carats);
-			if ($carats > 0) {
-				foreach ($this->caratsRanges as $rangeId => $rangeMax) {
-					if ($rangeMax && $carats <= $rangeMax) {
-						break;
-					}
-				}
-			}
-		}
-		return $rangeId;
-	}
-
-	/**
-	 * Получение градаций каратности по значению поля drag
-	 *
-	 * @param array $drag
-	 * @return array
-	 */
-	public function getCaratsRanges($drag)
-	{
-		$caratsRanges = [];
-		foreach ($drag as $item) {
-			foreach ($item['data'] as $stoneProperty) {
-
-				if ($stoneProperty['name'] == 'Вес, Ct.') {
-					$value = str_replace('Ct', '', $stoneProperty['value']);
-					$caratsRange = $this->getCaratsRange($value);
-					if ($caratsRange && !in_array($caratsRange, $caratsRanges)) {
-						$caratsRanges[] = $caratsRange;
-					}
-				}
-			}
-		}
-		return $caratsRanges;
-	}
-
-	/**
-	 * Получение градаций каратности, сгруппированных по виду камня, по значению поля drag
-	 *
-	 * @param array $drag
-	 * @return array
-	 */
-	public function getCaratsRangesByStone($drag)
-	{
-		$caratsRangesByStone = [];
-		foreach ($drag as $item) {
-			$stoneCode = $item['kamenCode'];
-			if (!$stoneCode) {
-				break;
-			}
-			foreach ($item['data'] as $stoneProperty) {
-				if ($stoneProperty['name'] == 'Вес, Ct.') {
-					$value = str_replace('Ct', '', $stoneProperty['value']);
-					$caratsRange = $this->getCaratsRange($value);
-					if ($caratsRange) {
-						if (!isset($caratsRangesByStone[$stoneCode])) {
-							$caratsRangesByStone[$stoneCode] = [];
-						}
-						if (!in_array($caratsRange, $caratsRangesByStone[$stoneCode])) {
-							$caratsRangesByStone[$stoneCode][] = $caratsRange;
-						}
-					}
-				}
-			}
-		}
-		return $caratsRangesByStone;
-	}
 }
