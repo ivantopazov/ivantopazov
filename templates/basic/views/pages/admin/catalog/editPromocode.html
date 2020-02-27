@@ -1,0 +1,118 @@
+<div class="tabs-container">
+	<div class="mb20">
+
+		<ul class="nav nav-tabs">
+			<li class=" active ">
+				<a href="#tab-info" data-toggle="tab" aria-expanded="true">
+					Описание <!--<i class="fa px14 fa-paper-plane-o"></i>-->
+				</a>
+			</li>
+		</ul>
+
+		<div class="tab-content">
+
+			<div id="tab-info" class="tab-pane active">
+				<div class="panel-body">
+
+					<form class="row mt10 mb10" id="blockInfo"
+						  action="/admin/catalog/promocodes/actEditPromocodeInfo"
+						  method="post"
+						  before="Ev.promocodes_edit.FORM.set_info.before"
+						  success="Ev.promocodes_edit.FORM.set_info.success"
+						  data_type="json">
+
+						<input type="hidden" name="promocode_id" value="{{promocode.id}}"/>
+
+						<div class="form-group blok pad5555">
+							<div class="row">
+								<div class="col-xs-3 txr"><label class="control-label fon18lh">Дата начала:</label>
+								</div>
+								<div class="col-xs-5" style="position: relative" id="date-start-container">
+									<input type="text" class="form-control datepicker"
+										   value="{{promocode.date_start|date('d.m.Y')}}" placeholder="Дата начала"
+                                           data-date-container='#date-start-container'
+										   name="date_start">
+								</div>
+							</div>
+						</div>
+						<div class="form-group blok pad5555">
+							<div class="row">
+								<div class="col-xs-3 txr"><label class="control-label fon18lh">Дата окончания:</label>
+								</div>
+								<div class="col-xs-5" style="position: relative" id="date-end-container">
+									<input type="text" class="form-control datepicker"
+										   value="{{promocode.date_end|date('d.m.Y')}}" placeholder="Дата окончания"
+                                           data-date-container='#date-end-container'
+										   name="date_end">
+								</div>
+							</div>
+						</div>
+						<div class="form-group blok pad5555">
+							<div class="row">
+								<div class="col-xs-3 txr"><label class="control-label fon18lh">Код:</label></div>
+								<div class="col-xs-5">
+									<input type="text" class="form-control" placeholder="Код" name="code"
+										   value="{{promocode.code}}">
+								</div>
+							</div>
+						</div>
+						<div class="form-group blok pad5555">
+							<div class="row">
+								<div class="col-xs-3 txr"><label class="control-label fon18lh">Наименование:</label>
+								</div>
+								<div class="col-xs-5">
+									<input type="text" class="form-control" placeholder="Наименование" name="title"
+										   value="{{promocode.title}}">
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group blok pad5555">
+							<div class="row">
+								<div class="col-xs-3 txr"><label class="control-label fon18lh">Скидка (руб):</label>
+								</div>
+								<div class="col-xs-5">
+									<input type="text" class="form-control" placeholder="Скидка (руб)"
+										   value="{{promocode.amount}}" name="amount">
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group blok pad5555">
+							<div class="row">
+								<div class="col-xs-3 txr"><label class="control-label fon18lh">Скидка (%):</label></div>
+								<div class="col-xs-5">
+									<input type="text" class="form-control" placeholder="Скидка (%)"
+										   value="{{promocode.percent}}" name="percent">
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group blok pad5555">
+							<div class="row">
+								<div class="col-xs-3 txr"><label class="control-label fon18lh">Минимальный заказ
+									(руб):</label></div>
+								<div class="col-xs-5">
+									<input type="text" class="form-control" placeholder="Минимальный заказ (руб)"
+										   name="min_order" value="{{promocode.min_order}}">
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group blok pt10 pb10">
+							<div class="row">
+								<label class="mt10 col-sm-3 control-label">&nbsp;</label>
+								<div class="mt10 col-sm-5">
+									<button type="submit" class="btn btn-sm btn-success mr10 mb10">Сохранить</button>
+									<button type="reset" class="btn btn-sm  mr10 mb10 hidden">Сброс</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+</div>

@@ -137,30 +137,33 @@ class Images{
         }
     }
 
+	function imageresize($outfile, $infile, $neww, $newh, $quality)
+	{
+            try {
+			if (strpos($infile, '.png') !== false) {
+				$im = imagecreatefrompng($infile);
+			} else {
+				$im = imagecreatefromjpeg($infile);
+			}
+			$k1 = $neww / imagesx($im);// 400 / 430 = '0,9302325581395349'
+			$k2 = $newh / imagesy($im);// 400 / 600 = '0,6666666666666667'
+			$k = $k1 > $k2 ? $k2 : $k1; // '0,6666666666666667'
 
-    function imageresize($outfile,$infile,$neww,$newh,$quality) {
-        
-        $im=imagecreatefromjpeg($infile);
-        $k1=$neww/imagesx($im);// 400 / 430 = '0,9302325581395349'
-        $k2=$newh/imagesy($im);// 400 / 600 = '0,6666666666666667'
-        $k=$k1>$k2?$k2:$k1; // '0,6666666666666667'
+			$w = intval(imagesx($im) * $k); // 430 * 0,6666666666666667 = 286,6666666666667
+			$h = intval(imagesy($im) * $k); // 600 * 0,6666666666666667 = 400
 
-        $w=intval(imagesx($im)*$k); // 430 * 0,6666666666666667 = 286,6666666666667
-        $h=intval(imagesy($im)*$k); // 600 * 0,6666666666666667 = 400
-        
-        $xl = ( $w < $neww )?(($neww-$w)/2):0;
-        $yt = ( $h < $newh )?(($newh-$h)/2):0;
-                
-        
-        $im1=imagecreatetruecolor($neww,$newh);
-        imagefill($im1, 0, 0, 0xFFFFFF );
-        imagecopyresampled($im1,$im,$xl,$yt,0,0,$w,$h,imagesx($im),imagesy($im));
+			$xl = ($w < $neww) ? (($neww - $w) / 2) : 0;
+			$yt = ($h < $newh) ? (($newh - $h) / 2) : 0;
 
-        imagejpeg($im1,$outfile,$quality);
-        imagedestroy($im);
-        imagedestroy($im1);
-        
-    }
+			$im1 = imagecreatetruecolor($neww, $newh);
+			imagefill($im1, 0, 0, 0xFFFFFF);
+			imagecopyresampled($im1, $im, $xl, $yt, 0, 0, $w, $h, imagesx($im), imagesy($im));
+
+			imagejpeg($im1, $outfile, $quality);
+			imagedestroy($im);
+			imagedestroy($im1);
+		} catch (Exception $err) {}
+	}
 
 
 	

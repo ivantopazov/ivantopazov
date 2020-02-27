@@ -11,34 +11,43 @@ class Home extends CI_Controller {
     protected $post = array();
     protected $get = array();
 	
-    public function __construct() {        
+    public function __construct() {
         parent::__construct();
         
-		$this->user_info = ( $this->mdl_users->user_data() )? $this->mdl_users->user_data() : false; 
-        $this->store_info = $this->mdl_stores->allConfigs();  
+		$this->user_info = ( $this->mdl_users->user_data() )? $this->mdl_users->user_data() : false;
+        $this->store_info = $this->mdl_stores->allConfigs();
         
         $this->post = $this->security->xss_clean($_POST);
         $this->get = $this->security->xss_clean($_GET);
         
     }
-        
+    
     public function index(){
-        
-        $start = microtime(true); 
-                
+    
+//    	error_reporting(E_ALL);
+//		ini_set('display_errors', 1);
+    	$start = microtime(true);
+     
 		$title = ( !empty( $this->store_info['seo_title'] ) ) ? $this->store_info['seo_title'] : $this->store_info['header'];
 		$page_var = 'home';
-                
+        
         $this->mdl_tpl->view( 'templates/doctype_home.html' , array(
         
             'title' => $title,
             'addons_folder' => $this->mdl_stores->getСonfigFile('addons_folder'),
-            'config_styles_path' => $this->mdl_stores->getСonfigFile('config_styles_path'), 
-            'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'), 
+            'config_styles_path' => $this->mdl_stores->getСonfigFile('config_styles_path'),
+            'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
             
             'seo' => $this->mdl_tpl->view('snipets/seo_tools.html',array(
                 'mk' => ( !empty( $this->store_info['seo_keys'] ) ) ? $this->store_info['seo_keys'] : '',
-                'md' => ( !empty( $this->store_info['seo_desc'] ) ) ? $this->store_info['seo_desc'] : ''
+                'md' => ( !empty( $this->store_info['seo_desc'] ) ) ? $this->store_info['seo_desc'] : '',
+                'oggMetta' => [
+                  "title" => "Ювелирный интернет-магазин в Москве",
+                  "url" => "https://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"],
+                  "image" => "https://ivantopazov.ru/templates/basic/images/event-4.jpg",
+                  "site_name" => "Иван Топазов",
+                  "description" => ( !empty( $this->store_info['seo_desc'] ) ) ? $this->store_info['seo_desc'] : ''
+                ]
             ), true),
             
             'navTop' => $this->mdl_tpl->view('snipets/navTop.html',array(
@@ -64,7 +73,7 @@ class Home extends CI_Controller {
                 'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path')
             ), true ),
             
-            'content' => $this->mdl_tpl->view('pages/home/basic.html',array(),true),
+            'content' => "", //$this->mdl_tpl->view('pages/home/basic.html',array(),true),
             
             'actionsBlocks' => $this->mdl_tpl->view('snipets/actionsBlocks.html',array(),true),
             
@@ -72,13 +81,13 @@ class Home extends CI_Controller {
                 'items' => $this->getNovyePostuplenia( false )
             ),true),
             
-            'lideryProdazh' => $this->mdl_tpl->view('snipets/lideryProdazh.html',array(
+            /*'lideryProdazh' => $this->mdl_tpl->view('snipets/lideryProdazh.html',array(
                 'items' => $this->getLideryProdaj( false )
-            ),true),
+            ),true),*/
             
-            'popularnyeTovary' => $this->mdl_tpl->view('snipets/popularnyeTovary.html',array(
+            /*'popularnyeTovary' => $this->mdl_tpl->view('snipets/popularnyeTovary.html',array(
                 'items' => $this->popularnyeTovary( false )
-            ),true),
+            ),true),*/
             
             'preimushchestva' => $this->mdl_tpl->view('snipets/preimushchestva.html',array(
                 'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path')
@@ -102,7 +111,7 @@ class Home extends CI_Controller {
             
         ), false);
         
-        // echo '<p style="background: yellow none repeat scroll 0% 0%; margin: 20px 0px 0px; position: fixed; bottom: 0px;">Время выполнения скрипта: '.(microtime(true) - $start).' сек.</p>'; 
+        // echo '<p style="background: yellow none repeat scroll 0% 0%; margin: 20px 0px 0px; position: fixed; bottom: 0px;">Время выполнения скрипта: '.(microtime(true) - $start).' сек.</p>';
         
         
     }
@@ -191,13 +200,13 @@ class Home extends CI_Controller {
             'order_by' => [
                 'item' => 'id',
                 'value' => 'DESC'
-            ], 
+            ],
             'group_by' => 'articul',
             'distinct' => true,
-            'labels' => ['id', 'aliase', 'title', 'salle_procent', 'modules'],            
+            'labels' => ['id', 'aliase', 'title', 'salle_procent', 'modules'],
             'module_queue' => [
                  'limit', 'price_actual',  'salePrice', 'photos'
-            ],            
+            ],
             'module' => true,
             'modules' => [[
                 'module_name' => 'price_actual',
@@ -232,6 +241,9 @@ class Home extends CI_Controller {
     
     // Лидеры продаж
     public function getLideryProdaj( $j = true ){
+   
+       error_reporting(-1);
+       ini_set('display_errors', 1);
         
         $r = $this->mdl_product->queryData([
             'return_type' => 'ARR2',
@@ -255,7 +267,7 @@ class Home extends CI_Controller {
             'order_by' => [
                 'item' => 'id',
                 'value' => 'RANDOM'
-            ], 
+            ],
             'labels' => ['id', 'aliase', 'title', 'salle_procent', 'modules'],
             'module' => true,
             'modules' => [[
@@ -291,6 +303,9 @@ class Home extends CI_Controller {
     
     // Популярные товары
     public function popularnyeTovary( $j = true ){
+   
+       error_reporting(-1);
+       ini_set('display_errors', 1);
         
         $r = $this->mdl_product->queryData([
             'return_type' => 'ARR2',
@@ -314,7 +329,7 @@ class Home extends CI_Controller {
             'order_by' => [
                 'item' => 'view',
                 'value' => 'DESC'
-            ], 
+            ],
             'labels' => ['id', 'aliase', 'title', 'salle_procent', 'modules'],
             'module' => true,
             'modules' => [[

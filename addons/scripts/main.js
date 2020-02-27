@@ -1,453 +1,696 @@
 window.speedCart = [];
 window.MAIN = {
 
-    setEvents : function(){
-        $('#cart').off('change');
-        $('#cart').on('change','input[type="text"].qtyChange', function(){
-            console.log($(this).attr('itemid'),  $(this).val(), 'update 1 1 ');
-            CART.updateCount( $(this).attr('itemid'),  $(this).val(), MAIN.cartPages );
-        });
-    },
+	setEvents: function () {
+		$('#cart').off('change');
+		$('#cart').on('change', 'input[type="text"].qtyChange', function () {
+			// console.log($(this).attr('itemid'), $(this).val(), 'update 1 1 ');
+			CART.updateCount($(this).attr('itemid'), $(this).val(), MAIN.cartPages);
+		});
+	},
 
-    updateHeaderInfo : function(){
-        CART.list(function( response ){
-            MAIN.updateView( response );
-        });
-    },
+	updateHeaderInfo: function () {
+		CART.list(function (response) {
+			MAIN.updateView(response);
+		});
+	},
+	
+	updateHeaderInfo2: function () {
+		CART.favorite(function (response) {
+			MAIN.updateView2(response);
+		});
+	},
 
-    messagesDeliver : function(){
-        CART.list(function( response ){
-            var summaCop = []; var count = 0;
-            for (var key in response) {
-                var val = response [key];
-                var summaCop = Number( summaCop ) + ( val.qty * Number( val.price ));
-                var count = Number( count + val.qty );
-            }
-            var summaRUB = Number( summaCop / 100 );
-            if( summaCop > 500000 ){
-                var t = '';
-                t += 'Вы получаете бесплатную доставку';
-                $('#DeliverInfo').html( t );
-                $('#DeliverInfo').removeClass('hidden');
-            }else{
-                var t = '';
-                t += 'Получите бесплатную доставку при заказе от 5000 рублей! ';
-                t += 'Сумма вашей корзины: ' + summaRUB + ' руб.';
-                $('#DeliverInfo').html( t );
-                $('#DeliverInfo').removeClass('hidden');
-            }
-        });
-    },
+	messagesDeliver: function () {
+		CART.list(function (response) {
+			var summaCop = [];
+			var count = 0;
+			for (var key in response) {
+				var val = response [key];
+				var summaCop = Number(summaCop) + (val.qty * Number(val.price));
+				var count = Number(count + val.qty);
+			}
+			var summaRUB = Number(summaCop / 100);
+			if (summaCop > 700000) {
+				var t = '';
+				t += 'Вы получаете бесплатную доставку';
+				$('#DeliverInfo').html(t);
+				$('#DeliverInfo').removeClass('hidden');
+			} else {
+				var t = '';
+				t += 'Получите бесплатную доставку при заказе от 7000 рублей с учетом всех скидок на изделия. ';
+				t += 'Сумма вашей корзины: ' + summaRUB + ' руб.';
+				$('#DeliverInfo').html(t);
+				$('#DeliverInfo').removeClass('hidden');
+			}
+		});
+	},
 
-    // Обновить информацию в шапке корзины
-    updateView : function( response ){
-        var summaCop = []; var count = 0;
-        for (var key in response) {
-            var val = response [key];
-            var summaCop = Number( summaCop ) + ( val.qty * Number( val.price ));
-            var count = Number( count + val.qty );
-        }
-        var summaRUB = Number( summaCop / 100 );
-        $('.cartSumma').html( count );
+	// Обновить информацию в шапке корзины
+	updateView: function (response) {
+		var summaCop = 0;
+		var count = 0;
+		for (var key in response) {
+			var val = response [key];
+			summaCop = Number(summaCop) + (val.qty * Number(val.price));
+			count = Number(count + val.qty);
+		}
+		var summaRUB = Number(summaCop / 100);
+		$('.cartSumma').html(count);
 
-        this.messagesDeliver();
-    },
+		this.messagesDeliver();
+	},
+	
+	// Обновить информацию в шапке избранного
+	updateView2: function (response) {
+		var copy = [];
+		response.forEach(function(item){
+		  copy.push(item.id);
+		});
 
-    //Выполнить после обавления товара в корзину
-    addCartCallback : function ( response ){
-        MAIN.updateView( response );
-        $('#modal_cart_addet').modal();
-    },
+		response = Array.from(new Set(copy));
 
-    speedAddCart : function ( item ){
-        window.speedCart = [];
-        window.speedCart.push( item );
-        console.log('-<<<-', window.speedCart, item );
+		var count = 0;
+		for (var key in response) {
+			count = Number(count + 1);
+		}
+		$('.favoriteSumma').html(count);
+	},
 
-    },
+	//Выполнить после обавления товара в корзину
+	addCartCallback: function (response) {
+		MAIN.updateView(response);
+		$('#modal_cart_addet').modal();
+	},
+	
+	//Выполнить после добавления в избраннное
+	addFavorite: function (response) {
+		CART.addFavorite(response);
+		$('#modal_cart_favorite').modal();
+		$('.favoriteSumma').html($('.favoriteSumma').html()*1+1);
+	},	
 
-    // CreditAddCart : function ( item ){
-    //     window.creditCart = [];
-    //         creditCart.push( item );
-    // },
+	speedAddCart: function (item) {
+		window.speedCart = [];
+		window.speedCart.push(item);
+		// console.log('-<<<-', window.speedCart, item);
 
-    // Загрузка позиций корзины ( страница - корзина )
-    cartPages : function(){
-        CART.list(function( response ){
-            MAIN.updateView( response );
-            MAIN.erectCartList( response );
-            MAIN.setEvents();
-        });
-    },
+	},
 
-    // Формирование списка позиций ( страница - корзина )
-    erectCartList : function ( LIST ){
+	// CreditAddCart : function ( item ){
+	//     window.creditCart = [];
+	//         creditCart.push( item );
+	// },
 
-        TPL.GET_TPL('pages/cart/items', { items: LIST }, function( t ){
-            $('.cartBlock .cartList').html( t );
-        });
+	// Загрузка позиций корзины ( страница - корзина )
+	cartPages: function () {
+		CART.list(function (response) {
+			MAIN.updateView(response);
+			MAIN.erectCartList(response);
+			MAIN.setEvents();
+		});
+		CART.promocode(function (response) {
+			MAIN.setPromocodeInfo(response);
+		});
+	},
+	
+	// Загрузка позиций избранного
+	cartPagesWithRefreshFavorite: function () {
+		CART.favorite(function (response) {
+			$.ajax({
+				type: 'post',
+				url: '/favorite/refresh',
+				data: {
+					favorite: response,
+				},
+				dataType: 'json',
+				success: function (data) {
+					console.log(data);
+					if (data.success) {
+						TPL.GET_TPL('pages/favorite/items', {items: data.favorite}, function (t) {
+							$('.cartBlock .cartList').html(t);
+						});
+						$('.cartBlock').removeClass('hidden');
+						$('#emptyCart').addClass('hidden');
+					} else {
+						$('.cartBlock').addClass('hidden');
+						$('#emptyCart').removeClass('hidden');
+					}
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					FNC.errorConnect(errorThrown);
+				},
+			});
+			
+			MAIN.updateView2(response);
+		});
+	},
+	
+	// Загрузка позиций корзины с предварительным обновлением цен
+	cartPagesWithRefresh: function () {
+		var promocode = CART.promocode();
+		CART.list(function (response) {
+			$.ajax({
+				type: 'post',
+				url: '/cart/refresh',
+				data: {
+					cart: response,
+					promocodeCode: promocode.code,
+				},
+				dataType: 'json',
+				success: function (data) {
+					if (data.success) {
+						CART.update(data.prices, data.promocode, MAIN.cartPages);
+					}
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					FNC.errorConnect(errorThrown);
+				},
+			});
+		});
+	},
 
-        var itog = 0;
-        for ( var key in LIST ) {
-            var val = LIST[key];
-            itog += ( ( val.qty * val.price  ) / 100 );
-        }
-        $('#itog').html( itog + ' руб.' );
+	// Формирование списка позиций ( страница - корзина )
+	erectCartList: function (LIST) {
+		var itog = 0;
+		for (var key in LIST) {
+			var val = LIST[key];
+			itog += parseInt(((val.qty * val.price) / 100));
 
-        if( LIST.length > 0 ){
-           $('.cartBlock').removeClass('hidden');
-           $('#order_info').removeClass('hidden');
-           $('#emptyCart').addClass('hidden');
-        }else{
-           $('.cartBlock').addClass('hidden');
-           $('#order_info').addClass('hidden');
-           $('#emptyCart').removeClass('hidden');
-        }
+			LIST[key]['pr'] = parseInt((LIST[key]['qty'] * LIST[key]['price']) / 100);
+		}
+		$('#itog').html(itog + ' руб.');
 
-        //MAIN.cartList();
-        this.messagesDeliver();
-    },
+		TPL.GET_TPL('pages/cart/items', {items: LIST}, function (t) {
+			$('.cartBlock .cartList').html(t);
+		});
 
-    // ОФОРМЛЕНИЕ КОРЗИНЫ
-    FORM : {
+		if (LIST.length > 0) {
+			$('.cartBlock').removeClass('hidden');
+			$('#order_info').removeClass('hidden');
+			$('#emptyCart').addClass('hidden');
+		} else {
+			$('.cartBlock').addClass('hidden');
+			$('#order_info').addClass('hidden');
+			$('#emptyCart').removeClass('hidden');
+		}
 
-        requare : function( data, callback ){
+		//MAIN.cartList();
+		this.messagesDeliver();
+	},
 
-            var cartArray = CART.list( false );
-            var success = true;
-            var postData = {};
+	usePromocode: function () {
+		var code = $.trim($('#promocode').val());
+		if (code) {
+			$.ajax({
+				type: 'post',
+				url: '/cart/use_promocode',
+				data: {
+					code: code,
+					cartTotal: parseInt($('#itog').html()),
+				},
+				dataType: 'json',
+				success: function (data) {
+					if (data.success && data.promocode && data.promocode.code) {
+						CART.setPromocode(data.promocode);
+						MAIN.setPromocodeInfo(data.promocode);
 
-            if( cartArray.length > 0  ){
-                var postData = {
-                    type : 'Обычная покупка',
-                    cart : CART.list( false ),
-                    info : data
-                };
-            }else{
-                success = false;
-            }
-            callback( success, postData );
+						$('#modal_promocode_success').modal();
+					} else {
+						CART.setPromocode({});
+						MAIN.setPromocodeInfo({});
+						$('#promocodeError').html(data.error || 'Произошла ошибка, попробуйте позднее.');
+						$('#modal_promocode_failed').modal();
+					}
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					FNC.errorConnect(errorThrown);
+					$('#promocodeError').html('Произошла ошибка, попробуйте позднее.');
+					$('#modal_promocode_failed').modal();
+				},
+			});
+		}
+	},
 
-        },
+	removePromocode: function () {
+		CART.setPromocode({});
+		MAIN.setPromocodeInfo({});
+		$('#modal_promocode_removed').modal();
+	},
 
-        before : function( data ){
+	setPromocodeInfo: function (promocode) {
+		if (promocode && promocode.code) {
+			var cartTotal = parseInt($('#itog').html());
+			cartTotalWithPromocode = +promocode.percent ?
+				Math.round(cartTotal * (100 - promocode.percent) / 100) :
+				cartTotal - promocode.amount;
+			var promocodeValue = +promocode.percent ? promocode.percent + '%' :
+				promocode.amount + ' р.';
 
-            var err = 0;
-            var saveMenu = false;
+			$('#itogWithPromocode').html(cartTotalWithPromocode + ' руб.');
+			$('#itog').addClass('oldPrice');
 
-            for (var key in data.info) {
-                var val = data.info [key];
+			$('#promocode').val(promocode.code);
+			$('.promocodeCode').html(promocode.code);
+			$('.promocodeValue').html(promocodeValue);
+			$('#promocodeInfo').removeClass('hidden');
+			$('#promocodeRemove').removeClass('hidden');
+		} else {
+			$('#itogWithPromocode').html('');
+			$('#itog').removeClass('oldPrice');
 
-                if( val.name === 'fio' ){
-                     if( !FNC.validate('string_cylric_plus', val.value ) ){
-                        $( DOM.parent + ' input[name="fio"]').css('outline', '1px solid red');
-                        setTimeout(function(){
-                             $( DOM.parent + ' input[name="fio"]').css('outline', 'none');
-                        },5000);
-                        err++;
-                    }
-                }
+			$('#promocode').val('');
+			$('#promocodeInfo').addClass('hidden');
+			$('#promocodeRemove').addClass('hidden');
+		}
+	},
 
-                if( val.name === 'phone' ){
-                    if( val.value.length < 1  ){
-                        $( DOM.parent + ' input[name="phone"]').css('outline', '1px solid red');
-                        setTimeout(function(){
-                             $( DOM.parent + ' input[name="phone"]').css('outline', 'none');
-                        },5000);
-                        err++;
-                    }
-                }
+	// ОФОРМЛЕНИЕ КОРЗИНЫ
+	FORM: {
 
-                if( val.name === 'adress' ){
-                    if( val.value.length < 1  ){
-                        $( DOM.parent + ' textarea[name="adress"]').css('outline', '1px solid red');
-                        setTimeout(function(){
-                             $( DOM.parent + ' textarea[name="adress"]').css('outline', 'none');
-                        },5000);
-                        err++;
-                    }
-                }
+		requare: function (data, callback) {
 
-            }
+			var cartArray = CART.list();
+			var promocode = CART.promocode();
+			var success = true;
+			var postData = {};
 
-            CART.list(function( response ){
-              var summaCop = []; var count = 0;
-              for (var key in response) {
-                var val = response [key];
-                var summaCop = Number( summaCop ) + ( val.qty * Number( val.price ));
-                var count = Number( count + val.qty );
-              }
-              var summaRUB = Number( summaCop / 100 );
-              if( summaCop < 700000 ){
-                  err++;
-              }
-            });
+			if (cartArray.length > 0) {
+				var postData = {
+					type: 'Обычная покупка',
+					cart: cartArray,
+					promocode: promocode,
+					info: data,
+				};
+			} else {
+				success = false;
+			}
+			callback(success, postData);
 
-            if( err < 1 ){
-                $( DOM.parent + ' #order_info button[type="submit"]').prop('disabled', true);
-            }
+		},
 
-            //console.log( 'xx', MAIN.sendSuccess() );
+		before: function (data) {
 
-            //return false;
-            return ( err < 1 ) ? true : false;
+			var err = 0;
+			var saveMenu = false;
 
-        },
+			for (var key in data.info) {
+				var val = data.info [key];
 
-        success : function( json ){
-            if( json.err < 1 ){
-                //yaCounter41905564.reachGoal('new_order');
+				if (val.name === 'fio') {
+					if (!FNC.validate('string_cylric_plus', val.value.trim())) {
+						$(DOM.parent + ' input[name="fio"]').css('outline', '1px solid red');
+						setTimeout(function () {
+							$(DOM.parent + ' input[name="fio"]').css('outline', 'none');
+						}, 5000);
+						err++;
+					}
+				}
 
-                //CART.list(function( response ){
+				if (val.name === 'phone') {
+					if (val.value.trim().length < 10) {
+						$(DOM.parent + ' input[name="phone"]').css('outline', '1px solid red');
+						setTimeout(function () {
+							$(DOM.parent + ' input[name="phone"]').css('outline', 'none');
+						}, 5000);
+						err++;
+					}
+				}
 
-                    /*var pp = {
-                        "ecommerce": {
-                            "purchase": {
-                                "actionField": {
-                                    "id" : json.order_id,
-                                    "goal_id" : 27016149,
-                                    "revenue" : json.revenue
-                                },
-                                "products": ( function(response){
-                                    var setItems = [];
-                                    for ( var key in response ) {
-                                        var val = response[key];
-                                        var add = {
-                                            id : Number(val.id),
-                                            name : val.title,
-                                            price : Number( ( val.price / 100 ).toFixed(2)),
-                                            quantity :  Number( val.qty )
-                                        };
-                                        setItems.push( add );
-                                    }
-                                    return setItems;
-                                })( response )
-                            }
-                        }
-                    };
+				if (val.name === 'email') {
+					if (val.value.trim().length < 1) {
+						$(DOM.parent + ' input[name="email"]').css('outline', '1px solid red');
+						setTimeout(function () {
+							$(DOM.parent + ' input[name="email"]').css('outline', 'none');
+						}, 5000);
+						err++;
+					}
+				}
 
-                    console.log( '230', response, pp );
+				/*
+				if (val.name === 'times') {
+					if (val.value.trim().length < 1) {
+						$(DOM.parent + ' input[name="times"]').css('outline', '1px solid red');
+						setTimeout(function () {
+							$(DOM.parent + ' input[name="times"]').css('outline', 'none');
+						}, 5000);
+						err++;
+					}
+				}
+				*/
 
-                    dataLayer.push( pp );
-                    */
+				if (val.name === 'city') {
+					if (val.value.trim().length < 1) {
+						$(DOM.parent + ' input[name="city"]').css('outline', '1px solid red');
+						setTimeout(function () {
+							$(DOM.parent + ' input[name="city"]').css('outline', 'none');
+						}, 5000);
+						err++;
+					}
+				}
 
+				if (val.name === 'address') {
+					if (val.value.trim().length < 1) {
+						$(DOM.parent + ' input[name="address"]').css('outline', '1px solid red');
+						setTimeout(function () {
+							$(DOM.parent + ' input[name="address"]').css('outline', 'none');
+						}, 5000);
+						err++;
+					}
+				}
 
-                //});
+			}
 
-                CART.removeAll(function(){
-                   console.log('thanks');
-                   window.location.replace('/cart/thanks');
-                });
-            }else{
-                alert('При заполнении формы заказы, была допущена ошибка.');
-                $( DOM.parent + ' #order_info button[type="submit"]').removeAttr('disabled');
-            }
-        }
+			CART.list(function (response) {
+				var summaCop = [];
+				var count = 0;
+				for (var key in response) {
+					var val = response [key];
+					var summaCop = Number(summaCop) + (val.qty * Number(val.price));
+					var count = Number(count + val.qty);
+				}
+				var summaRUB = Number(summaCop / 100);
+				/*if( summaCop < 700000 ){
+				 err++;
+				 }*/ // Здесь стоял лимит на минимальную сумму заказа: 7к рублей в копейках
+			});
 
-    },
+			if (err < 1) {
+				$(DOM.parent + ' #order_info button[type="submit"]').prop('disabled', true);
+			}
 
-    // ОФОРМЛЕНИЕ КОРЗИНЫ
-    SpeedFORM : {
+			return (err < 1) ? true : false;
 
-        requare : function( data, callback ){
+		},
 
-            var cartArray = window.speedCart;
-            var success = true;
-            var postData = {};
-            if( window.speedCart.length > 0  ){
-                var postData = {
-                    type : 'Быстрая покупка',
-                    cart : window.speedCart,
-                    info : data
-                };
-            }else{
-                success = false;
-            }
+		success: function (json) {
+			if (json.err < 1) {
+				//yaCounter41905564.reachGoal('new_order');
 
-            callback( success, postData );
+				//CART.list(function( response ){
 
-        },
+				/*var pp = {
+				 "ecommerce": {
+				 "purchase": {
+				 "actionField": {
+				 "id" : json.order_id,
+				 "goal_id" : 27016149,
+				 "revenue" : json.revenue
+				 },
+				 "products": ( function(response){
+				 var setItems = [];
+				 for ( var key in response ) {
+				 var val = response[key];
+				 var add = {
+				 id : Number(val.id),
+				 name : val.title,
+				 price : Number( ( val.price / 100 ).toFixed(2)),
+				 quantity :  Number( val.qty )
+				 };
+				 setItems.push( add );
+				 }
+				 return setItems;
+				 })( response )
+				 }
+				 }
+				 };
 
-        before : function( data ){
-            var err = 0;
-            var saveMenu = false;
-            for (var key in data.info) {
-                var val = data.info [key];
-                if( val.name === 'fio' ){
-                     if( !FNC.validate('string_cylric_plus', val.value ) ){
-                        $( DOM.parent + ' input[name="fio"]').css('outline', '1px solid red');
-                        setTimeout(function(){
-                             $( DOM.parent + ' input[name="fio"]').css('outline', 'none');
-                        },5000);
-                        err++;
-                    }
-                }
-                if( val.name === 'phone' ){
-                    if( FNC.validate( 'phone', val.value ) === false ){
-                        $( DOM.parent + ' input[name="phone"]').css('outline', '1px solid red');
-                        setTimeout(function(){
-                             $( DOM.parent + ' input[name="phone"]').css('outline', 'none');
-                        },5000);
-                        err++;
-                    }
-                }
-                if( val.name === 'adress' ){
-                    if( val.value.length < 1  ){
-                        $( DOM.parent + ' textarea[name="adress"]').css('outline', '1px solid red');
-                        setTimeout(function(){
-                             $( DOM.parent + ' textarea[name="adress"]').css('outline', 'none');
-                        },5000);
-                        err++;
-                    }
-                }
-            }
+				 console.log( '230', response, pp );
 
-            return ( err < 1 ) ? true : false;
+				 dataLayer.push( pp );
+				 */
 
-        },
+				//});
 
-        success : function( json ){
-            if( json.err < 1 ){
-                window.speedCart = [];
-                $('#modal_speedOrder').modal('hide');
-                FNC.alert('success', 'Ваш заказ был успешно отправлен.');
-            }else{
-                alert('При заполнении формы заказы, была допущена ошибка.');
-            }
-        }
+				CART.removeAll(function () {
+					window.location.replace('/cart/thanks');
+				});
+			} else {
+				alert('При заполнении формы заказы, была допущена ошибка.');
+				$(DOM.parent + ' #order_info button[type="submit"]').removeAttr('disabled');
+			}
+		},
 
-    },
+	},
 
-    // ОФОРМЛЕНИЕ КОРЗИНЫ
-    CreditFORM : {
+	// Быстрый заказ
+	SpeedFORM: {
 
-        requare : function( data, callback ){
+		requare: function (data, callback) {
 
-            var cartArray = window.creditCart;
-            var success = true;
-            var postData = {};
-            if( cartArray.length > 0  ){
-                var postData = {
-                    type : 'Покупка в кредит',
-                    cart : window.creditCart,
-                    info : data
-                };
-            }else{
-                success = false;
-            }
-            callback( success, postData );
+			var cartArray = window.speedCart;
+			var success = true;
+			var postData = {};
+			if (window.speedCart.length > 0) {
+				var postData = {
+					type: 'Быстрая покупка',
+					cart: window.speedCart,
+					info: data,
+				};
+			} else {
+				success = false;
+			}
 
-        },
+			callback(success, postData);
 
-        before : function( data ){
-            var err = 0;
-            var saveMenu = false;
-            for (var key in data.info) {
-                var val = data.info [key];
-                if( val.name === 'fio' ){
-                     if( !FNC.validate('string_cylric_plus', val.value ) ){
-                        $( DOM.parent + ' input[name="fio"]').css('outline', '1px solid red');
-                        setTimeout(function(){
-                             $( DOM.parent + ' input[name="fio"]').css('outline', 'none');
-                        },5000);
-                        err++;
-                    }
-                }
-                if( val.name === 'phone' ){
-                    if( FNC.validate( 'phone', val.value ) === false ){
-                        $( DOM.parent + ' input[name="phone"]').css('outline', '1px solid red');
-                        setTimeout(function(){
-                             $( DOM.parent + ' input[name="phone"]').css('outline', 'none');
-                        },5000);
-                        err++;
-                    }
-                }
-                if( val.name === 'adress' ){
-                    if( val.value.length < 1  ){
-                        $( DOM.parent + ' textarea[name="adress"]').css('outline', '1px solid red');
-                        setTimeout(function(){
-                             $( DOM.parent + ' textarea[name="adress"]').css('outline', 'none');
-                        },5000);
-                        err++;
-                    }
-                }
-            }
-            return ( err < 1 ) ? true : false;
+		},
 
-        },
+		before: function (data) {
+			var err = 0;
+			var saveMenu = false;
+			for (var key in data.info) {
+				var val = data.info [key];
+				if (val.name === 'fio') {
+					if (!FNC.validate('string_cylric_plus', val.value)) {
+						$(DOM.parent + ' input[name="fio"]').css('outline', '1px solid red');
+						setTimeout(function () {
+							$(DOM.parent + ' input[name="fio"]').css('outline', 'none');
+						}, 5000);
+						err++;
+					}
+				}
+				if (val.name === 'phone') {
+					if (val.value.trim().length < 10 || FNC.validate('phone', val.value) === false) {
+						$(DOM.parent + ' input[name="phone"]').css('outline', '1px solid red');
+						setTimeout(function () {
+							$(DOM.parent + ' input[name="phone"]').css('outline', 'none');
+						}, 5000);
+						err++;
+					}
+				}
+				if (val.name === 'adress') {
+					if (val.value.length < 1) {
+						$(DOM.parent + ' textarea[name="adress"]').css('outline', '1px solid red');
+						setTimeout(function () {
+							$(DOM.parent + ' textarea[name="adress"]').css('outline', 'none');
+						}, 5000);
+						err++;
+					}
+				}
+			}
 
-        success : function( json ){
-            if( json.err < 1 ){
-                window.creditCart = [];
-                $('#modal_creditOrder').modal('hide');
-                FNC.alert('success', 'Ваша заявка на кредит была успешно отправлена.');
-            }else{
-                alert('При заполнении формы заказы, была допущена ошибка.');
-            }
-        }
+			return (err < 1) ? true : false;
 
-    },
+		},
 
-    // ОФОРМЛЕНИЕ КОРЗИНЫ
-    callBackFORM : {
+		success: function (json) {
+			if (json.err < 1) {
+				window.speedCart = [];
+				$('#modal_speedOrder').modal('hide');
+				FNC.alert('success', 'Ваш заказ был успешно отправлен.');
+			} else {
+				alert('При заполнении формы заказы, была допущена ошибка.');
+			}
+		},
 
-        before : function( data ){
-            var err = 0;
-            var saveMenu = false;
-            for (var key in data.info) {
-                var val = data.info [key];
-                if( val.name === 'fio' ){
-                     if( !FNC.validate('string_cylric_plus', val.value ) ){
-                        $( DOM.parent + ' input[name="fio"]').css('outline', '1px solid red');
-                        setTimeout(function(){
-                             $( DOM.parent + ' input[name="fio"]').css('outline', 'none');
-                        },5000);
-                        err++;
-                    }
-                }
-                if( val.name === 'phone' ){
-                    if( FNC.validate( 'phone', val.value ) === false ){
-                        $( DOM.parent + ' input[name="phone"]').css('outline', '1px solid red');
-                        setTimeout(function(){
-                             $( DOM.parent + ' input[name="phone"]').css('outline', 'none');
-                        },5000);
-                        err++;
-                    }
-                }
-            }
-            return ( err < 1 ) ? true : false;
+	},
 
-        },
+	// Другой размер
+	otherSize: {
 
-        success : function( json ){
-            if( json.err < 1 ){
-                window.creditCart = [];
-                $('#modal_callback').modal('hide');
-                FNC.alert('success', 'Ваша заявка на обратный звонок была успешно отправлена.');
-            }else{
-                alert('При заполнении формы заявки, была допущена ошибка.');
-            }
-        }
+		before: function (data) {
+			var err = 0;
+			var sizeSelected = false;
+			for (var key in data) {
+				var val = data[key];
+				if (val.name === 'fio') {
+					if (!FNC.validate('string_cylric_plus', val.value)) {
+						$(DOM.parent + ' input[name="fio"]').css('outline', '1px solid red');
+						setTimeout(function () {
+							$(DOM.parent + ' input[name="fio"]').css('outline', 'none');
+						}, 5000);
+						err++;
+					}
+				}
+				if (val.name === 'phone') {
+					if (val.value.trim().length < 10 || FNC.validate('phone', val.value) === false) {
+						$(DOM.parent + ' input[name="phone"]').css('outline', '1px solid red');
+						setTimeout(function () {
+							$(DOM.parent + ' input[name="phone"]').css('outline', 'none');
+						}, 5000);
+						err++;
+					}
+				}
+				if (val.name === 'size' && val.value) {
+					sizeSelected = true;
+				}
+			}
+			if (!sizeSelected) {
+				$('#otherSizeTitle').css('color', 'red');
+				setTimeout(function () {
+					$('#otherSizeTitle').css('color', 'inherit');
+				}, 5000);
+				err++;
+			}
 
-    }
+			return (err < 1) ? true : false;
+
+		},
+
+		success: function (json) {
+			if (json.err < 1) {
+				window.speedCart = [];
+				$('#modal_otherSize').modal('hide');
+				FNC.alert('success', 'Ваш запрос был успешно отправлен.');
+			} else {
+				alert('При заполнении формы заказы, была допущена ошибка.');
+			}
+		},
+
+	},
+
+	// ОФОРМЛЕНИЕ КОРЗИНЫ
+	CreditFORM: {
+
+		requare: function (data, callback) {
+
+			var cartArray = window.creditCart;
+			var success = true;
+			var postData = {};
+			if (cartArray.length > 0) {
+				var postData = {
+					type: 'Покупка в кредит',
+					cart: window.creditCart,
+					info: data,
+				};
+			} else {
+				success = false;
+			}
+			callback(success, postData);
+
+		},
+
+		before: function (data) {
+			var err = 0;
+			var saveMenu = false;
+			for (var key in data.info) {
+				var val = data.info [key];
+				if (val.name === 'fio') {
+					if (!FNC.validate('string_cylric_plus', val.value)) {
+						$(DOM.parent + ' input[name="fio"]').css('outline', '1px solid red');
+						setTimeout(function () {
+							$(DOM.parent + ' input[name="fio"]').css('outline', 'none');
+						}, 5000);
+						err++;
+					}
+				}
+				if (val.name === 'phone') {
+					if (val.value.trim().length < 10 || FNC.validate('phone', val.value) === false) {
+						$(DOM.parent + ' input[name="phone"]').css('outline', '1px solid red');
+						setTimeout(function () {
+							$(DOM.parent + ' input[name="phone"]').css('outline', 'none');
+						}, 5000);
+						err++;
+					}
+				}
+				if (val.name === 'adress') {
+					if (val.value.length < 1) {
+						$(DOM.parent + ' textarea[name="adress"]').css('outline', '1px solid red');
+						setTimeout(function () {
+							$(DOM.parent + ' textarea[name="adress"]').css('outline', 'none');
+						}, 5000);
+						err++;
+					}
+				}
+			}
+			return (err < 1) ? true : false;
+
+		},
+
+		success: function (json) {
+			if (json.err < 1) {
+				window.creditCart = [];
+				$('#modal_creditOrder').modal('hide');
+				FNC.alert('success', 'Ваша заявка на кредит была успешно отправлена.');
+			} else {
+				alert('При заполнении формы заказы, была допущена ошибка.');
+			}
+		},
+
+	},
+
+	// Обратный звонок
+	callBackFORM: {
+
+		before: function (data) {
+			var err = 0;
+			var saveMenu = false;
+			data.forEach(function (val) {
+				if (val.name === 'fio') {
+					if (!FNC.validate('string_cylric_plus', val.value.trim())) {
+						$(DOM.parent + ' input[name="fio"]').css('outline', '1px solid red');
+						setTimeout(function () {
+							$(DOM.parent + ' input[name="fio"]').css('outline', 'none');
+						}, 5000);
+						err++;
+					}
+				}
+				if (val.name === 'phone') {
+					if (!FNC.validate('phone', val.value.trim()) || val.value.trim().length < 10) {
+						$(DOM.parent + ' input[name="phone"]').css('outline', '1px solid red');
+						setTimeout(function () {
+							$(DOM.parent + ' input[name="phone"]').css('outline', 'none');
+						}, 5000);
+						err++;
+					}
+				}
+			});
+			if (err < 1) {
+				FNC.set_cookie('callBackModalCount', '2');
+				$('#modal_callback').modal('hide');
+				return true;
+			}
+			return false;
+		},
+
+		success: function (json) {
+			if (json.err < 1) {
+				window.creditCart = [];
+				// $('#modal_callback').modal('hide');
+				FNC.alert('success', 'Ваша заявка на обратный звонок была успешно отправлена.');
+			} else {
+				alert('При заполнении формы заявки, была допущена ошибка.');
+			}
+		},
+
+	},
 
 };
 
-
 /*
-scrollTopMenu : function(){
-    var scrollItem = function(){
-        var top = $(document).scrollTop();
-        if (top < 210){
-            $('#menu > div').removeClass('navbar-nav').removeClass('navbar-fixed-top');
-        }else{
-            $('#menu > div').addClass('navbar-nav').addClass('navbar-fixed-top');
-        }
-    };
+ scrollTopMenu : function(){
+ var scrollItem = function(){
+ var top = $(document).scrollTop();
+ if (top < 210){
+ $('#menu > div').removeClass('navbar-nav').removeClass('navbar-fixed-top');
+ }else{
+ $('#menu > div').addClass('navbar-nav').addClass('navbar-fixed-top');
+ }
+ };
 
-    scrollItem();
-    $(window).scroll(function () {
-        scrollItem();
-    });
-}
-*/
+ scrollItem();
+ $(window).scroll(function () {
+ scrollItem();
+ });
+ }
+ */

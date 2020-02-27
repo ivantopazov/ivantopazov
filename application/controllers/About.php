@@ -21,7 +21,7 @@ class About extends CI_Controller {
     // Страница О КОМПАНИИ
     public function index(){
         
-        $start = microtime(true); 
+        $start = microtime(true);
         
         
 		$title = ( !empty( $this->store_info['seo_title'] ) ) ? $this->store_info['seo_title'] : $this->store_info['header'];
@@ -106,23 +106,50 @@ class About extends CI_Controller {
         
         $this->load->model('mdl_mail');			
         $this->mdl_mail->set_ot_kogo_from( 'order@ivantopazov.ru', 'IVAN TOPAZOV' );
-        //$this->mdl_mail->set_komu_to( 'korchma-kursk@yandex.ru', 'Покупатель');
+        $this->mdl_mail->set_komu_to( 'sale@ivantopazov.ru', 'SALE IVAN TOPAZOV');
         $this->mdl_mail->set_tema_subject( 'Заявка на обратный звонок - ' . date('d.m.Y H:i:s') );
         $this->mdl_mail->set_tema_message( $html_content );
         $this->mdl_mail->send();
         
         
-        $this->mdl_mail->set_komu_to( '2Kem@mail.ru', 'Покупатель');
-        $this->mdl_mail->send();
+//        $this->mdl_mail->set_komu_to( 'ivan.topazov@inbox.ru', 'Покупатель');
+//        $this->mdl_mail->send();
+//
+//        $this->mdl_mail->set_komu_to( 'topazovi@gmail.com', 'Покупатель');
+//        $this->mdl_mail->send();
         
-        $this->mdl_mail->set_komu_to( 'ivantopazov@bk.ru', 'Покупатель');
-        $this->mdl_mail->send();
-    
-        $this->mdl_mail->set_komu_to( 'info.nikoniki@gmail.com', 'Покупатель');
-        $this->mdl_mail->send();
+        $this->telegramCallBack($html_content);
+        
+        /*$this->mdl_mail->set_komu_to( 'dmitry@naidich.ru', 'Покупатель');
+        $this->mdl_mail->send();*/
         
         echo json_encode(array( 'err' => 0));
+        die;
+    }
+    
+    // Уведомление в телеграм о заявке на обратный звонок
+    private function telegramCallBack($text){
+        $token='917204448:AAG-Vox-e1DKE7W9rwC-ztlOtkmf66FOx1M'; // Апи ключ для бота. СЕКРЕТНО!
+        $chat_id='493457769'; // Идентификатор чата бота и человека, который будет принимать оповещения
+        $proxy='103.228.117.244:8080'; // Адрес:порт прокси
+        $auth=''; // Логин:пароль прокси, если используется авторизация
         
+        $ch=curl_init();
+        curl_setopt($ch, CURLOPT_URL,
+               'https://api.telegram.org/bot'.$token.'/sendMessage');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,
+               'chat_id='.$chat_id.'&text='.urlencode($text));
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 20);
+        curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, 1);
+        curl_setopt($ch, CURLOPT_PROXY, $proxy);
+        //curl_setopt($ch, CURLOPT_PROXYUSERPWD, $auth); // ЕСЛИ ИСПОЛЬЗУЕТСЯ АВТОРИЗАЦИЯ - РАСКОММЕНТИТЬ ЭТУ СТРОКУ
+        
+        $result=curl_exec($ch);
+        curl_close($ch);
     }
     
     

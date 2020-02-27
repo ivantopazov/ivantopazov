@@ -279,7 +279,7 @@ class Mdl_category extends CI_Model {
              
         $modules = ( isset( $option['modules'] ) ) ? $option['modules'] : false;     
         $index = ( isset( $option['index'] ) ) ? $option['index'] : false;     
-        $cat_aliase = ( isset( $option['cat_aliase'] ) ) ? $option['cat_aliase'] : false;
+//        $cat_aliase = ( isset( $option['cat_aliase'] ) ) ? $option['cat_aliase'] : false;
         
         if( $this->_query[$index]['module'] !== false ){
             if( $this->_query[$index]['labels'] !== false ){

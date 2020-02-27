@@ -38,7 +38,7 @@ class Debug extends CI_Controller  {
                 'method' => 'AND',
                 'set' => [[
                     'item' => 'postavchik',
-                    'value' => 'Alcor'
+                    'value' => 'alcor'
                 ]]
             ],
             'labels' => ['id', 'aliase', 'title',  'modules']
@@ -454,7 +454,7 @@ class Debug extends CI_Controller  {
                 'method' => 'AND',
                 'set' => [[
                     'item' => 'postavchik',
-                    'value' => 'Alcor'
+                    'value' => 'alcor'
                 ]]
             ],
             'labels' => ['id', 'title', 'optionLabel']

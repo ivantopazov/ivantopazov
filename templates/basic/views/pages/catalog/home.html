@@ -1,124 +1,157 @@
+<div class="row visible-xs" style="margin:0px;">
+	<div class="col-xs-6 col-sm-3 col-md-3  col-lg-2 text-center">
+		<a href="#" class="search-catalog" data-target="#modal_search_form" data-toggle="modal"
+		   onclick="yaCounter45556173.reachGoal('search');">Поиск</a>
+	</div>
+	<div class="col-xs-6 col-sm-6 col-md-3  col-lg-2 ico-3  text-center">
+		<a href="#" class="filter-btn">Фильтр</a>
+	</div>
+</div>
+<hr/>
+<div class="clearfix">&nbsp;</div>
+
 <div class="hidden_overflow" style="padding-bottom: 0px;">
-    <div class="container theme-showcase mt10 " role="main">
-		
+	<div class="container theme-showcase mt10 " role="main">
+
+		<h1 class="Conv_Circe-Bold ZAG pb30 expandable catalog_h1 hidden-xs">{{header_title}}</h1>
+
 		<!-- ############# Фильтр каталог планшет, дектопа версия -->
-		
-		<div class="col-xs-12 col-sm-5 col-md-4 col-lg-3 hidden-xs">
-            
-            <div class="row">
-				
-                <div class="col-xs-12 mb00  ">
-                    <span class="title1 Conv_CRC55 black px20"><strong>Фильтр:</strong></span>
+
+		<div class="col-xs-12 col-sm-5 col-md-4 col-lg-3" id="filter-block-show">
+
+			<div class="row">
+
+				<div class="col-xs-12 mb00  ">
+					<span class="title1 Conv_CRC55 black px20"><strong>Фильтр:</strong></span>
 				</div>
-				
-                <div class="col-xs-12 pr0" data-parent="filter-block">{{blocks}}</div>
-                
-                <input type="hidden" name="t" value="{{textSearch}}" />
-				
-                <div class="col-xs-12 jq-filters_btn  mt15">
-                    <a class="btn-cart Conv_CRC55  btn-block text-center ZAG" href="#" click="Ev.catalog.getFiltersParam()" > Подбор позиций </a>
-				</div>    
-				
+
+				<div class="col-xs-12 jq-filters_btn  mt15">
+					<a class="btn-cart Conv_CRC55  btn-block text-center ZAG" href="#"
+					   click="Ev.catalog.resetFiltersParam()">Сбросить фильтр</a>
+				</div>
+
+				<div class="col-xs-12 pr0" data-parent="filter-block">{{blocks}}</div>
+
+				<input type="hidden" name="t" value="{{textSearch}}" />
+
+				<div class="col-xs-12 jq-filters_btn  mt15">
+					<a class="btn-cart Conv_CRC55  btn-block text-center ZAG" href="#"
+					   click="Ev.catalog.resetFiltersParam()">Сбросить фильтр</a>
+				</div>
+
 			</div>
-            
+
+			<br/><br/>
 		</div>
-		
+
+		<h1 class="Conv_Circe-Bold ZAG pb30 expandable catalog_h1 visible-xs">{{header_title}}</h1>
+
 		<!-- ############# Фильтр каталог мобильная версия -->
-		
-		
-		
-		
+
+
 		<div aria-hidden="true" role="dialog" tabindex="-1" id="modal_catalog_filter" class="modal inmodal fade">
 			<div class="modal-dialog modal-xs">
 				<div class="modal-content">
-					
+
 					<div class="modal-header">
 						<button data-dismiss="modal" class="close" type="button">
 							<span aria-hidden="true">×</span><span class="sr-only">Close</span>
 						</button>
 						<h4 class="modal-title title1 Conv_CRC55 black px20">Фильтр:</h4>
 					</div>
-					
-					
-					<div style="padding: 15px;"> 
-						
-						<div class=" pr0  " data-parent="mob-filter-block">{{blocks}}</div>
-						
-						<input type="hidden" name="t" value="{{textSearch}}" />
-						
+
+
+					<div style="padding: 15px;">
+
 						<div class=" jq-filters_btn  mt15">
-							<a class="btn-cart Conv_CRC55  btn-block text-center ZAG" href="#" click="Ev.catalog.getFiltersParam()" > Подбор позиций </a>
-						</div> 
-						
-					</div>    
-					
+							<a class="btn-cart Conv_CRC55  btn-block text-center ZAG" href="#"
+							   click="Ev.catalog.resetFiltersParam('mob-filter-block')">Сбросить фильтр</a>
+						</div>
+
+						<div class=" pr0  " data-parent="mob-filter-block">{{blocks}}</div>
+
+						<input type="hidden" name="t" value="{{textSearch}}" />
+
+						<div class=" jq-filters_btn  mt15">
+							<a class="btn-cart Conv_CRC55  btn-block text-center ZAG" href="#"
+							   click="Ev.catalog.resetFiltersParam('mob-filter-block')">Сбросить фильтр</a>
+						</div>
+
+					</div>
+
 				</div>
 			</div>
 		</div>
-		
-		
+
+
 		<!-- ############# Контент -->
-		
-        <div class="col-xs-12 col-sm-7 col-md-8  col-lg-9 ">
-			
+
+		<div class="col-xs-12 col-sm-7 col-md-8  col-lg-9 ">
+
+			<!--
             <div class="mb25"> 
                 <div class="row"> 
-					
 					<a href="#" data-toggle="modal" data-target="#modal_catalog_filter" class="visible-xs btn-cart Conv_CRC55   text-center" style="position: fixed; top: 4px; left: 50%; margin-right: 26px; z-index:1039;">
-						
 						<img src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeD0iMHB4IiB5PSIwcHgiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIgNTEyOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgd2lkdGg9IjUxMnB4IiBoZWlnaHQ9IjUxMnB4Ij4KPGc+Cgk8Zz4KCQk8Zz4KCQkJPHBhdGggZD0iTTI5OC42NjcsMjQ2LjUzOFY2NGMwLTIzLjUzMS0xOS4xMzUtNDIuNjY3LTQyLjY2Ny00Mi42NjdTMjEzLjMzMyw0MC40NjksMjEzLjMzMyw2NHYxODIuNTM4ICAgICBjLTI1LjM4MSwxNC44MDMtNDIuNjY3LDQyLjAyMS00Mi42NjcsNzMuNDYyczE3LjI4NSw1OC42NTksNDIuNjY3LDczLjQ2MlY0NDhjMCwyMy41MzEsMTkuMTM1LDQyLjY2Nyw0Mi42NjcsNDIuNjY3ICAgICBzNDIuNjY3LTE5LjEzNSw0Mi42NjctNDIuNjY3di01NC41MzhjMjUuMzgxLTE0LjgwMyw0Mi42NjctNDIuMDIxLDQyLjY2Ny03My40NjJTMzI0LjA0OCwyNjEuMzQxLDI5OC42NjcsMjQ2LjUzOHogTTIzNC42NjcsNjQgICAgIGMwLTExLjc2LDkuNTczLTIxLjMzMywyMS4zMzMtMjEuMzMzUzI3Ny4zMzMsNTIuMjQsMjc3LjMzMyw2NHYxNzMuNjk3Yy02Ljg1OS0xLjc4My0xMy45MjQtMy4wMy0yMS4zMzMtMy4wMyAgICAgcy0xNC40NzQsMS4yNDctMjEuMzMzLDMuMDNWNjR6IE0yNzcuMzMzLDQ0OGMwLDExLjc2LTkuNTczLDIxLjMzMy0yMS4zMzMsMjEuMzMzUzIzNC42NjcsNDU5Ljc2LDIzNC42NjcsNDQ4di00NS42OTcgICAgIGM2Ljg1OSwxLjc4MywxMy45MjQsMy4wMywyMS4zMzMsMy4wM3MxNC40NzQtMS4yNDcsMjEuMzMzLTMuMDNWNDQ4eiBNMjU2LDM4NGMtMzUuMjkyLDAtNjQtMjguNzA4LTY0LTY0czI4LjcwOC02NCw2NC02NCAgICAgczY0LDI4LjcwOCw2NCw2NFMyOTEuMjkyLDM4NCwyNTYsMzg0eiIgZmlsbD0iI0ZGRkZGRiIvPgoJCQk8cGF0aCBkPSJNMTI4LDc1Ljg3MVY2NGMwLTIzLjUzMS0xOS4xMzUtNDIuNjY3LTQyLjY2Ny00Mi42NjdTNDIuNjY3LDQwLjQ2OSw0Mi42NjcsNjR2MTEuODcxQzE3LjI4NSw5MC42NzQsMCwxMTcuODkyLDAsMTQ5LjMzMyAgICAgczE3LjI4NSw1OC42NTksNDIuNjY3LDczLjQ2MlY0NDhjMCwyMy41MzEsMTkuMTM1LDQyLjY2Nyw0Mi42NjcsNDIuNjY3UzEyOCw0NzEuNTMxLDEyOCw0NDhWMjIyLjc5NiAgICAgYzI1LjM4Mi0xNC44MDMsNDIuNjY3LTQyLjAyMSw0Mi42NjctNzMuNDYyUzE1My4zODIsOTAuNjc0LDEyOCw3NS44NzF6IE02NCw2NGMwLTExLjc2LDkuNTczLTIxLjMzMywyMS4zMzMtMjEuMzMzICAgICBjMTEuNzYsMCwyMS4zMzMsOS41NzMsMjEuMzMzLDIxLjMzM3YzLjAzQzk5LjgwNyw2NS4yNDcsOTIuNzQyLDY0LDg1LjMzMyw2NEM3Ny45MjQsNjQsNzAuODU5LDY1LjI0Nyw2NCw2Ny4wM1Y2NHogTTEwNi42NjcsNDQ4ICAgICBjMCwxMS43Ni05LjU3MywyMS4zMzMtMjEuMzMzLDIxLjMzM0M3My41NzMsNDY5LjMzMyw2NCw0NTkuNzYsNjQsNDQ4VjIzMS42MzdjNi44NTksMS43ODMsMTMuOTI0LDMuMDMsMjEuMzMzLDMuMDMgICAgIGM3LjQwOSwwLDE0LjQ3NC0xLjI0NywyMS4zMzMtMy4wM1Y0NDh6IE04NS4zMzMsMjEzLjMzM2MtMzUuMjkyLDAtNjQtMjguNzA4LTY0LTY0YzAtMzUuMjkyLDI4LjcwOC02NCw2NC02NCAgICAgYzM1LjI5MiwwLDY0LDI4LjcwOCw2NCw2NEMxNDkuMzMzLDE4NC42MjUsMTIwLjYyNSwyMTMuMzMzLDg1LjMzMywyMTMuMzMzeiIgZmlsbD0iI0ZGRkZGRiIvPgoJCQk8cGF0aCBkPSJNNDY5LjMzMywxMTguNTM4VjY0YzAtMjMuNTMxLTE5LjEzNS00Mi42NjctNDIuNjY3LTQyLjY2N1MzODQsNDAuNDY5LDM4NCw2NHY1NC41MzggICAgIGMtMjUuMzgxLDE0LjgwMy00Mi42NjcsNDIuMDIxLTQyLjY2Nyw3My40NjJzMTcuMjg1LDU4LjY1OSw0Mi42NjcsNzMuNDYyVjQ0OGMwLDIzLjUzMSwxOS4xMzUsNDIuNjY3LDQyLjY2Nyw0Mi42NjcgICAgIHM0Mi42NjctMTkuMTM1LDQyLjY2Ny00Mi42NjdWMjY1LjQ2MkM0OTQuNzE1LDI1MC42NTksNTEyLDIyMy40NDEsNTEyLDE5MlM0OTQuNzE1LDEzMy4zNDEsNDY5LjMzMywxMTguNTM4eiBNNDA1LjMzMyw2NCAgICAgYzAtMTEuNzYsOS41NzMtMjEuMzMzLDIxLjMzMy0yMS4zMzNTNDQ4LDUyLjI0LDQ0OCw2NHY0NS42OTdjLTYuODU5LTEuNzgzLTEzLjkyNC0zLjAzLTIxLjMzMy0zLjAzcy0xNC40NzQsMS4yNDctMjEuMzMzLDMuMDMgICAgIFY2NHogTTQ0OCw0NDhjMCwxMS43Ni05LjU3MywyMS4zMzMtMjEuMzMzLDIxLjMzM1M0MDUuMzMzLDQ1OS43Niw0MDUuMzMzLDQ0OFYyNzQuMzAzYzYuODU5LDEuNzgzLDEzLjkyNCwzLjAzLDIxLjMzMywzLjAzICAgICBzMTQuNDc0LTEuMjQ3LDIxLjMzMy0zLjAzVjQ0OHogTTQyNi42NjcsMjU2Yy0zNS4yOTIsMC02NC0yOC43MDgtNjQtNjRzMjguNzA4LTY0LDY0LTY0czY0LDI4LjcwOCw2NCw2NCAgICAgUzQ2MS45NTgsMjU2LDQyNi42NjcsMjU2eiIgZmlsbD0iI0ZGRkZGRiIvPgoJCTwvZz4KCTwvZz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8L3N2Zz4K" width="22px" />
-						
 					</a>
-					
-					
                     {{snipets}}
 				</div>  
 			</div>
-            
-            <div class="mb25"> 
-                <div class="mb25">
-                    <ul class="list-inline px16" data-parent="filter-option">
-                        <li><span class="title1 Conv_CRC55 black" ><strong>Сортировать:</strong></span> </li>
-						<li><span class="title1 Conv_CRC55 {% if sort == 'pricemin' %}active{% endif %}" data-filter_option="pricemin"> <a href="#" click="Ev.catalog.setOption_item('pricemin');" >по возрастанию цены</a></span></li>
-                        <li><span class="title1 Conv_CRC55 {% if sort == 'pricemax' %}active{% endif %}" data-filter_option="pricemax"> <a href="#" click="Ev.catalog.setOption_item('pricemax');" >по убыванию цены</a></span></li>
-                        <li><span class="title1 Conv_CRC55 {% if sort == 'pop' %}active{% endif %}"  data-filter_option="pop"> <a href="#" click="Ev.catalog.setOption_item('pop');" >по популярности</a></span></li>
-                        <li><span class="title1 Conv_CRC55 {% if sort == 'new' %}active{% endif %}"  data-filter_option="new"> <a href="#" click="Ev.catalog.setOption_item('new');" >по новинкам</a></span></li>
-                        <li><span class="title1 Conv_CRC55 {% if sort == 'upsells' %}active{% endif %}"  data-filter_option="upsells"><strong> <a href="#" click="Ev.catalog.setOption_item('upsells');" >по скидкам</a></strong></span></li>
+			-->
+
+			<div class="mb25">
+				<div class="mb25">
+
+					<ul class="list-inline px16" data-parent="filter-option">
+						<li><span class="title1 Conv_CRC55 black"><strong>Сортировать:</strong></span></li>
+						<li>
+							<div class="dropdown">
+							  <button class="btn btn_new dropdown-toggle text-blue" type="button" data-toggle="dropdown">
+								{% if sort == 'pricemin' %}по возрастанию цены{% endif %}
+								{% if sort == 'pricemax' %}по убыванию цены{% endif %}
+								{% if sort == 'pop' %}по популярности{% endif %}
+								{% if sort == 'new' %}по новинкам{% endif %}
+								{% if sort == 'upsells' %}по скидкам{% endif %}
+							  <span class="caret"></span></button>
+							  <ul class="dropdown-menu dropdown-menu_new">
+								<li class="{% if sort == 'pricemin' %}active{% endif %}"><a href="#" click="Ev.catalog.setOption_item('pricemin');"><span data-filter_option="pricemin">по возрастанию цены</span></a></li>
+								<li class="{% if sort == 'pricemax' %}active{% endif %}"><a href="#" click="Ev.catalog.setOption_item('pricemax');"><span data-filter_option="pricemax">по убыванию цены</span></a></li>
+								<li class="{% if sort == 'pop' %}active{% endif %}"><a href="#" click="Ev.catalog.setOption_item('pop');"><span data-filter_option="pop">по популярности</span></a></li>
+								<li class="{% if sort == 'new' %}active{% endif %}"><a href="#" click="Ev.catalog.setOption_item('new');"><span data-filter_option="new">по новинкам</span></a></li>
+								<li class="{% if sort == 'upsells' %}active{% endif %}"><a href="#" click="Ev.catalog.setOption_item('upsells');"><span data-filter_option="upsells">по скидкам</span></a></li>
+							  </ul>
+							</div>
+						</li>
 					</ul>
 				</div>
 			</div>
-			
-            <div class="mb25"> 
-                <div class=""> 
-                    <h2 class="Conv_Circe-Bold ZAG pb30"><span class="title_line_2">{{header_title}}</span></h2>
-				</div>  
+
+
+			<div class="mb25">
+				<div class="row">
+					{{products}}
+				</div>
 			</div>
-            
-            <div class="mb25"> 
-                <div class="row"> 
-                    {{products}}
-				</div>  
+
+			<div class="mb25">
+				<div class=" text-center">
+					{{pagination}}
+				</div>
 			</div>
-            
-            <div class="mb25"> 
-                <div class=" text-center"> 
-                    {{pagination}}
-				</div>  
+
+			<div class="mb25">
+				<div class=" text-left">
+					{{description}}
+				</div>
 			</div>
-            
-            <div class="mb25"> 
-                <div class=" text-left"> 
-                    {{description}}
-				</div>  
+
+			<div class="mb25 hidden">
+				<div class="">
+					{{podcat}}
+				</div>
 			</div>
-            
-            <div class="mb25 hidden"> 
-                <div class=""> 
-                    {{podcat}}
-				</div>  
-			</div>
-            
+
 		</div>
-        
+
 	</div>
 </div>								

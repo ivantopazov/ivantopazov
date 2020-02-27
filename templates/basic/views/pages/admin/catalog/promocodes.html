@@ -1,0 +1,57 @@
+<div class="row ml0 mr0 mt20">
+    <div class="col-sm-3 ">
+        <a href="/admin/catalog/promocodes/edit/0"> <button class="btn btn-sm btn-primary" type="button">Добавить промокод</button></a>
+    </div>
+    <div class="col-sm-6">
+        <form action="/admin/catalog/promocodes" method="get" static="true" >
+            <input type="text" name="t" class="form-control input-sm m-b-xs" placeholder="Поиск в списке [артикул, алиас, название, слово]" value="{{textSearch}}">
+        </form>
+    </div>
+    <div class="col-sm-3 ">		
+    </div> 		
+</div> 	  
+ 
+<div class="row ml0 mr0">       
+   
+    <table class="fooTabled table table-striped" data-page-size="8" data-filter='#filter'>
+        <thead class="bord">
+            <tr>
+                <th class="w50"><b>ID</b></th>
+                <td align="center" class="w100"><b>Дата начала</b></td>
+                <td align="center" class="w100"><b>Дата окончания</b></td>
+                <td align="center" class="w100"><b>Код</b></td>
+                <th><b>Наименование</b></th>
+                <th class="w100"><b>Скидка (руб)</b></th>
+                <th class="w100"><b>Скидка (%)</b></th>
+                <th class="w100"><b>Минимальный заказ (руб)</b></th>
+            </tr>
+        </thead>
+        <tbody class="bord">
+            {% for item in promocodes %}
+                <tr class="gradeU">
+                    <td>{{item.id}}</td>
+                    <td align="center">{{item.modules.dates.Start_date_mdY}}</td>
+                    <td align="center">{{item.modules.dates.End_date_mdY}}</td>
+                    <td align="center"><a href="/admin/catalog/promocodes/edit/{{item.id}}">{{item.code}}</a></td>
+                    <td>{{item.title}}</td>
+                    <td align="center">{{item.amount}}</td>
+                    <td align="center">{{item.percent}}</td>
+                    <td align="center">{{item.min_order}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5">
+                    <ul class="pagination pull-right"></ul>
+                </td>
+            </tr>
+        </tfoot>
+    </table>        
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        {{pag}}
+    </div>
+</div>

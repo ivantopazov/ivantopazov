@@ -1,11 +1,13 @@
 {% if items |length > 0 %}
 <div class="hidden_overflow" style="padding-bottom: 0px;">
-	<div class="container theme-showcase mt10 " role="main">
-		<div class="col-xs-12 col-sm-12 col-md-12  col-lg-12 ">                
-			<h2 class="Conv_Circe-Bold ZAG ml20 pb30"><span class="title_line">Вам понравится</span></h2>                
+	<div class="container theme-showcase mt10_ " role="main">
+		<div class="col-xs-12 col-sm-12 col-md-12  col-lg-12 ">                 
+			<h2 class="Conv_Circe-Bold mt10_ pb30 px22 block_h2-mobil"><span class="title_line px22" style="color:#62a9d5 !important; text-transform:uppercase;">Вам понравится</span></h2>   			
 		</div>            
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">    	
+		<div class="single-slide">
 		{% for prod in items %} 
-		<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 mb25">
+		<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 catalog-xs">
 			<div class="text_shad">
 				<div class="p15">
 					{% if prod.salle_procent > 0 %}
@@ -14,9 +16,9 @@
 					<a href="{{prod.modules.linkPath}}"><img alt="{{prod.title}}" src="/uploads/products/250/{{prod.modules.photos[0].photo_name}}" width="100%"></a>
 					<a href="{{prod.modules.linkPath}}"><h4 class="clearfix title_h Conv_CRC55">{{prod.title}}</h4></a>
 					<span class="clearfix line_t clearfix">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-					<strong class="px19 clearfix">  
+					<strong class="px20 clearfix">  
 						{% if prod.salle_procent > 0 %}
-						<small class="serebro_white px13" style="position: absolute; bottom: 80px;"><s>{{prod.modules.salePrice.VAL_00.orig}}  р.</s></small> 
+						<small class="serebro_white px13" style="position: absolute; margin-top:-12px;"><s>{{prod.modules.salePrice.VAL_00.orig}}  р.</s></small> 
 						{{prod.modules.salePrice.VAL_00.salePrice}}  р.
 						{% else %}
 						{{prod.modules.price_actual.format}}  р.
@@ -25,11 +27,13 @@
 				</div>
                 
                 
-				<a href="#" class=" btn-cart Conv_CRC55  btn-block text-center ZAG cart-anim" 
+				<a href="#" class=" btn-cart Conv_CRC55  btn-block text-center ZAG cart-anim"  onclick="yaCounter45556173.reachGoal('cart-catalog');" 
 				click="CART.add({ id:{{prod.id}}, title:'{{prod.title}}', price:{% if prod.salle_procent > 0 %}{{prod.modules.salePrice.COP.salePrice}}{% else %}{{prod.modules.price_actual.cop}}{% endif %}, qty:{type:'plus', value:1}, orig:{ image:'{{prod.modules.photos[0].photo_name}}', articul:'{{prod.articul}}', link:'{{prod.modules.linkPath}}'}}, MAIN.addCartCallback );">В корзину</a>
 			</div>
 		</div>
 		{% endfor %}            
+		</div>
+		</div>
 	</div>
 </div> <!-- /container -->
 {% endif %}

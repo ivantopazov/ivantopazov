@@ -4,9 +4,10 @@
 		<div class="p15">
 
 			{% if prod.salle_procent > 0 %}
-                <span class="label label-pill label-danger" style="position: absolute; background-color: #ffa800; padding:4px 7px; font-size:13px;">- {{prod.salle_procent}} %</span>
+                <span class="label label-pill label-danger" style="position: absolute; background-color: #ffa800; padding:4px 7px; font-size:13px; right: 17px;">- {{prod.salle_procent}} %</span>
+				
                 {% if ( prod.modules.salePrice.VAL_00.salePrice|replace({' ': ''}) < 20000 or prod.modules.price_actual.format|replace({' ': ''}) < 20000 ) and prod.id % 2 == 0 %}
-                    <span class="label-hit" style='position: absolute;right: 17px;'>Хит!</span>
+                    <span class="label-hit" style='position: absolute;'>Хит!</span>
                 {% endif %}
                 {% if prod.salle_procent % 5 == 3 %}
                     <span class="label label-pill label-danger" style='position: absolute;right: 17px;'>Новинка!</span>
@@ -36,5 +37,3 @@
     </div>
 </div>
 {% endfor %}
-
-

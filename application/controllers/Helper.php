@@ -30,16 +30,16 @@ class Helper extends CI_Controller {
     * Получение шаблона
     **/
     public function get_tpl_data ( $tpl_name = false ){
-        $tpl_name = ( isset( $this->post['tpl_name'] ) ) ? $this->post['tpl_name'] : $tpl_name ;
-        if( $tpl_name ){
-            $f_name = $this->config->item('config_tpl_path') . '/' . $tpl_name . '.html';
-            if( file_exists( './' .  $f_name )  ){
+		$tpl_name = ( isset( $this->post['tpl_name'] ) ) ? $this->post['tpl_name'] : $tpl_name ;
+		if( $tpl_name ){
+			$f_name = $this->config->item('config_tpl_path') . '/' . $tpl_name . '.html';
+			if( file_exists( './' .  $f_name )  ){
                 echo file_get_contents ( './' .  $f_name );
             }else{
                 echo './' . $f_name;
             }
+			die;
         }
     }
     
 }
-    
