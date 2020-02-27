@@ -4,18 +4,17 @@
 		<div class="p15">
 
 			{% if prod.salle_procent > 0 %}
-                <span class="label label-pill label-danger" style="position: absolute; background-color: #ffa800; padding:4px 7px; font-size:13px;">- {{prod.salle_procent}} %</span>
+                <span class="label label-pill label-danger" style="position: absolute; background-color: #ffa800; padding:4px 7px; font-size:13px; right: 17px;">- {{prod.salle_procent}} %</span>
+				
                 {% if ( prod.modules.salePrice.VAL_00.salePrice|replace({' ': ''}) < 20000 or prod.modules.price_actual.format|replace({' ': ''}) < 20000 ) and prod.id % 2 == 0 %}
-                    <span class="label-hit" style='position: absolute;right: 17px;'>Хит!</span>
+                    <span class="label-hit" style='position: absolute;'>Хит!</span>
                 {% endif %}
                 {% if prod.salle_procent % 5 == 3 %}
                     <span class="label label-pill label-danger" style='position: absolute;right: 17px;'>Новинка!</span>
                 {% endif %}
 			{% endif %}
 
-			<a href="{{prod.modules.linkPath}}" class="catalog-xs-img"><img src="/uploads/products/250/{{prod.modules.photos[0].photo_name}}" alt="{{prod.title}}"
-				click="MAIN.addFavorite({ id:{{prod.id}}, title:'{{prod.title}}', price:{{prod.modules.price_actual.cop}}, salePrice:{{prod.modules.salePrice.COP.salePrice}}, orig: { image:'{{prod.modules.photos[0].photo_name}}', articul:'{{prod.articul}}', link:'{{prod.modules.linkPath}}'}});"
-			width="100%"></a>
+			<a href="{{prod.modules.linkPath}}" class="catalog-xs-img"><img src="/uploads/products/250/{{prod.modules.photos[0].photo_name}}" alt="{{prod.title}}" width="100%"></a>
 
 			<a href="{{prod.modules.linkPath}}"><h4 class="clearfix title_h Conv_CRC55">{{prod.title}}</h4></a>
 
@@ -32,7 +31,8 @@
 
 		</div>
 
-		<a href="#" class="btn-cart Conv_CRC55  btn-block text-center ZAG cart-anim" onclick="yaCounter45556173.reachGoal('cart-catalog');" click="CART.add({ id:{{prod.id}}, title:'{{prod.title}}', price:{% if prod.salle_procent > 0 %}{{prod.modules.salePrice.COP.salePrice}}{% else %}{{prod.modules.price_actual.cop}}{% endif %}, qty:{type:'plus', value:1}, orig: { image:'{{prod.modules.photos[0].photo_name}}', articul:'{{prod.articul}}', link:'{{prod.modules.linkPath}}'}}, MAIN.addCartCallback );" >В корзину</a>
+		<a href="#" class="btn-cart Conv_CRC55 col-lg-9 col-xs-9 text-center ZAG cart-anim" onclick="yaCounter45556173.reachGoal('cart-catalog');" click="CART.add({ id:{{prod.id}}, title:'{{prod.title}}', price:{% if prod.salle_procent > 0 %}{{prod.modules.salePrice.COP.salePrice}}{% else %}{{prod.modules.price_actual.cop}}{% endif %}, qty:{type:'plus', value:1}, orig: { image:'{{prod.modules.photos[0].photo_name}}', articul:'{{prod.articul}}', link:'{{prod.modules.linkPath}}'}}, MAIN.addCartCallback );" >В корзину</a>
+		<a href="#" class="btn-cart Conv_CRC55 col-lg-3 col-xs-3 text-center ZAG cart-anim" style="border-left:1px solid #fff;border-right:1px solid #63a9d6;" click="MAIN.addFavorite({ id:{{prod.id}}, title:'{{prod.title}}', price:'{{prod.modules.salePrice.VAL_00.orig}}', salePrice:'{{prod.modules.price_actual.format}}', orig: { image:'{{prod.modules.photos[0].photo_name}}', articul:'{{prod.articul}}', link:'{{prod.modules.linkPath}}'}});">&#9825;</a>
 
     </div>
 </div>
