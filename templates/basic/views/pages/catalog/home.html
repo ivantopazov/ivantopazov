@@ -101,25 +101,26 @@
 
 			<div class="mb25">
 				<div class="mb25">
+
 					<ul class="list-inline px16" data-parent="filter-option">
 						<li><span class="title1 Conv_CRC55 black"><strong>Сортировать:</strong></span></li>
-						<li><span class="title1 Conv_CRC55 {% if sort == 'pricemin' %}active{% endif %}"
-								  data-filter_option="pricemin"> <a href="#"
-																	click="Ev.catalog.setOption_item('pricemin');">по возрастанию цены</a></span>
-						</li>
-						<li><span class="title1 Conv_CRC55 {% if sort == 'pricemax' %}active{% endif %}"
-								  data-filter_option="pricemax"> <a href="#"
-																	click="Ev.catalog.setOption_item('pricemax');">по убыванию цены</a></span>
-						</li>
-						<li><span class="title1 Conv_CRC55 {% if sort == 'pop' %}active{% endif %}"
-								  data-filter_option="pop"> <a href="#" click="Ev.catalog.setOption_item('pop');">по популярности</a></span>
-						</li>
-						<li><span class="title1 Conv_CRC55 {% if sort == 'new' %}active{% endif %}"
-								  data-filter_option="new"> <a href="#" click="Ev.catalog.setOption_item('new');">по новинкам</a></span>
-						</li>
-						<li><span class="title1 Conv_CRC55 {% if sort == 'upsells' %}active{% endif %}"
-								  data-filter_option="upsells"><strong> <a href="#"
-																		   click="Ev.catalog.setOption_item('upsells');">по скидкам</a></strong></span>
+						<li>
+							<div class="dropdown">
+							  <button class="btn btn_new dropdown-toggle text-blue" type="button" data-toggle="dropdown">
+								{% if sort == 'pricemin' %}по возрастанию цены{% endif %}
+								{% if sort == 'pricemax' %}по убыванию цены{% endif %}
+								{% if sort == 'pop' %}по популярности{% endif %}
+								{% if sort == 'new' %}по новинкам{% endif %}
+								{% if sort == 'upsells' %}по скидкам{% endif %}
+							  <span class="caret"></span></button>
+							  <ul class="dropdown-menu dropdown-menu_new">
+								<li class="{% if sort == 'pricemin' %}active{% endif %}"><a href="#" click="Ev.catalog.setOption_item('pricemin');"><span data-filter_option="pricemin">по возрастанию цены</span></a></li>
+								<li class="{% if sort == 'pricemax' %}active{% endif %}"><a href="#" click="Ev.catalog.setOption_item('pricemax');"><span data-filter_option="pricemax">по убыванию цены</span></a></li>
+								<li class="{% if sort == 'pop' %}active{% endif %}"><a href="#" click="Ev.catalog.setOption_item('pop');"><span data-filter_option="pop">по популярности</span></a></li>
+								<li class="{% if sort == 'new' %}active{% endif %}"><a href="#" click="Ev.catalog.setOption_item('new');"><span data-filter_option="new">по новинкам</span></a></li>
+								<li class="{% if sort == 'upsells' %}active{% endif %}"><a href="#" click="Ev.catalog.setOption_item('upsells');"><span data-filter_option="upsells">по скидкам</span></a></li>
+							  </ul>
+							</div>
 						</li>
 					</ul>
 				</div>
