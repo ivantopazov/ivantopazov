@@ -3,293 +3,71 @@
 
 
 
-        <div class="navbar-header pull-left"   style="padding-left: 15px;">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-			</button>
-
+        <div class="row">
+			<div class="col-xs-4 navbar-header text-left" style="padding-top:7px;">		
+				<button type="button" class="pull-left navbar-toggle collapsed" id="ChangeToggle" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+				   <div id="navbar-hamburger">
+					  <span class="sr-only">Toggle navigation</span>
+					  <span class="icon-bar"></span>
+					  <span class="icon-bar"></span>
+					  <span class="icon-bar"></span>
+					</div>
+					
+					<div id="navbar-close" class="hidden">
+						<div class="ico-88"></div>
+					</div>
+				</button>
+	
+				<div class="ico-2_new pull-left clearfix"  data-target="#modal_callback" data-toggle="modal" onclick="yaCounter45556173.reachGoal('call-btn');" id="callback_link"></div>
+			
+			</div>
+			<div class="col-xs-4 text-center">
+				<a href="/" style="height: 60px; display: block;"><img src="/{{config_images_path}}/logo.png?c=2" class="mt15" width="100px"></a> 
+			</div>
+			<div class="col-xs-4 text-right" style="padding-top:7px;">
+				<a class="pull-right" href="/cart" unload="MAIN.updateHeaderInfo()">
+					<div class="ico-4 clearfix">
+						<div class="cart_info"><span id="cartSumma" class="label cartSumma label-pill label-warning">0</span></div>
+					</div>
+				</a>
+			</div>		
 		</div>
+        
+
+	</div>
+</nav>
 
 
-		<div  class="pull-right visible-xs vhidden"   style="padding-right: 25px; padding-top: 7px;">
-			<a href="/cart" unload="MAIN.updateHeaderInfo()">
-				<center><div class="ico-4 clearfix"><div class="cart_info"><span id="cartSumma" class="label cartSumma label-pill label-warning">0</span></div></div></center>
-
-			</a>
-		</div>
-		
-		<div  class="pull-right visible-xs vhidden"   style="padding-right: 35px; padding-top: 7px;">
-			<a href="/favorite" unload="MAIN.updateHeaderInfo2()">
-				<center>
-				<div class="clearfix">
-					<span style="font-size: 36px; line-height: 1;">&#9825;</span> 
-					<div class="cart_info"><span id="favoriteSumma" class="label favoriteSumma label-pill label-warning">0</span></div>
-				</div>
-				</center>
-			</a>
-		</div>
-
-		<div class="clearfix"></div>
-
-        <div id="navbar" class="navbar-collapse collapse">
-
+<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav visible-xs">
-
-
-
-
 				<li>
-					<a href="/" class="ZAG">Главная </a>
+					<form action="/search" method="post" id="form_search">  
+						<div class="modal-body ev-modal_data"> 
+						<div class="row"> 
+							<div class="col-xs-12">
+								<p class="mb5">
+								<input style="width: 100%;" class="form-control text-left lato nav_search" name="t-search" placeholder="" type="text">
+							</p>
+							</div>
+						</div>
+						</div>
+					</form>
 				</li>
-
-
-
+				<li>
+					<a href="/" class="ZAG Conv_CRC35">Главная </a>
+				</li>
 				<li class="dropdown">
-					<a href="/catalog/kolca" class="dropdown-toggle ZAG" data-toggle="dropdown">Кольца <b class="caret"></b></a>
-
-
-					<div class="dropdown-menu woman mega-menu px14 list-group">
-						<div class="container">
-							<div class="col-md-12">
-
-								<div class="col-md-3">
-
-									<p class="nav-header Conv_CRC55 px18"><strong><a href="/catalog/kolca">Кольца</a></strong></p>
-
-
-									<p><a href="/catalog/kolca?f[metall]=JoltZoloto|krasnZoloto|belZoloto&s=pricemin&l=44">Кольца из золота</a></p>
-									<!--<p><a href="/catalog/kolca?f[metall]=serebro&s=pop&l=44&t=">Кольца из серебра</a></p>-->
-
-									<p><a href="/catalog/kolca?s=pop&l=44&t=%D0%9E%D0%B1%D1%80%D1%83%D1%87%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B5">Обручальные кольца</a></p>
-
-									<!--<p><a href="/catalog/kolca?f[sex]=woman&s=pop&l=44&t=Классическое">Классические обручальные кольца</a></p>-->
-
-
-									<!--<p><a href="/catalog/kolca?s=pop&l=44&t=Помолвочное">Помолвочные кольца</a></p>-->
-
-								</div>
-
-								<!--<div class="col-md-3">
-
-									<p class="nav-header Conv_CRC55 px18"><strong><a href="/catalog/kolca?f[sex]=men&s=pop&l=44&t=">Для мужчин</a></strong></p>
-
-									<p><a href="/catalog/kolca?f[metall]=kombinZoloto|krasnZoloto|belZoloto&f[sex]=men&s=pop&l=44&t=">Кольца из золота</a></p>
-									<p><a href="/catalog/kolca?f[metall]=serebro&f[sex]=men&s=pop&l=44&t=">Кольца из серебра</a></p>
-
-
-									<p><a href="/catalog/kolca?f[sex]=men&s=pop&l=44&t=Обручальное">Обручальные кольца</a></p>
-
-									<p><a href="/catalog/kolca?f[sex]=men&s=pop&l=44&t=Классическое">Классические обручальные кольца</a></p>
-
-									<p><a href="/catalog/kolca?f[sex]=men&s=pop&l=44&t=Комбинированное">Комбинированные обручальные кольца</a></p>
-
-									<p><a href="/catalog/kolca?f[sex]=men&s=pop&l=44&t=Печатка">Печатки</a></p>
-
-
-								</div>-->
-
-								<div class="col-md-2">
-
-									<p class="nav-header Conv_CRC55 px18"><strong><a href="#">Вставка</a></strong></p>
-
-
-
-									<p><a href="/catalog/kolca?f[kamen]=brilliant&s=pop&l=44&t=">Кольца с бриллиантами</a></p>
-									<p><a href="/catalog/kolca?f[kamen]=sapfir&s=pop&l=44&t=">Кольца с сапфирами</a></p>
-									<p><a href="/catalog/kolca?f[kamen]=izumrud&s=pop&l=44&t=">Кольца с изумрудами</a></p>
-									<p><a href="/catalog/kolca?f[kamen]=rubin&s=pop&l=44&t=">Кольца с рубинами</a></p>
-									<p><a href="/catalog/kolca?f[kamen]=jemchug&s=pop&l=44&t=">Кольца с жемчугом</a></p>
-
-								</div>
-
-								<div class="col-md-2">
-
-									<p class="nav-header Conv_CRC55 px18"><strong><a href="#">&nbsp;</a></strong></p>
-
-
-
-									<p><a href="/catalog/kolca?f[kamen]=topaz&s=pop&l=44&t=">Кольца с топазом</a></p>
-									<p><a href="/catalog/kolca?f[kamen]=ametist&s=pop&l=44&t=">Кольца с аметистом</a></p>
-									<p><a href="/catalog/kolca?f[kamen]=granat&s=pop&l=44&t=">Кольца с гранатом</a></p>
-									<p><a href="/catalog/kolca?f[kamen]=hrizolit&s=pop&l=44&t=">Кольца с хризолитом</a></p>
-									<p><a href="/catalog/kolca?f[kamen]=citrin&s=pop&l=44&t=">Кольца с цитрином</a></p>
-
-								</div>
-
-								<!--<div class="col-md-2">
-
-									<p class="nav-header Conv_CRC55 px18"><strong><a href="#">&nbsp;</a></strong></p>
-
-
-
-									<p><a href="/catalog/kolca?f[kamen]=agat&s=pop&l=44&t=">Кольца с агатом</a></p>
-									<p><a href="/catalog/kolca?f[kamen]=kvarc&s=pop&l=44&t=">Кольца с кварцом</a></p>
-									<p><a href="/catalog/kolca?f[kamen]=jantar&s=pop&l=44&t=">Кольца с янтарем</a></p>
-									<p><a href="/catalog/kolca?f[kamen]=opal&s=pop&l=44&t=">Кольца с опалом</a></p>
-									<p><a href="/catalog/kolca?f[kamen]=fianit&s=pop&l=44&t=">Кольца с фианитом</a></p>
-
-
-								</div>-->
-
-
-
-							</div></div></div><!-- dropdown-menu -->
-
+					<a href="/catalog/kolca" class="dropdown-toggle ZAG Conv_CRC35">Кольца</a>
 				</li><!-- /.кольца -->
 
-
-
 				<li class="dropdown ">
-					<a href="/catalog/sergi" class="dropdown-toggle ZAG" data-toggle="dropdown">Серьги <b class="caret"></b></a>
-
-
-					<div class="dropdown-menu woman mega-menu px14 list-group1">
-						<div class="container">
-							<div class="col-md-12">
-								<div class="col-md-2">
-
-									<p class="nav-header Conv_CRC55 px18"><strong><a href="/catalog/sergi">Серьги</a></strong></p>
-
-
-									<p><a href="/catalog/sergi?f[metall]=JoltZoloto|krasnZoloto|belZoloto&s=pop&l=44&t=">Серьги из золота</a></p>
-									<!--<p><a href="/catalog/sergi?f[metall]=serebro&s=pop&l=44&t=">Серьги из серебра</a></p>-->
-									<p><a href="/catalog/sergi?f[sex]=woman&s=pop&l=44&t=Пусеты">Серьги пусеты</a></p>
-									<!--<p><a href="/catalog/sergi?f[sex]=woman&s=pop&l=44&t=Конго">Серьги конго</a></p>-->
-
-
-
-
-
-
-								</div>
-
-								<div class="col-md-2">
-
-									<p class="nav-header Conv_CRC55 px18"><strong><a href="#">Вставка</a></strong></p>
-
-
-
-									<p><a href="/catalog/sergi?f[kamen]=brilliant&s=pop&l=44&t=">Серьги с бриллиантами</a></p>
-									<p><a href="/catalog/sergi?f[kamen]=sapfir&s=pop&l=44&t=">Серьги с сапфирами</a></p>
-									<p><a href="/catalog/sergi?f[kamen]=izumrud&s=pop&l=44&t=">Серьги с изумрудами</a></p>
-									<!--<p><a href="/catalog/sergi?f[kamen]=rubin&s=pop&l=44&t=">Серьги с рубинами</a></p>-->
-									<p><a href="/catalog/sergi?f[kamen]=jemchug&s=pop&l=44&t=">Серьги с жемчугом</a></p>
-
-
-								</div>
-
-								<div class="col-md-2">
-
-									<p class="nav-header Conv_CRC55 px18"><strong><a href="#">&nbsp;</a></strong></p>
-
-
-
-									<p><a href="/catalog/sergi?f[kamen]=topaz&s=pop&l=44&t=">Серьги с топазом</a></p>
-									<p><a href="/catalog/sergi?f[kamen]=ametist&s=pop&l=44&t=">Серьги с аметистом</a></p>
-									<p><a href="/catalog/sergi?f[kamen]=granat&s=pop&l=44&t=">Серьги с гранатом</a></p>
-									<p><a href="/catalog/sergi?f[kamen]=hrizolit&s=pop&l=44&t=">Серьги с хризолитом</a></p>
-									<p><a href="/catalog/sergi?f[kamen]=citrin&s=pop&l=44&t=">Серьги с цитрином</a></p>
-
-
-								</div>
-
-								<!--<div class="col-md-2">
-
-									<p class="nav-header Conv_CRC55 px18"><strong><a href="#">&nbsp;</a></strong></p>
-
-
-
-									<p><a href="/catalog/sergi?f[kamen]=agat&s=pop&l=44&t=">Серьги с агатом</a></p>
-									<p><a href="/catalog/sergi?f[kamen]=kvarc&s=pop&l=44&t=">Серьги с кварцом</a></p>
-									<p><a href="/catalog/sergi?f[kamen]=jantar&s=pop&l=44&t=">Серьги с янтарем</a></p>
-									<p><a href="/catalog/sergi?f[kamen]=opal&s=pop&l=44&t=">Серьги с опалом</a></p>
-									<p><a href="/catalog/sergi?f[kamen]=fianit&s=pop&l=44&t=">Серьги с фианитом</a></p>
-
-
-								</div>-->
-
-
-
-							</div></div></div><!-- dropdown-menu -->
-
+					<a href="/catalog/sergi" class="dropdown-toggle ZAG Conv_CRC35">Серьги</b></a>
 				</li><!-- /.серьги -->
 
 
 
 				<li class="dropdown ">
-					<a href="/catalog/podveski" class="dropdown-toggle ZAG" data-toggle="dropdown">Подвески <b class="caret"></b></a>
-
-					<div class="dropdown-menu woman mega-menu px14 list-group1">
-						<div class="container">
-							<div class="col-md-12">
-
-								<div class="col-md-2">
-
-									<p class="nav-header Conv_CRC55 px18"><strong><a href="/catalog/podveski?l=44">Подвески</a></strong></p>
-
-
-									<p><a href="/catalog/krest">Крестики</a></p>
-
-
-
-
-
-
-
-								</div>
-
-								<!--div class="col-md-2">
-
-									<p class="nav-header Conv_CRC55 px18"><strong><a href="#">Вставка</a></strong></p>
-
-
-
-									<p><a href="/catalog/sergi?f[kamen]=brilliant&s=pop&l=44&t=">Серьги с бриллиантами</a></p>
-									<p><a href="/catalog/sergi?f[kamen]=sapfir&s=pop&l=44&t=">Серьги с сапфирами</a></p>
-									<p><a href="http://гнупг.рф/catalog/sergi?f[kamen]=izumrud&s=pop&l=44&t=">Серьги с изумрудами</a></p>
-									<p><a href="/catalog/sergi?f[kamen]=rubin&s=pop&l=44&t=">Серьги с рубинами</a></p>
-									<p><a href="/catalog/sergi?f[kamen]=jemchug&s=pop&l=44&t=">Серьги с жемчугом</a></p>
-
-
-									</div>
-
-									<div class="col-md-2">
-
-									<p class="nav-header Conv_CRC55 px18"><strong><a href="#">&nbsp;</a></strong></p>
-
-
-
-									<p><a href="/catalog/sergi?f[kamen]=topaz&s=pop&l=44&t=">Серьги с топазом</a></p>
-									<p><a href="/catalog/sergi?f[kamen]=ametist&s=pop&l=44&t=">Серьги с аметистом</a></p>
-									<p><a href="/catalog/sergi?f[kamen]=granat&s=pop&l=44&t=">Серьги с гранатом</a></p>
-									<p><a href="/catalog/sergi?f[kamen]=hrizolit&s=pop&l=44&t=">Серьги с хризолитом</a></p>
-									<p><a href="/catalog/sergi?f[kamen]=citrin&s=pop&l=44&t=">Серьги с цитрином</a></p>
-
-
-									</div>
-
-									<div class="col-md-2">
-
-									<p class="nav-header Conv_CRC55 px18"><strong><a href="#">&nbsp;</a></strong></p>
-
-
-
-									<p><a href="/catalog/sergi?f[kamen]=agat&s=pop&l=44&t=">Серьги с агатом</a></p>
-									<p><a href="/catalog/sergi?f[kamen]=kvarc&s=pop&l=44&t=">Серьги с кварцом</a></p>
-									<p><a href="/catalog/sergi?f[kamen]=jantar&s=pop&l=44&t=">Серьги с янтарем</a></p>
-									<p><a href="/catalog/sergi?f[kamen]=opal&s=pop&l=44&t=">Серьги с опалом</a></p>
-									<p><a href="/catalog/sergi?f[kamen]=fianit&s=pop&l=44&t=">Серьги с фианитом</a></p>
-
-
-								</div-->
-
-
-
-							</div></div></div><!-- dropdown-menu -->
-
+					<a href="/catalog/podveski" class="dropdown-toggle ZAG Conv_CRC35">Подвески</a>
 				</li><!-- /.подвески -->
 
 
@@ -297,11 +75,11 @@
 
 
 				<li>
-					<a href="/catalog/braslety" class="ZAG">Браслеты</a>
+					<a href="/catalog/braslety" class="ZAG Conv_CRC35">Браслеты</a>
 				</li>
 
 				<li>
-					<a href="/catalog/cepochki" class="ZAG">Цепи</a>
+					<a href="/catalog/cepochki" class="ZAG Conv_CRC35">Цепи</a>
 				</li>
 
 				<!--<li>
@@ -309,9 +87,32 @@
 				</li>-->
 
 				<li>
-					<a href="/catalog/kole" class="ZAG">Колье </a>
+					<a href="/catalog/kole" class="ZAG Conv_CRC35">Колье</a>
 				</li>
+				
+				<li class="dropdown">
+					<a class="dropdown-toggle px18 Conv_CRC35" data-toggle="dropdown" href="/catalog">Еще изделия <b class="caret"></b></a> 
+					<div class="dropdown-menu woman mega-menu px14 list-group1 Conv_CRC35">
+						<div class="container">
+							<div class="col-md-12">
+									<p><a href="/catalog/brosh" class="px18 Conv_CRC35">Броши</a></p>
+									<p><a href="/catalog/kole" class="px18 Conv_CRC35">Колье</a></p>
+									<p><a href="/catalog/krest" class="px18 Conv_CRC35">Кресты</a></p>
+									<p><a href="/catalog/pirsing" class="px18 Conv_CRC35">Пирсинг</a></p>
+									<p><a href="/catalog/zaponki" class="px18 Conv_CRC35">Запонки</a></p>
+									<p><a href="/catalog/zajimi-dlya-galstuka" class="px18 Conv_CRC35">Зажимы для галстука</a></p>  
+							</div>
+						</div>
+					</div>
+				</li>
+				
+				<li style="line-height: 0; border:0;">
+					<a href="/cart" class="px18 Conv_CRC35"><span style="border-bottom:1px solid #ccc;">Корзина (<span id="cartSumma" class="cartSumma">0</span>)</span></a><br />
+					<a href="/favorite" class="px18 Conv_CRC35"><span style="border-bottom:1px solid #ccc;">Избранное (<span id="favoriteSumma" class="favoriteSumma" style="color:#5a5a5a;">0</span>)</span></a><br />
 
+					<a href="tel:88002506221" class="ZAG px20 Conv_CRC35" style="font-size:32px;"><span style="border-bottom:1px solid #ccc;">8 800 250 62 21</span></a><br /> 
+					<a href="mailto:sale@ivantopazov.ru" class="px18 Conv_CRC35"><span style="border-bottom:1px solid #ccc;">sale@ivantopazov.ru</span></a> 
+				</li>
 				<!--li>
 					<a href="/catalog/krest" class="ZAG">Крест</a>
 				</li-->
@@ -325,7 +126,7 @@
 				</li-->
 
 
-				<li class="dropdown">
+				<!--<li class="dropdown">
 					<a class="dropdown-toggle ZAG" data-toggle="dropdown" href="/collections">Коллекции <b
 							class="caret"></b></a>
 					<div class="dropdown-menu woman mega-menu px14 list-group1 Conv_CRC35">
@@ -364,7 +165,7 @@
 							</div>
 						</div>
 					</div>
-				</li>
+				</li>-->
 
 
 				<!--<li class="dropdown">
@@ -538,10 +339,7 @@
 
 
 		</div>
-
-	</div>
-</nav>
-
+		
 <!-- /#################### Дектоп планшет меню -->
 
 
