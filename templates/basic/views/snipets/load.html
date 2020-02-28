@@ -266,6 +266,12 @@
 		window.open('https://ivantopazov.ru/search?t=' + $('input[name="t-search"]').val(), '_blank');
 	});
 	
+	$('#form_search').submit(function (event) {
+		console.log($('.nav_search').val());
+		location.href = 'https://ivantopazov.ru/search?t=' + $('.nav_search').val();
+		event.preventDefault(); 
+	});
+	
 	$(function () {
 		$('.filter-btn').click(function () {
 			$('#filter-block-show').slideToggle();
@@ -273,6 +279,10 @@
 		});
 	});
 
+	$('#ChangeToggle').click(function() {
+		$('#navbar-hamburger').toggleClass('hidden');
+		$('#navbar-close').toggleClass('hidden');  
+	});
 
 </script>
 
@@ -348,11 +358,11 @@
 		}
 	}
 
-	showCallBackPopup();
+//	showCallBackPopup();
 
-	$('#modal_callback').on('hidden.bs.modal', function () {
-		showCallBackPopup();
-	});
+//	$('#modal_callback').on('hidden.bs.modal', function () {
+//		showCallBackPopup();
+//	});
 
 </script>
 
