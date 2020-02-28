@@ -16,6 +16,7 @@ class Catalog extends CI_Controller
 	public function __construct()
 	{
 
+
 		parent::__construct();
 		$this->user_info = ($this->mdl_users->user_data()) ? $this->mdl_users->user_data() : false;
 		$this->store_info = $this->mdl_stores->allConfigs();
@@ -164,13 +165,6 @@ class Catalog extends CI_Controller
 			]);
 
 			$linkCurrent = '/catalog/' . implode('/', $tree);
-
-			if ($product) {
-				array_pop($tree);
-				$r['method'] = 'view_product';
-				$r['item'] = $product;
-				$r['error404'] = ($linkCurrent === $r['item']['modules']['linkPath']) ? false : true;
-			} else {
 				// нас интересует категория последнего уровеня (сейчас каталог одноуровневый, но может быть и многоуровневым)
 				// родительские категории добавляются в хлебные крошки
 				$category = null;
@@ -200,6 +194,16 @@ class Catalog extends CI_Controller
 						];
 					}
 				} while ($categoryCurrent);
+				
+				
+			if ($product) {
+				array_pop($tree);
+				$r['method'] = 'view_product';
+				$r['item'] = $product;
+				$r['item']['cat'] = $category;
+				$r['error404'] = ($linkCurrent === $r['item']['modules']['linkPath']) ? false : true;
+			} else {
+
 
 				// ToDo: для главной страницы доделать!
 				if ($category) {
@@ -289,6 +293,7 @@ class Catalog extends CI_Controller
 	// Вывести главную страницу каталога
 	public function index()
 	{
+		
 		$start = microtime(true);
 
 		$page_var = 'catalog';
@@ -296,7 +301,8 @@ class Catalog extends CI_Controller
 //		$getData = $this->getCategoryHome();
 		$getData = $this->getCatData();
 
-		$title = (!isset($getData['setFilters']['category']) ? 'все украшения ' : '') . $getData['filterTitle'];
+		$title = (!isset($getData['setFilters']['category']) ? 'Каталог ювелирных изделий Иван Топазов - цены и фото на золотые украшения со скидкой в Москве' : '') . $getData['filterTitle'];
+		$h1 = (!isset($getData['setFilters']['category']) ? 'Ювелирные изделия в интернет-магазине - каталог украшений' : '') . $getData['filterTitle'];
 		$title = mb_strtoupper(mb_substr($title, 0, 1)) . mb_substr($title, 1);
 
 		// Если нет товаров, ставим заглушку
@@ -317,7 +323,8 @@ class Catalog extends CI_Controller
 
 			'seo' => $this->mdl_tpl->view('snipets/seo_tools.html', [
 				'mk' => (!empty($this->store_info['seo_keys'])) ? $this->store_info['seo_keys'] : '',
-				'md' => (!empty($this->store_info['seo_desc'])) ? $this->store_info['seo_desc'] : '',
+				//'md' => (!empty($this->store_info['seo_desc'])) ? $this->store_info['seo_desc'] : '',
+				'md' => 'Золотые украшения по низким ценам. Посмотрите каталог с фото и закажите бесплатную доставку. Покупка после примерки. Скидки на ювелирные изделия из золота.',
 			], true),
 
 			'navTop' => $this->mdl_tpl->view('snipets/navTop.html', [
@@ -327,6 +334,9 @@ class Catalog extends CI_Controller
 			], true),
 
 			'header' => $this->mdl_tpl->view('snipets/header.html', [
+			
+			    'filter' => 1, 
+				'title' => '',
 				'store' => $this->store_info,
 				'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
 			], true),
@@ -346,7 +356,7 @@ class Catalog extends CI_Controller
 				], true),
 				'textSearch' => $getData['textSearch'],
 				'sort' => $getData['sort'],
-				'header_title' => $title,
+				'header_title' => $h1,
 				'collections' => $this->mdl_tpl->view('pages/catalog/category_view_collections.html', [
 					'items' => $getData['collections'],
 				], true),
@@ -653,7 +663,7 @@ class Catalog extends CI_Controller
 		$start = microtime(true);
 
 		$getData = $this->getCatData($data['item']['id']);
-
+ 
 		// Если нет товаров, ставим заглушку
 		if (count($getData["products"]) < 1) {
 			$descr = "<p style='font-size:18px;font-weight:bold;'>
@@ -686,6 +696,9 @@ class Catalog extends CI_Controller
 			], true),
 
 			'header' => $this->mdl_tpl->view('snipets/header.html', [
+			
+			    'filter' => 1, 
+				'title' => $data['item']['name'],
 				'store' => $this->store_info,
 				'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
 			], true),
@@ -950,7 +963,8 @@ class Catalog extends CI_Controller
 			];
 		}
 
-		$r['sort'] = (isset($this->get['s'])) ? $this->get['s'] : 'pop';
+		//$r['sort'] = (isset($this->get['s'])) ? $this->get['s'] : 'pop';
+		$r['sort'] = (isset($this->get['s'])) ? $this->get['s'] : 'pricemin';
 
 		//if( isset( $this->get['s'] ) ){
 
@@ -1096,17 +1110,39 @@ class Catalog extends CI_Controller
 	public function view_product($data)
 	{
 
-		$start = microtime(true);
+//		$start = microtime(true);
 
 		$dataItem = $this->getProductData($data['item']['id'], $data['item']['aliase'], false);
 
+//		$cat = $dataItem['product']['cat'];
+//		$price = $dataItem['product']['modules']['salePrice']['COP']['orig'];
+//		$salePrice = $dataItem['product']['modules']['salePrice']['COP']['salePrice'];
+		
+		//$dataItem1 = $this->getVamPonravitsa($data['item']['id'], false);
+
+		//print_r($dataItem1);
+		
 		if (!empty ($dataItem)) {
 
 			$product = $dataItem['product'];
-
+		
+			//print_r($product['modules']['paramsView']);
+			//print_r($data['item']['aliase']);
+			
 			// 'seo_keys', 'seo_desc', 'seo_title',
 			$title = (!empty($product['seo_title'])) ? $product['seo_title'] : $product['title'];
 			$page_var = 'catalog';
+			
+			$brand = array(
+				'kaborovsky' => 'от «Ювелирного Дома Кабаровских»',
+				'alkor' => 'от «Ювелирной фабрики Алькор»',
+				'master-brilliant' => 'от «Мастер Бриллиант»',
+				'trofimova-jewellery' => 'от «TROFIMOVA jewellery»',
+				'yuvelirnye-tradicii' => 'от «Ювелирные Традиции»',
+				'delta' => 'от «КЮЗ Дельта»',
+				'Estet' => 'от «Ювелирного дома Эстет»',
+				'sokolov' => 'от «Ювелирной компании SOKOLOV»',
+			);
 
 			$this->mdl_tpl->view('templates/doctype_catalog.html', [
 
@@ -1134,6 +1170,9 @@ class Catalog extends CI_Controller
 				], true),
 
 				'header' => $this->mdl_tpl->view('snipets/header.html', [
+				
+					'filter' => 1, 
+					'title' => $data['item']['cat']['name'], 
 					'store' => $this->store_info,
 					'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
 				], true),
@@ -1153,7 +1192,8 @@ class Catalog extends CI_Controller
 
 				'content' => $this->mdl_tpl->view('pages/catalog/product_view.html', [
 					'product' => $product,
-					'brand_desc' => $product['postavchik'] ? $this->mdl_tpl->view('pages/catalog/brands_descriptions/' . $product['postavchik'] . '.html', [], true) : '',
+					'brand_desc' => $product['postavchik'] ? $this->mdl_tpl->view('pages/catalog/brands_descriptions/' . $product['postavchik'] . '.html', [], true) : '', 
+					'brand' => $product['postavchik'] ? $brand[$product['postavchik']] : '',
 					'counter' => $dataItem['timerCount'],
 					'sizes' => isset($dataItem['sizes']) ? $dataItem['sizes'] : [],
 					'otherSizes' => isset($dataItem['otherSizes']) ? $dataItem['otherSizes'] : [],
@@ -1167,9 +1207,9 @@ class Catalog extends CI_Controller
 					'items' => $this->getKomplect($product['id'], false),
 				], true),
 
-				/*'VamPonravitsa' => $this->mdl_tpl->view('snipets/VamPonravitsa.html', array(
+				'VamPonravitsa' => $this->mdl_tpl->view('snipets/VamPonravitsa.html', array(
 					'items' => $this->getVamPonravitsa($product['id'], false),
-				), true),*/
+				), true),
 
 				'preimushchestva' => $this->mdl_tpl->view('snipets/preimushchestva.html', [
 					'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
@@ -1411,7 +1451,7 @@ class Catalog extends CI_Controller
 						'value' => $prodID,
 					]],
 				],
-				'labels' => ['id', 'sex', 'cat', 'filters', 'modules'],
+				'labels' => ['id', 'sex', 'cat', 'filter_zoloto', 'filter_kamen', 'modules'],
 				'module' => true,
 				'modules' => [[
 					'module_name' => 'price_actual',
@@ -1421,23 +1461,51 @@ class Catalog extends CI_Controller
 					],
 				]],
 			]);
-
 			$sex = $prod['sex'];
 			$cat = $prod['cat'];
-			$metall = false;
+			$kamen = false;
+			$zoloto = false;
 
-			if (!empty($prod['filters'])) {
+			if (!empty($prod['filter_kamen'])) {
+				$filterKamen = json_decode($prod['filter_kamen'], true);
+				$kamen = $filterKamen[0];
+			}
+
+			if (!empty($prod['filter_zoloto'])) {
+				$filterZoloto = json_decode($prod['filter_zoloto'], true);
+				$zoloto = $filterZoloto[0];
+			}
+
+			/*if (!empty($prod['filters'])) {
 				$ddd = json_decode($prod['filters'], true);
 				foreach ($ddd as $_v) {
 					if ($_v['item'] === 'metall') {
 						$metall = (count($_v['values']) > 0) ? $_v['values'][0] : $metall;
 					}
+					if ($_v['item'] === 'kamen') {
+						$kamen = (count($_v['values']) > 0) ? $_v['values'][0] : $kamen;
+					}
 				}
-			}
+			}*/
 
+
+			
+			/*if ($metall !== false) {
+				$metall_arr = array(
+					'krasnZoloto' => 'krasnoe',
+					'JoltZoloto' => 'zhyoltoe',
+					'belZoloto' => 'beloe',
+					'Zoloto' => 'Zoloto',
+					'Золото' => 'Золото',
+				);
+				$metall = $metall_arr[$metall];
+			}*/
+			
+			
 			$prod_price = $prod['modules']['price_actual']['number'];
-			$price_ot = ($prod_price < 2000) ? 0 : $prod_price - 2000;
-			$price_do = $prod_price + 2000;
+			$price_ot = ($prod_price < 5000) ? 0 : $prod_price - 5000;
+			$price_do = $prod_price + 5000;
+
 
 			$options = [
 				'return_type' => 'ARR2',
@@ -1474,11 +1542,16 @@ class Catalog extends CI_Controller
 						'item' => 'price',
 						'type' => 'range-values',
 						'values' => [$price_ot, $price_do],
-					], [
-						'item' => 'metall',
+					], 
+					[
+						'item' => 'kamen',
 						'type' => 'checkbox-group',
-						'values' => ($metall !== false) ? [$metall] : [],
-					],
+						'values' => ($kamen !== false) ? [$kamen] : [],
+					], [
+						'item' => 'zoloto',
+						'type' => 'checkbox-group',
+						'values' => ($zoloto !== false) ? [$zoloto] : [],
+					], 
 				],
 				'module_queue' => [
 					'price_actual', 'limit', 'salePrice', 'linkPath', 'photos',
@@ -1504,7 +1577,7 @@ class Catalog extends CI_Controller
 					'option' => [
 						'no_images_view' => 1,
 					],
-				]],
+				]], 
 			];
 
 			$r = $this->mdl_product->queryData($options);
