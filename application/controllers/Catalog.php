@@ -44,7 +44,7 @@ class Catalog extends CI_Controller
 	 * @param int $filterId
 	 * @return array
 	 */
-	protected function getFilter($filterId)
+	protected function getFilter($filterId,$category_id=false)
 	{
 		$filter = $this->mdl_category->queryData([
 			'return_type' => 'ARR1',
@@ -74,6 +74,15 @@ class Catalog extends CI_Controller
 			return !isset($filterItem['hidden']) || !$filterItem['hidden'];
 		});
 
+		if ($category_id) {
+			$query_max_price = $this->db->query(" SELECT MAX(price_real) as max_price FROM `products` WHERE cat='".$category_id."' AND view>'0' AND qty>'0' AND moderate>'1'");
+		} else {
+			$query_max_price = $this->db->query(" SELECT MAX(price_real) as max_price FROM `products` WHERE view>'0' AND qty>'0' AND moderate>'1' ");
+		}
+		$max_price = $query_max_price->row_array();
+		$price = $max_price['max_price']/100;
+		$filterData[0]['max_price'] = ($price<50000) ? 50000 : $price;
+		
 		return $filterData;
 	}
 
@@ -221,7 +230,7 @@ class Catalog extends CI_Controller
 
 					if (count($filtersFromUrl)) {
 
-						$filter = $this->getFilter($category ? $category['filter_id'] : 11);
+						$filter = $this->getFilter($category ? $category['filter_id'] : 11, $category['id']);
 						$filter = $this->parseFilter($filter);
 
 						$filterSettings = [];
@@ -858,7 +867,7 @@ class Catalog extends CI_Controller
 			]);
 		}
 
-		$filter = $this->getFilter($category ? $category['filter_id'] : 11);
+		$filter = $this->getFilter($category ? $category['filter_id'] : 11, $category['id']);
 
 		$option = [
 			'return_type' => 'ARR2+',
