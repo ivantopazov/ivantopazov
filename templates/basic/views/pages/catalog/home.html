@@ -69,12 +69,12 @@
 								{% if sort == 'new' %}по новинкам{% endif %}
 								{% if sort == 'upsells' %}по скидкам{% endif %}
 							  <span class="caret"></span></button>
-							  <ul class="dropdown-menu dropdown-menu_new">
-								<li class="{% if sort == 'pricemin' %}active{% endif %}"><a href="#" click="Ev.catalog.setOption_item('pricemin');"><span data-filter_option="pricemin">по возрастанию цены</span></a></li>
-								<li class="{% if sort == 'pricemax' %}active{% endif %}"><a href="#" click="Ev.catalog.setOption_item('pricemax');"><span data-filter_option="pricemax">по убыванию цены</span></a></li>
-								<li class="{% if sort == 'pop' %}active{% endif %}"><a href="#" click="Ev.catalog.setOption_item('pop');"><span data-filter_option="pop">по популярности</span></a></li>
-								<li class="{% if sort == 'new' %}active{% endif %}"><a href="#" click="Ev.catalog.setOption_item('new');"><span data-filter_option="new">по новинкам</span></a></li>
-								<li class="{% if sort == 'upsells' %}active{% endif %}"><a href="#" click="Ev.catalog.setOption_item('upsells');"><span data-filter_option="upsells">по скидкам</span></a></li>
+							  <ul class="dropdown-menu dropdown-menu_new" data-parent="filter-option">
+								<li class="{% if sort == 'pricemin' %}active{% endif %}"><a href="#" click="Ev.catalog.setOption_item('pricemin');"><span data-filter_option="pricemin" class="{% if sort == 'pricemin' %}active{% endif %}">по возрастанию цены</span></a></li>
+								<li class="{% if sort == 'pricemax' %}active{% endif %}"><a href="#" click="Ev.catalog.setOption_item('pricemax');"><span data-filter_option="pricemax" class="{% if sort == 'pricemax' %}active{% endif %}">по убыванию цены</span></a></li>
+								<li class="{% if sort == 'pop' %}active{% endif %}"><a href="#" click="Ev.catalog.setOption_item('pop');"><span data-filter_option="pop" class="{% if sort == 'pop' %}active{% endif %}">по популярности</span></a></li>
+								<li class="{% if sort == 'new' %}active{% endif %}"><a href="#" click="Ev.catalog.setOption_item('new');"><span data-filter_option="new" class="{% if sort == 'new' %}active{% endif %}">по новинкам</span></a></li>
+								<li class="{% if sort == 'upsells' %}active{% endif %}"><a href="#" click="Ev.catalog.setOption_item('upsells');"><span data-filter_option="upsells" class="{% if sort == 'upsells' %}active{% endif %}">по скидкам</span></a></li>
 							  </ul>
 							</div>
 						</li>
