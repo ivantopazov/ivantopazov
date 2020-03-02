@@ -1,4 +1,4 @@
-<div class="row visible-xs" style="margin:0px;">
+<!--<div class="row visible-xs" style="margin:0px;">
 	<div class="col-xs-6 col-sm-3 col-md-3  col-lg-2 text-center">
 		<a href="#" class="search-catalog" data-target="#modal_search_form" data-toggle="modal"
 		   onclick="yaCounter45556173.reachGoal('search');">Поиск</a>
@@ -7,7 +7,7 @@
 		<a href="#" class="filter-btn">Фильтр</a>
 	</div>
 </div>
-<hr/>
+<hr/>-->
 <div class="clearfix">&nbsp;</div>
 
 <div class="hidden_overflow" style="padding-bottom: 0px;">
@@ -21,22 +21,15 @@
 
 			<div class="row">
 
-				<div class="col-xs-12 mb00  ">
-					<span class="title1 Conv_CRC55 black px20"><strong>Фильтр:</strong></span>
-				</div>
-
-				<div class="col-xs-12 jq-filters_btn  mt15">
-					<a class="btn-cart Conv_CRC55  btn-block text-center ZAG" href="#"
-					   click="Ev.catalog.resetFiltersParam()">Сбросить фильтр</a>
-				</div>
-
 				<div class="col-xs-12 pr0" data-parent="filter-block">{{blocks}}</div>
 
 				<input type="hidden" name="t" value="{{textSearch}}" />
 
 				<div class="col-xs-12 jq-filters_btn  mt15">
-					<a class="btn-cart Conv_CRC55  btn-block text-center ZAG" href="#"
-					   click="Ev.catalog.resetFiltersParam()">Сбросить фильтр</a>
+					<a class="filter_head filter_head_clear" href="#" click="Ev.catalog.resetFiltersParam()"><u>Сбросить фильтры</u></a>
+				</div>
+				<div class="col-xs-12 jq-filters_btn  mt5">
+					<a class="filter_head_close" href="#"><u>Закрыть</u> <span aria-hidden="true">×</span></a>
 				</div>
 
 			</div>
@@ -45,44 +38,6 @@
 		</div>
 
 		<h1 class="Conv_Circe-Bold ZAG pb30 expandable catalog_h1 visible-xs">{{header_title}}</h1>
-
-		<!-- ############# Фильтр каталог мобильная версия -->
-
-
-		<div aria-hidden="true" role="dialog" tabindex="-1" id="modal_catalog_filter" class="modal inmodal fade">
-			<div class="modal-dialog modal-xs">
-				<div class="modal-content">
-
-					<div class="modal-header">
-						<button data-dismiss="modal" class="close" type="button">
-							<span aria-hidden="true">×</span><span class="sr-only">Close</span>
-						</button>
-						<h4 class="modal-title title1 Conv_CRC55 black px20">Фильтр:</h4>
-					</div>
-
-
-					<div style="padding: 15px;">
-
-						<div class=" jq-filters_btn  mt15">
-							<a class="btn-cart Conv_CRC55  btn-block text-center ZAG" href="#"
-							   click="Ev.catalog.resetFiltersParam('mob-filter-block')">Сбросить фильтр</a>
-						</div>
-
-						<div class=" pr0  " data-parent="mob-filter-block">{{blocks}}</div>
-
-						<input type="hidden" name="t" value="{{textSearch}}" />
-
-						<div class=" jq-filters_btn  mt15">
-							<a class="btn-cart Conv_CRC55  btn-block text-center ZAG" href="#"
-							   click="Ev.catalog.resetFiltersParam('mob-filter-block')">Сбросить фильтр</a>
-						</div>
-
-					</div>
-
-				</div>
-			</div>
-		</div>
-
 
 		<!-- ############# Контент -->
 
