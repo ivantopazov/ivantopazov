@@ -44,18 +44,17 @@
 
 </style>
 
-<div class="row visible-xs" style="margin:0px;">
-	<div class="col-xs-6 col-sm-3 col-md-3  col-lg-2 text-center">
-		<a onclick="history.back(); return false;" href="#" class="back-to-catalog">Вернуться<br />в каталог</a>
-	</div>
-	<div class="col-xs-6 col-sm-6 col-md-3  col-lg-2 ico-3  text-center">
-		<a onclick="callBackSale(); return false;" href="#" class="choose-btn">Подобрать<br />украшение</a>
-	</div>
-</div>
+
 <div class="clearfix">&nbsp;</div>
 
 <section class="hidden_overflow">
 	<div class="container content">
+	
+		<div class="row" style="margin:0px;">
+			<div class="col-xs-12 col-sm-12 col-md-12  col-lg-12">
+				<a onclick="history.back(); return false;" href="#" class="back-to-catalog_new">&lsaquo; Вернуться в каталог</a>
+			</div>
+		</div>
 		<div class="bg-page">
 
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
@@ -100,6 +99,7 @@
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
 
 				<h1 class="Conv_Circe-Bold mt10" style="color:#62a9d5;">{{product.title}}</h1>
+				<div class="Conv_Circe px18" style="color:#62a9d5;">{{brand}}</div>
 
 				<div class="pt10 mb15">
 					<div class="">
@@ -287,24 +287,24 @@
 
 
 					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-4"> 
-							<a href="#" class=" btn-cart Conv_CRC55  btn-block text-center ZAG p15 px16 mt15" onclick="yaCounter45556173.reachGoal('cart-product');" style="background:#ffa800; border:0;"
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6"> 
+							<a href="#" class=" btn-cart Conv_CRC55  btn-block text-center ZAG p10 px16 mt15" onclick="yaCounter45556173.reachGoal('cart-product');" style="background:#ffa800; border:0;"
 							   click="CART.add({ id:{{product.id}}, title:'{{product.title}}', price:{{price}}, qty:{type:'plus', value:1}, orig: { image:'{{product.modules.photos[0].photo_name}}', articul:'{{product.articul}}', link:'{{product.modules.linkPath}}'}}, MAIN.addCartCallback );">Добавить
 								в корзину</a>
 						</div>
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
-							<a href="#" class="btn-cart_default Conv_CRC55 btn-block text-center ZAG p15 px16 mt15" onclick="yaCounter45556173.reachGoal('quick-order');"
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
+							<a href="#" class="btn-cart_default Conv_CRC55 btn-block text-center ZAG p10 px16 mt15" onclick="yaCounter45556173.reachGoal('quick-order');"
 							   data-toggle="modal" data-target="#modal_speedOrder" href="#"
 							   click="MAIN.speedAddCart({ id:{{product.id}}, title:'{{product.title}}', price:{{price}}, qty:1, orig: { image:'{{product.modules.photos[0].photo_name}}', articul:'{{product.articul}}', link:'{{product.modules.linkPath}}'}});"
 							>
 								Быстрый заказ
 							</a>
 						</div>
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
-							<a href="#" class="btn-cart_default Conv_CRC55 btn-block text-center ZAG p15 px16 mt15" onclick="" 
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
+							<a href="#" class="btn-cart_default_new Conv_CRC55 btn-block text-center ZAG px16 mt15" onclick="" 
 							   click="MAIN.addFavorite({ id:{{product.id}}, title:'{{product.title}}', price:'{{product.modules.salePrice.VAL_00.orig}}', salePrice:'{{product.modules.salePrice.VAL_00.salePrice}}', orig: { image:'{{product.modules.photos[0].photo_name}}', articul:'{{product.articul}}', link:'{{product.modules.linkPath}}'}});"
 							>
-								&#9825;<br>Отложить
+								<span class="text-heart">&#9825;</span> <span class="text_show-mobile">В избранное</span>
 							</a>
 						</div>
 						<!--div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -477,14 +477,25 @@
 				</div>
 -->
 			</div>
+			
 
 
-			<div class="col-xs-12"></div>
+		</div> 
+		
 
 
-		</div>
 	</div>
+	
+	
 </section>
+
+<div class="hidden_overflow" style="padding-bottom: 0px;">
+	<div class="container theme-showcase mt10_ " role="main">
+		<div class="cartBlock hidden" unload="MAIN.addView({ id:{{product.id}}, title:'{{product.title}}', price:'{{product.modules.salePrice.VAL_00.orig}}', salePrice:'{{product.modules.salePrice.VAL_00.salePrice}}', orig: { image:'{{product.modules.photos[0].photo_name}}', articul:'{{product.articul}}', link:'{{product.modules.linkPath}}'}});">
+			<div unload="MAIN.cartPagesWithRefreshView()" class="cartList"></div>
+		</div>	
+	</div>
+</div>
 
 <!--
 <div aria-hidden="true" role="dialog" tabindex="-1" id="modal_new_otziv" class="modal inmodal fade">

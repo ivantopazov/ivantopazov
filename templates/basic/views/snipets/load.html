@@ -169,10 +169,8 @@
 				<p class="px17 fw300 hidden" id="messageCartSumma"></p>
 			</div>
 			<div class="modal-footer">
-				<a class="btn-event Conv_Circe-Bold button hover-shadows" href="/cart">Оформить заказ</a>
-				<button data-dismiss="modal" class="btn-cart Conv_CRC55  text-center ZAG" type="button">Продолжить
-					покупки
-				</button>
+				<a class="btn-event Conv_Circe-Bold button hover-shadows" href="/cart" style="background:#ffa800; color:#fff; text-transform:uppercase; width:221px; text-align:center;">Оформить заказ</a>
+				<button data-dismiss="modal" class="btn-cart Conv_CRC55  text-center ZAG" type="button">Продолжить покупки</button>
 			</div>
 		</div>
 	</div>
@@ -203,7 +201,7 @@
 <div aria-hidden="true" role="dialog" tabindex="-1" id="modal_search_form" class="modal inmodal fade">
 	<div class="modal-dialog modal-xs">
 		<div class="modal-content">
-			<form action="/search" method="get" target="_blank">
+			<form action="/search" id="search_popup" method="get" target="_blank">
 
 				<div class="modal-header">
 					<button data-dismiss="modal" class="close" type="button">
@@ -215,7 +213,7 @@
 
 					<div class="row">
 						<div class="col-xs-12">
-							<p class="mb5"><input style="width: 100%;" class="form-control text-left  lato" name="t-search"
+							<p class="mb5"><input style="width: 100%;" class="form-control text-left  lato search_popup" name="t-search"
 												  placeholder="Введите название или вид изделия" type="text"></p>
 						</div>
 					</div>
@@ -249,7 +247,7 @@
 
 <script src="/{{addons_folder}}/scripts/plugins/toastr/toastr.min.js?_=123"></script>
 <link href="/{{addons_folder}}/styles/plugins/toastr/toastr.min.css" rel="stylesheet">
-
+ 
 
 <script src="/{{addons_folder}}/scripts/jquery.maskedinput.min.js"></script>
 
@@ -258,12 +256,23 @@
 
 <script src="//api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU" type="text/javascript"></script>
 
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 <script type="text/javascript" src="/{{addons_folder}}/scripts/plugins/slick/slick.min.js"></script>
 
 
 <script>
-	$('#search').click(function () {
-		window.open('https://ivantopazov.ru/search?t=' + $('input[name="t-search"]').val(), '_blank');
+	$('#search_popup').submit(function () {
+		//window.open('https://ivantopazov.ru/search?t=' + $('input[name="t-search"]').val(), '_blank');
+		location.href = 'https://ivantopazov.ru/search?t=' + $('.search_popup').val();
+		event.preventDefault(); 
+	});
+	
+	$('#form_search').submit(function (event) {
+		//console.log($('.nav_search').val());
+		location.href = 'https://ivantopazov.ru/search?t=' + $('.nav_search').val();
+		event.preventDefault(); 
 	});
 	
 	$(function () {
@@ -273,10 +282,16 @@
 		});
 	});
 
+	$('#ChangeToggle').click(function() {
+		$('#navbar-hamburger').toggleClass('hidden');
+		$('#navbar-close').toggleClass('hidden');  
+	});
 
 </script>
 
 <script>
+
+
 	function callBackSale() {
 		// if (ymaps.geolocation.city.length > 2) $('#callback_title').html('Ваш город ' + ymaps.geolocation.city + '? Закажите обратный звонок и получите скидку 40%! Не суммируется с другими скидками.');
 		// else
@@ -348,11 +363,11 @@
 		}
 	}
 
-	showCallBackPopup();
+//	showCallBackPopup();
 
-	$('#modal_callback').on('hidden.bs.modal', function () {
-		showCallBackPopup();
-	});
+//	$('#modal_callback').on('hidden.bs.modal', function () {
+//		showCallBackPopup();
+//	});
 
 </script>
 

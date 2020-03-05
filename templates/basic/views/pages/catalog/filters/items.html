@@ -1,27 +1,60 @@
 {% for item in items %} 
 <div class="row" data-block_name="{{item.variabled}}" >    
-	<div class="col-xs-12 mt15">
-		<p><strong> {{item.title}} </strong></p>
+	<div class="col-xs-12 mt5 filter_show_block" data-name="{{item.variabled}}">
+		<p class="filter_head">{{item.title}}</p>
+		<p class="filter_head_sel">
+		{% if item.type == 'range-values' %}
+			{% if _context[item.variabled][0] == '' and _context[item.variabled][1] == '' %}ВСЕ{% endif %}
+			{% if _context[item.variabled][0] == '0' and _context[item.variabled][1] == '0' %}ВСЕ{% endif %}
+			{% if _context[item.variabled][0] > 0 and _context[item.variabled][1] > 0 %}{{ _context[item.variabled][0] }} - {{ _context[item.variabled][1] }}{% endif %}
+			{% if _context[item.variabled][0] > 0 and (_context[item.variabled][1] == '' or _context[item.variabled][1] == 0) %}&gt; {{ _context[item.variabled][0] }}{% endif %}
+			{% if (_context[item.variabled][0] == '' or _context[item.variabled][0] == 0) and _context[item.variabled][1] > 0 %}&lt; {{ _context[item.variabled][1] }}{% endif %}
+		{% endif %}
+		{% if item.type == 'checkbox-group' %}
+			{% set n = 0 %}
+			{% for link in item.data %}{% if link.check == 'on' %}{% if n>0 %}, {% endif %}{{link.title}}{% set n = n+1 %}{% endif %}{% endfor %}
+			{% if n==0 %}ВСЕ{% endif %}
+		{% endif %}
+		</p>
 	</div>        
-	<div class="col-xs-12 filter_scroll_">
+	<div class="col-xs-12 filter_scroll_ filter_hide filter_hide_{{item.variabled}}">
         
 		{% if item.type == 'range-values' %}
 		<div class="row" style="margin-bottom: 20px;">
 			{% for kk, link in item.data %}
 			<div class="col-xs-6">
-				<div class="row">
-					<label class="col-xs-12" for="{{link.variabled}}" title="{{link.title}}">{{link.title}}</label>    
-					<div class="col-xs-12">
-						<div class="pull-right">
-							<span class="control-label">
-								<input type="text" id="{{link.variabled}}" name="{{link.variabled}}" class="form-control" value="{{ _context[item.variabled][kk] }}" placeholder="{{link.title}}" autocomplete="off" />
-							</span>
-						</div>
-					</div>
+
+				<div class="pull-left">
+					<span class="control-label">
+						{{link.title}} <input type="text" id="{{link.variabled}}" name="{{link.variabled}}" class="form-control input_fc" value="{{ _context[item.variabled][kk] }}" placeholder="" autocomplete="off" />
+					</span>
 				</div>
+
 			</div>  
 			{% endfor %}
 		</div>
+		
+		{% if item.variabled == 'price' %}
+		<div class="row" style="margin-bottom: 20px;">
+			<div class="col-xs-12">
+				<div class="filter_range" data-min="0" data-max="{{item.max_price}}" 
+					data-min_val="{% if _context[item.variabled][0] > 0 %}{{_context[item.variabled][0]}}{% else %}0{% endif %}" 
+					data-max_val="{% if _context[item.variabled][1] > 0 %}{{_context[item.variabled][1]}}{% else %}{{item.max_price}}{% endif %}"></div>
+			</div>
+		</div>
+		<div class="row" style="margin-bottom: 20px;">
+			<div class="col-xs-12">
+				<label class="filter_price_range" data-min="0" data-max="5000" style="display:inline-block"><span id="" data-name="" class="">&lt; 5 000</span></label>
+				<label class="filter_price_range" data-min="5000" data-max="10000" style="display:inline-block"><span id="" data-name="" class="">5 000 - 10 000</span></label>
+				<label class="filter_price_range" data-min="10000" data-max="20000" style="display:inline-block"><span id="" data-name="" class="">10 000 - 20 000</span></label>
+				<label class="filter_price_range" data-min="30000" data-max="50000" style="display:inline-block"><span id="" data-name="" class="">30 000 - 50 000</span></label>
+				<label class="filter_price_range" data-min="50000" data-max="" style="display:inline-block"><span id="" data-name="" class="">&gt; 50 000</span></label>
+			</div>
+		</div>
+		{% endif %}
+
+		
+		
 		{% endif %}
 		
 		
@@ -29,33 +62,25 @@
 		
 		{% if item.data |length > 8 %}<div class="slideHide" data-item="{{item.variabled}}" data-status="hide">{% endif %}
 			
-			<div class="row">
+		<div class="row">
+			<div class="col-xs-12">
 				{% for link in item.data %}
-				<div class="{% if item.variabled == 'size' %} col-xs-6 {% else %} col-xs-12 {% endif %}">
-					
-					<div class="pull-left">  
-						<div class="pull-right">
-							<span class="control-label">
-								<input type="checkbox" id="{{link.variabled}}" name="{{link.variabled}}" {% if link.check == 'on' %} checked {% endif %} class="i-checks" autocomplete="off" />
-							</span>
-						</div>
-					</div>
-					<label class="Conv_CRC55 " for="{{link.variabled}}" title="{{link.title}}" style="margin-left: 15px;">{{link.title}}</label>    
-					
-				</div> 
+
+				<label class="filter_val" title="{{link.title}}" style="display:inline-block"><span id="{{link.variabled}}" data-name="{{link.variabled}}" class="{% if link.check == 'on' %}checked{% endif %}">{{link.title}}</span></label>
+				
 				{% endfor %} 
 			</div>
+		</div>
 			
 		{% if item.data |length > 8 %}</div>{% endif %}
-		
 		{% if item.data |length > 8 %}
-		<p><a class="btn btn-default btn-block mt15" href="#" click="Ev.catalog.viewHide('{{item.variabled}}');" >Показать больше / Скрыть</a></p>
+		<p><a class="filter_more filter_more_{{item.variabled}}" click="Ev.catalog.viewHide('{{item.variabled}}');" >Показать еще</a></p>
 		{% endif %}
-		
 		{% endif %}
 		
 		
 		
 	</div>        
 </div>
+<hr class="filter_hr" />
 {% endfor %}

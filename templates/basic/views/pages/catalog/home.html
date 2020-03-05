@@ -1,4 +1,4 @@
-<div class="row visible-xs" style="margin:0px;">
+<!--<div class="row visible-xs" style="margin:0px;">
 	<div class="col-xs-6 col-sm-3 col-md-3  col-lg-2 text-center">
 		<a href="#" class="search-catalog" data-target="#modal_search_form" data-toggle="modal"
 		   onclick="yaCounter45556173.reachGoal('search');">Поиск</a>
@@ -7,7 +7,7 @@
 		<a href="#" class="filter-btn">Фильтр</a>
 	</div>
 </div>
-<hr/>
+<hr/>-->
 <div class="clearfix">&nbsp;</div>
 
 <div class="hidden_overflow" style="padding-bottom: 0px;">
@@ -21,67 +21,23 @@
 
 			<div class="row">
 
-				<div class="col-xs-12 mb00  ">
-					<span class="title1 Conv_CRC55 black px20"><strong>Фильтр:</strong></span>
-				</div>
-
-				<div class="col-xs-12 jq-filters_btn  mt15">
-					<a class="btn-cart Conv_CRC55  btn-block text-center ZAG" href="#"
-					   click="Ev.catalog.resetFiltersParam()">Сбросить фильтр</a>
-				</div>
-
 				<div class="col-xs-12 pr0" data-parent="filter-block">{{blocks}}</div>
 
 				<input type="hidden" name="t" value="{{textSearch}}" />
 
 				<div class="col-xs-12 jq-filters_btn  mt15">
-					<a class="btn-cart Conv_CRC55  btn-block text-center ZAG" href="#"
-					   click="Ev.catalog.resetFiltersParam()">Сбросить фильтр</a>
+					<a class="filter_head filter_head_clear" href="#" click="Ev.catalog.resetFiltersParam()"><u>Сбросить фильтры</u></a>
+				</div>
+				<div class="col-xs-12 jq-filters_btn  mt5">
+					<a class="filter_head_close" href="#"><u>Закрыть</u> <span aria-hidden="true">×</span></a>
 				</div>
 
 			</div>
 
 			<br/><br/>
 		</div>
-
+		
 		<h1 class="Conv_Circe-Bold ZAG pb30 expandable catalog_h1 visible-xs">{{header_title}}</h1>
-
-		<!-- ############# Фильтр каталог мобильная версия -->
-
-
-		<div aria-hidden="true" role="dialog" tabindex="-1" id="modal_catalog_filter" class="modal inmodal fade">
-			<div class="modal-dialog modal-xs">
-				<div class="modal-content">
-
-					<div class="modal-header">
-						<button data-dismiss="modal" class="close" type="button">
-							<span aria-hidden="true">×</span><span class="sr-only">Close</span>
-						</button>
-						<h4 class="modal-title title1 Conv_CRC55 black px20">Фильтр:</h4>
-					</div>
-
-
-					<div style="padding: 15px;">
-
-						<div class=" jq-filters_btn  mt15">
-							<a class="btn-cart Conv_CRC55  btn-block text-center ZAG" href="#"
-							   click="Ev.catalog.resetFiltersParam('mob-filter-block')">Сбросить фильтр</a>
-						</div>
-
-						<div class=" pr0  " data-parent="mob-filter-block">{{blocks}}</div>
-
-						<input type="hidden" name="t" value="{{textSearch}}" />
-
-						<div class=" jq-filters_btn  mt15">
-							<a class="btn-cart Conv_CRC55  btn-block text-center ZAG" href="#"
-							   click="Ev.catalog.resetFiltersParam('mob-filter-block')">Сбросить фильтр</a>
-						</div>
-
-					</div>
-
-				</div>
-			</div>
-		</div>
 
 
 		<!-- ############# Контент -->
@@ -101,25 +57,26 @@
 
 			<div class="mb25">
 				<div class="mb25">
+
 					<ul class="list-inline px16" data-parent="filter-option">
 						<li><span class="title1 Conv_CRC55 black"><strong>Сортировать:</strong></span></li>
-						<li><span class="title1 Conv_CRC55 {% if sort == 'pricemin' %}active{% endif %}"
-								  data-filter_option="pricemin"> <a href="#"
-																	click="Ev.catalog.setOption_item('pricemin');">по возрастанию цены</a></span>
-						</li>
-						<li><span class="title1 Conv_CRC55 {% if sort == 'pricemax' %}active{% endif %}"
-								  data-filter_option="pricemax"> <a href="#"
-																	click="Ev.catalog.setOption_item('pricemax');">по убыванию цены</a></span>
-						</li>
-						<li><span class="title1 Conv_CRC55 {% if sort == 'pop' %}active{% endif %}"
-								  data-filter_option="pop"> <a href="#" click="Ev.catalog.setOption_item('pop');">по популярности</a></span>
-						</li>
-						<li><span class="title1 Conv_CRC55 {% if sort == 'new' %}active{% endif %}"
-								  data-filter_option="new"> <a href="#" click="Ev.catalog.setOption_item('new');">по новинкам</a></span>
-						</li>
-						<li><span class="title1 Conv_CRC55 {% if sort == 'upsells' %}active{% endif %}"
-								  data-filter_option="upsells"><strong> <a href="#"
-																		   click="Ev.catalog.setOption_item('upsells');">по скидкам</a></strong></span>
+						<li>
+							<div class="dropdown">
+							  <button class="btn btn_new dropdown-toggle text-blue" type="button" data-toggle="dropdown">
+								{% if sort == 'pricemin' %}по возрастанию цены{% endif %}
+								{% if sort == 'pricemax' %}по убыванию цены{% endif %}
+								{% if sort == 'pop' %}по популярности{% endif %}
+								{% if sort == 'new' %}по новинкам{% endif %}
+								{% if sort == 'upsells' %}по скидкам{% endif %}
+							  <span class="caret"></span></button>
+							  <ul class="dropdown-menu dropdown-menu_new" data-parent="filter-option">
+								<li class="{% if sort == 'pricemin' %}active{% endif %}"><a href="#" click="Ev.catalog.setOption_item('pricemin');"><span data-filter_option="pricemin" class="{% if sort == 'pricemin' %}active{% endif %}">по возрастанию цены</span></a></li>
+								<li class="{% if sort == 'pricemax' %}active{% endif %}"><a href="#" click="Ev.catalog.setOption_item('pricemax');"><span data-filter_option="pricemax" class="{% if sort == 'pricemax' %}active{% endif %}">по убыванию цены</span></a></li>
+								<li class="{% if sort == 'pop' %}active{% endif %}"><a href="#" click="Ev.catalog.setOption_item('pop');"><span data-filter_option="pop" class="{% if sort == 'pop' %}active{% endif %}">по популярности</span></a></li>
+								<li class="{% if sort == 'new' %}active{% endif %}"><a href="#" click="Ev.catalog.setOption_item('new');"><span data-filter_option="new" class="{% if sort == 'new' %}active{% endif %}">по новинкам</span></a></li>
+								<li class="{% if sort == 'upsells' %}active{% endif %}"><a href="#" click="Ev.catalog.setOption_item('upsells');"><span data-filter_option="upsells" class="{% if sort == 'upsells' %}active{% endif %}">по скидкам</span></a></li>
+							  </ul>
+							</div>
 						</li>
 					</ul>
 				</div>

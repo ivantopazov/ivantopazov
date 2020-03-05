@@ -2,23 +2,79 @@ $(function () {
 
 	var sendFilter = function() {
 		var db_block = $(this).parents('div[data-parent]').attr('data-parent');
-
 		setTimeout(function(){
 			Ev.catalog.getFiltersParam( db_block );
 		},100);
 	};
 
-	$.getScript('/addons/scripts/plugins/iCheck/icheck.min.js', function () {
+	/*$.getScript('/addons/scripts/plugins/iCheck/icheck.min.js', function () {
 		$('input.i-checks')
 			.on('ifChanged', sendFilter)
 			.iCheck({
 				checkboxClass: 'icheckbox_square-green',
 				radioClass: 'iradio_square-green',
 			});
-	});
+	});*/
 
 	$('input.form-control').on('blur', sendFilter);
+	$('.filter_val').on('click', function(){
+		
+		if ($(this).find('span').attr('class')=='checked')
+			$(this).find('span').removeClass('checked');
+		else 
+			$(this).find('span').addClass('checked');
+		
+		var db_block = $(this).parents('div[data-parent]').attr('data-parent');
+		setTimeout(function(){
+			Ev.catalog.getFiltersParam( db_block );
+		},100);
+	});
 
+	$('.filter_price_range').on('click', function(){
+		
+		$('#price-ot').val($(this).data('min'));
+		$('#price-do').val($(this).data('max'));
+		
+		var db_block = $(this).parents('div[data-parent]').attr('data-parent');
+		setTimeout(function(){
+			Ev.catalog.getFiltersParam( db_block );
+		},100);
+
+	});
+
+	var min = $(".filter_range" ).data('min');
+	var max = $(".filter_range" ).data('max');
+	var min_val = $(".filter_range" ).data('min_val');
+	var max_val = $(".filter_range" ).data('max_val');
+	$(".filter_range" ).slider({
+		range: true,
+		min: min,
+		max: max,
+		step: 5000,
+		values: [ min_val, max_val ],
+		slide: function( event, ui ) {
+			$("#price-ot").val(ui.values[ 0 ]);
+			$("#price-do").val(ui.values[ 1 ]);
+			var db_block = $(this).parents('div[data-parent]').attr('data-parent');
+			setTimeout(function(){
+				Ev.catalog.getFiltersParam( db_block );
+			},100);
+		}
+	});
+
+	$('.filter_show_block').on('click', function(){ 
+		var name = $(this).data('name');
+		$('.filter_hide:not(.filter_hide_'+name+')').hide();
+		$('.filter_hide.filter_hide_'+name).toggle();
+	});
+	
+	$('.filter_head_close').on('click', function(){ 
+		$('#filter-block-show').slideUp();
+		
+		console.log('766777');
+		
+	});
+	
 	$('.expandable').expander({
 		slicePoint: 70,
 		widow: 2,
@@ -38,12 +94,14 @@ $(function () {
 
 				var blockAttr = block.attr('data-status');
 
-				if (blockAttr === 'hide') {
+				if (blockAttr == 'hide') {
 					block.addClass('auto');
 					block.attr('data-status', 'show');
+					$('.filter_more_'+blockName).text('Скрыть');
 				} else {
 					block.removeClass('auto');
 					block.attr('data-status', 'hide');
+					$('.filter_more_'+blockName).text('Показать еще');
 				}
 
 			},
@@ -77,17 +135,18 @@ $(function () {
 				$('div[data-block_name]').map(function (a, e) {
 					filterNames.push($(e).attr('data-block_name'));
 				});
-
-				$(DOM.parent + ' div[data-parent="' + db_block + '"] input[type="checkbox"]:checked').map(function (a, e) {
+				
+				$(DOM.parent + ' div[data-parent="' + db_block + '"] .filter_val span[class=checked]').map(function (a, e) {
 					var parentBlock = $(e).parents('div[data-block_name]').attr('data-block_name');
 					if (!filter[parentBlock]) {
 						filter[parentBlock] = [];
 					}
-					filter[parentBlock].push($(e).attr('name'));
+					filter[parentBlock].push($(e).data('name'));
 				});
 
 				var priceFrom = $(DOM.parent + '  div[data-parent="' + db_block + '"] input[name="price-ot"]').val();
 				var priceTo = $(DOM.parent + '  div[data-parent="' + db_block + '"] input[name="price-do"]').val();
+				
 				if (priceFrom || priceTo) {
 					filter['price'] = [priceFrom, priceTo];
 				}
@@ -128,7 +187,7 @@ $(function () {
 			resetFiltersParam: function (db_block) {
 				var db_block = db_block || 'filter-block';
 
-				$(DOM.parent + ' div[data-parent="' + db_block + '"] input[type="checkbox"]').prop("checked", false);
+				$(DOM.parent + ' div[data-parent="' + db_block + '"] .filter_val span[class=checked]').removeClass('checked');
 				$(DOM.parent + '  div[data-parent="' + db_block + '"] input.form-control').val('');
 
 				Ev.catalog.getFiltersParam( db_block );
