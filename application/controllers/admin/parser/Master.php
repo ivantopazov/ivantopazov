@@ -139,12 +139,13 @@ class Master extends BaseParser
 		$kamen = explode("#", $vstavki);
 		foreach ($kamen as $key => $value) {
 			$val = explode(";", $value);
+			$name = $this->getFullStoneName($val[1]);
 			$drag[$key] = [
-				'kamen' => $this->getFullStoneName($val[1]),
-				'kamenCode' => $this->getStoneCode($val[1]),
+				'kamen' => $name,
+				'kamenCode' => $this->getStoneCode($name),
 				'data' => [
 					["name" => "Кол-во камней", "value" => $val[0]],
-					["name" => "Камень", "value" => $val[1]],
+					["name" => "Камень", "value" => $name],
 					["name" => "Форма огранки", "value" => $val[2]],
 					["name" => "Вес, Ct.", "value" => $val[3]],
 				],

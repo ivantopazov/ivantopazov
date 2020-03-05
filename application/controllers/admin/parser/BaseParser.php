@@ -76,6 +76,13 @@ class BaseParser extends CI_Controller
 
 	protected $stones = [
 		[
+			// ситалл первый, т.к. ситалл бывает под любой камень, например "Ситалл рубин",
+			// и так в итоге камень определится как "Ситалл", а не "рубин"
+			'title' => 'Ситалл',
+			'in_case' => 'Ситаллом',
+			'translit' => 'sitall',
+		],
+		[
 			'title' => 'Авантюрин',
 			'in_case' => 'Авантюрином',
 			'translit' => 'avantyurin',
@@ -181,6 +188,11 @@ class BaseParser extends CI_Controller
 			'translit' => 'morganit',
 		],
 		[
+			'title' => 'Муранское Стекло',
+			'in_case' => 'Муранским Стеклоом',
+			'translit' => 'muranskoe-steklo',
+		],
+		[
 			'title' => 'Нанокерамика',
 			'in_case' => 'Нанокерамикой',
 			'translit' => 'nanokeramika',
@@ -239,11 +251,6 @@ class BaseParser extends CI_Controller
 			'title' => 'Серебро',
 			'in_case' => 'Серебром',
 			'translit' => 'serebro',
-		],
-		[
-			'title' => 'Ситалл',
-			'in_case' => 'Ситаллом',
-			'translit' => 'sitall',
 		],
 		[
 			'title' => 'Танзанит',
@@ -309,6 +316,11 @@ class BaseParser extends CI_Controller
 		['title' => 'Ювелирный кристалл',
 			'in_case' => 'Ювелирный кристаллом',
 			'translit' => 'juvelirnyj-kristall',
+		],
+		[
+			'title' => 'Nano crystal',
+			'in_case' => 'Нанокристаллом',
+			'translit' => 'nano-crystal',
 		],
 	];
 
@@ -682,7 +694,7 @@ class BaseParser extends CI_Controller
 		$title = "{$data["type"]} из ";
 		$metalColor = trim($data["metal_color"]);
 		if ($metalColor) {
-			if ($metalColor == "Желтый" || $metalColor == "Жёлтый") {
+			if ($metalColor == "Желтый" || $metalColor == "Жёлтый" || $metalColor == "Лимонный") {
 				$title .= "желтого ";
 			}
 			if ($metalColor == "Красный") {
@@ -799,34 +811,47 @@ class BaseParser extends CI_Controller
 
 	protected function getFullStoneName($name)
 	{
-		$name = str_replace("Ал", "Алмаз", $name);
-		$name = str_replace("Амет", "Аметист", $name);
-		$name = str_replace("Бирюза н.", "Бирюза натуральная", $name);
-		$name = str_replace("Бр", "Бриллиант", $name);
-		$name = str_replace("бц", "бесцветный", $name);
-		$name = str_replace("б/ц", "бесцветный", $name);
-		$name = str_replace("Гр", "Гранат", $name);
-		$name = str_replace("г/т", "гидротермальный", $name);
-		$name = str_replace("Жем", "Жемчуг", $name);
-		$name = str_replace("Из", "Изумруд", $name);
-		$name = str_replace("культ", "", $name);
-		$name = str_replace(" н. ", " н.", $name);
-		$name = str_replace(" н.", " натуральный ", $name);
-		$name = str_replace("нат.", "натуральный", $name);
-		$name = str_replace("пресн.", "пресноводный", $name);
-		$name = str_replace("Р-топ", "Раух-Топаз", $name);
-		$name = str_replace("Род", "Родонит", $name);
-		$name = str_replace("Руб", "Рубин", $name);
-		$name = str_replace("Сапф", "Сапфир", $name);
-		$name = str_replace("синт.", "синтетический", $name);
-		$name = str_replace("синт", "синтетический", $name);
-		$name = str_replace("топ-London", "Топаз London", $name);
-		$name = str_replace("Топ-swiss", "Топаз Swiss", $name);
-		$name = str_replace("Тсав", "Тсаворит", $name);
-		$name = str_replace("Фиан", "Фианит", $name);
-		$name = str_replace("Хр", "Хризолит", $name);
-		$name = str_replace("цв.", "цветной", $name);
-		$name = str_replace("Цит", "Цитрин", $name);
+		$replacements = [
+			'Ал' => 'Алмаз', // попадпет Александрит!, пока решено костылем
+			'Амет' => 'Аметист',
+			'Бирюза н.' => 'Бирюза натуральная',
+			'Бр' => 'Бриллиант',
+			'бц' => 'бесцветный',
+			'б/ц' => 'бесцветный',
+			'Гр' => 'Гранат',
+			'г/т' => 'гидротермальный',
+			'Жем' => 'Жемчуг',
+			'Жемчуг синтетический пр' => 'Жемчуг синтетический просверленный',
+			'Из' => 'Изумруд',
+			'иск.' => 'искусственный',
+			'культ' => 'культивированный',
+			' н. ' => ' н.',
+			' н.' => ' натуральный ',
+			'нат.' => 'натуральный',
+			'п/пр' => 'полупросверленный',
+			'пресн.' => 'пресноводный',
+			'пресс.' => 'прессованный',
+			'Р-топ' => 'Раух-Топаз',
+			'Род' => 'Родонит', // попадпет Родолит!, пока решено костылем
+			'Руб' => 'Рубин',
+			'Сапфироваый' => 'Сапфировый',
+			'Сапф' => 'Сапфир',
+			'синт.' => 'синтетический',
+			'синт' => 'синтетический',
+			'топ-London' => 'Топаз London',
+			'Топ-swiss' => 'Топаз Swiss',
+			'Тсав' => 'Тсаворит',
+			'Фиан' => 'Фианит',
+			'Хр' => 'Хризолит',
+			'цв.' => 'цветной',
+			'Цит' => 'Цитрин',
+		];
+
+		foreach ($replacements as $search => $replacement) {
+			if (strpos($name, $search) !== false && strpos($name, $replacement) === false && strpos($name, 'Александрит' && strpos($name, 'Родолит') === false)) {
+				$name = str_replace($search, $replacement, $name);
+			}
+		}
 
 		return trim($name);
 	}
@@ -1021,7 +1046,7 @@ class BaseParser extends CI_Controller
 			if ($metalColor == "Белый") {
 				$filter['zoloto'][] = "beloe";
 			}
-			if ($metalColor == "Желтый" or $metalColor == "Жёлтый") {
+			if ($metalColor == "Желтый" || $metalColor == "Жёлтый" || $metalColor == "Лимонный") {
 				$filter['zoloto'][] = "zhyoltoe";
 			}
 			if ($metalColor == "Желтый белый") {
@@ -1109,7 +1134,7 @@ class BaseParser extends CI_Controller
 		$metal = '';
 		$metalColor = trim($data["metal_color"]);
 		if ($metalColor) {
-			if ($metalColor == "Желтый" or $metalColor == "Жёлтый") {
+			if ($metalColor == "Желтый" || $metalColor == "Жёлтый" || $metalColor == "Лимонный") {
 				$metal = "Желтое ";
 			}
 			if ($metalColor == "Красный") {
