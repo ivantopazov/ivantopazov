@@ -185,12 +185,24 @@ class Search extends CI_Controller
 		if (preg_match("/зажим/", $text)) {
 			$where[] = ['item' => 'cat', 'value' => 42];
 		}
+		$where[] = ['item' => 'title LIKE', 'value' => "%" . $kamen[1] . "%"];
 
 		$option = [
 			'return_type' => 'ARR2+',
 			'where' => [
 				'method' => 'AND',
 				'set' => $where,
+			],
+			'like' => [
+				'math' => 'both', // '%before', 'after%' и '%both%' - опциональность поиска
+				'method' => 'OR', // AND (и) / OR(или) / NOT(за исключением и..) / OR_NOT(за исключением или)
+				'set' => [[
+					'item' => 'articul',
+					'value' => $text,
+				], [
+					'item' => 'seria',
+					'value' => $text,
+				]]  // [ 'item' => '', 'value' => '' ],[...]
 			],
 			'labels' => ['id', 'aliase', 'articul', 'title', 'prices_empty', 'filters', 'salle_procent', 'modules'],
 			'group_by' => 'articul',
