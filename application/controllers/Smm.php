@@ -113,7 +113,7 @@ class Smm extends CI_Controller  {
                 'album_id' => $result['aid'],
                 'hash' => $result['hash'],
                 'gid' => $result['gid'],
-                'caption' => $getItems['title'] . ' по цене ' . $getItems['modules']['price_actual']['format'] . ' рублей в магазине ИванТопазов. https://ivantopazov.ru' . $getItems['modules']['linkPath']
+                'caption' => $getItems['title'] . ' по цене ' . $getItems['modules']['price_actual']['format'] . ' рублей в магазине ювелирной группы компаний («Монарх», «Настоящее золото»). https://zolotomo.ru' . $getItems['modules']['linkPath']
             ]);
             
             
@@ -245,7 +245,7 @@ class Smm extends CI_Controller  {
 			$category_id = 5;
 			
 			// Дескрипт
-			$desc = $getItems['title'] . ' по цене ' . $getItems['modules']['price_actual']['format'] . ' рублей в магазине ИванТопазов. https://ivantopazov.ru' . $getItems['modules']['linkPath'];
+			$desc = $getItems['title'] . ' по цене ' . $getItems['modules']['price_actual']['format'] . ' рублей в магазине ювелирной группы компаний («Монарх», «Настоящее золото»). https://zolotomo.ru' . $getItems['modules']['linkPath'];
 			$description = $desc;	
 			// цена
 			$price = $getItems['modules']['price_actual']['number'];
@@ -399,7 +399,7 @@ class Smm extends CI_Controller  {
             if( isset( $market_item['id'] ) ){
                 
                 // Дескрипт
-                $desc = $getItems['title'] . ' по цене ' . $getItems['modules']['price_actual']['format'] . ' рублей в магазине ИванТопазов. https://ivantopazov.ru' . $getItems['modules']['linkPath'];
+                $desc = $getItems['title'] . ' по цене ' . $getItems['modules']['price_actual']['format'] . ' рублей в магазине ювелирной группы компаний («Монарх», «Настоящее золото»). https://zolotomo.ru' . $getItems['modules']['linkPath'];
                 $description = $desc;
                 
                 // цена

@@ -25,7 +25,7 @@ class Reviews extends CI_Controller
 
 	public function index()
 	{
-		$title = 'Отзывы об интернет-магазине "Иван Топазов"';
+		$title = 'Отзывы об интернет-магазине ювелирной группы компаний («Монарх», «Настоящее золото»)';
 		$page_var = 'reviews';
 
 		$this->mdl_tpl->view('templates/doctype_home.html', array(
@@ -41,8 +41,8 @@ class Reviews extends CI_Controller
 				'oggMetta' => [
 					"title" => $title,
 					"url" => "https://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"],
-					"image" => "https://ivantopazov.ru/templates/basic/images/event-4.jpg",
-					"site_name" => "Иван Топазов",
+					"image" => "https://zolotomo.ru/templates/basic/images/event-4.jpg",
+					"site_name" => 'Ювелирная группа компаний («Монарх», «Настоящее золото»)',
 					"description" => (!empty($this->store_info['seo_desc'])) ? $this->store_info['seo_desc'] : '',
 				],
 			), true),

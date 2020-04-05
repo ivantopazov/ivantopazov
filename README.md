@@ -1,2 +1,2 @@
 # ivantopazov
-https://ivantopazov.ru/
+https://zolotomo.ru/

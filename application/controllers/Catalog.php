@@ -310,7 +310,7 @@ class Catalog extends CI_Controller
 //		$getData = $this->getCategoryHome();
 		$getData = $this->getCatData();
 
-		$title = (!isset($getData['setFilters']['category']) ? 'Каталог ювелирных изделий Иван Топазов - цены и фото на золотые украшения со скидкой в Москве' : '') . $getData['filterTitle'];
+		$title = (!isset($getData['setFilters']['category']) ? 'Каталог ювелирных изделий ювелирной группы компаний Монарх, Настоящее золото - цены и фото на золотые украшения со скидкой в Москве' : '') . $getData['filterTitle'];
 		$h1 = (!isset($getData['setFilters']['category']) ? 'Ювелирные изделия в интернет-магазине - каталог украшений' : '') . $getData['filterTitle'];
 		$title = mb_strtoupper(mb_substr($title, 0, 1)) . mb_substr($title, 1);
 

@@ -44,8 +44,8 @@ class Home extends CI_Controller {
                 'oggMetta' => [
                   "title" => "Ювелирный интернет-магазин в Москве",
                   "url" => "https://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"],
-                  "image" => "https://ivantopazov.ru/templates/basic/images/event-4.jpg",
-                  "site_name" => "Иван Топазов",
+                  "image" => "https://zolotomo.ru/templates/basic/images/event-4.jpg",
+                  "site_name" => 'Ювелирная группа компаний («Монарх», «Настоящее золото»)',
                   "description" => ( !empty( $this->store_info['seo_desc'] ) ) ? $this->store_info['seo_desc'] : ''
                 ]
             ), true),

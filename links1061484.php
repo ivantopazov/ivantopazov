@@ -17,13 +17,13 @@ ob_start();?>
 <!--(1PSRU)retino-a.ru--><a href="http://retino-a.ru/"><img src="http://retino-a.ru/b.jpg"></a> Купить <a href="http://retino-a.ru/">третиноин</a> retin-a <a href="http://retino-a.ru/">ретин-а</a> третиноин.<!--/retino-a.ru(1PSRU)-->
 <!--(1PSRU)inpeg.ru--><a href="http://www.inpeg.ru/" target="_blank"><img src="http://www.inpeg.ru/img/ban/inpeg.ru_88_31_1.gif" alt="Поздравления к праздникам, к дню рождения. Видео поздравления." width="88" height="31" border="0" /></a><!--/inpeg.ru(1PSRU)-->
 <!--(1PSRU)8500.ru--><a href="//8500.ru/cat/"><img src="//8500.ru/8500.ru.2.png" alt="Каталог сайтов"></a><!--/8500.ru(1PSRU)-->
-<!--(1PSRU)hitcounter.ru--><!-- HitCounter , HTML code for http://ivantopazov.ru -->
+<!--(1PSRU)hitcounter.ru--><!-- HitCounter , HTML code for http://zolotomo.ru -->
                         <script type="text/javascript">
                             var refer='refer=' + escape(document.referrer) + '&page=' + escape(window.location.href) + '&razresh=' + screen.width + 'x' + screen.height + '&cvet=' + screen.colorDepth + '&rand=' + Math.random(); 
                             document.write('<a href="http://hitcounter.ru/top/?fromsite=25078"> <img src="http://hitcounter.ru/top/img.php?id=25078&' + refer + '"  alt="HitCounter" width="88" height="31"> <\/a>');
                         </script>
                         <noscript><div><a href="http://hitcounter.ru/top/?fromsite=25078" onclick="this.target='_blank'"><img src="http://hitcounter.ru/top/img.php?id=25078" alt="HitCounter" width="88" height="31"></a></div></noscript>
-                    <!-- /HitCounter , HTML code for http://ivantopazov.ru -->
+                    <!-- /HitCounter , HTML code for http://zolotomo.ru -->
 <!--/hitcounter.ru(1PSRU)-->
 <!--(1PSRU)printland.by--><p><a href="http://printland.by/" target="_blank" title="PrintLand.by - Интернет-магазин оргтехники и расходных материалов"><img alt="PrintLand.by - Интернет-магазин оргтехники и расходных материалов" border="0" height="31" src="http://printland.by/image/printland.gif" width="88" /></a></p><!--/printland.by(1PSRU)-->
 <!--(1PSRU)manyweb.ru--><a target="_blank" href="http://manyweb.ru/">

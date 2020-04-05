@@ -23,6 +23,9 @@ class BaseParser extends CI_Controller
 	protected $priceType = 'common'; // 'alternative'
 
 	protected $downloadImages = false;
+	protected $multipleImages = false;
+//	protected $imageFileNameTemplate = '{article}-{index}.jpg';
+	protected $imageFileNameTemplate = '{article}.jpg';
 
 	protected $type_cat = [
 		'Кольцо' => 1,
@@ -39,6 +42,7 @@ class BaseParser extends CI_Controller
 		'Серьги с цепями' => 10,
 		'Серьги_Пусеты' => 10,
 		'Серьги_Пусеты с цепями' => 10,
+		'Серьга' => 10,
 		'Пусеты' => 10,
 		'Подвеска' => 19,
 		'Подвеска парная' => 19,
@@ -163,6 +167,11 @@ class BaseParser extends CI_Controller
 			'translit' => 'kvarc',
 		],
 		[
+			'title' => 'Керамика',
+			'in_case' => 'Керамикой',
+			'translit' => 'keramika',
+		],
+		[
 			'title' => 'Кианит',
 			'in_case' => 'Кианитом',
 			'translit' => 'kianit',
@@ -198,6 +207,11 @@ class BaseParser extends CI_Controller
 			'translit' => 'nanokeramika',
 		],
 		[
+			'title' => 'Наношпинель',
+			'in_case' => 'Наношпинелью',
+			'translit' => 'nanoshpinel',
+		],
+		[
 			'title' => 'Оникс',
 			'in_case' => 'Ониксом',
 			'translit' => 'oniks',
@@ -209,6 +223,11 @@ class BaseParser extends CI_Controller
 		],
 		[
 			'title' => 'Раух-топаз',
+			'in_case' => 'Раух-топазом',
+			'translit' => 'rauh-topaz',
+		],
+		[
+			'title' => 'Раухтопаз',
 			'in_case' => 'Раух-топазом',
 			'translit' => 'rauh-topaz',
 		],
@@ -251,6 +270,16 @@ class BaseParser extends CI_Controller
 			'title' => 'Серебро',
 			'in_case' => 'Серебром',
 			'translit' => 'serebro',
+		],
+		[
+			'title' => 'Стекло минеральное',
+			'in_case' => 'Минеральным стеклом',
+			'translit' => 'steklo-mineralnoe',
+		],
+		[
+			'title' => 'Стекло сапфировое',
+			'in_case' => 'Cапфировым стеклом',
+			'translit' => 'steklo-sapfirovoe',
 		],
 		[
 			'title' => 'Танзанит',
@@ -317,10 +346,19 @@ class BaseParser extends CI_Controller
 			'in_case' => 'Ювелирный кристаллом',
 			'translit' => 'juvelirnyj-kristall',
 		],
+		['title' => 'Янтарь',
+			'in_case' => 'Янтарем',
+			'translit' => 'yantar',
+		],
 		[
 			'title' => 'Nano crystal',
 			'in_case' => 'Нанокристаллом',
 			'translit' => 'nano-crystal',
+		],
+		[
+			'title' => 'Swarovski Zirconia',
+			'in_case' => 'Swarovski Zirconia',
+			'translit' => 'swarovski-zirconia',
 		],
 	];
 
@@ -404,13 +442,16 @@ class BaseParser extends CI_Controller
 				]],
 			], true),
 
-			'content' => $this->mdl_tpl->view("pages/admin/parser/{$this->parserCode}/{$this->parserCode}.html", [], true),
+			'content' => $this->mdl_tpl->view("pages/admin/parser/base.html", [
+				'parser' => $this->parserCode,
+			], true),
 
 			'load' => $this->mdl_tpl->view('snipets/load.html', [
 				'addons_folder' => $this->mdl_stores->getСonfigFile('addons_folder'),
 			], true),
 
-			'resorses' => $this->mdl_tpl->view("resorses/admin/parser/{$this->parserCode}.html", [
+			'resorses' => $this->mdl_tpl->view("resorses/admin/parser/base.html", [
+				'parser' => $this->parserCode,
 				'addons_folder' => $this->mdl_stores->getСonfigFile('addons_folder'),
 				'config_scripts_path' => $this->mdl_stores->getСonfigFile('config_scripts_path'),
 			], true),
@@ -471,42 +512,29 @@ class BaseParser extends CI_Controller
 		}
 
 		// Проверка наличия фото
+
 		$article = str_replace('/', '_', $data['article']);
 
-		$fileName = "{$article}.jpg";
-		$filePath = "{$this->uploadPath}{$fileName}";
-
-		if (!file_exists($filePath) && $this->downloadImages && $data['imageUrl']) {
-			$this->downloadImage($filePath, $data['imageUrl']);
-		}
-
-		if (!file_exists($filePath)) {
+		if (!$this->checkPhoto($article, $data)) {
 			$err++;
 			echo json_encode(['err' => $err, 'double' => $double, 'error' => 'no image']);
 			die;
 		}
 
 		$this->db->insert($this->prod_table, $dataForInsert);
-		$id = $this->db->insert_id();
+		$productId = $this->db->insert_id();
 
-		if (!$id) {
+		if (!$productId) {
 			$err++;
 		}
 
-		$aliase = "{$this->getTranslit($dataForInsert['title'])}_{$this->getTranslit(trim($article))}_{$id}";
-		$this->mdl_db->_update_db($this->prod_table, 'id', $id, ['aliase' => $aliase]);
+		$aliase = "{$this->getTranslit($dataForInsert['title'])}_{$this->getTranslit(trim($article))}_{$productId}";
+		$this->mdl_db->_update_db($this->prod_table, 'id', $productId, ['aliase' => $aliase]);
 
-		$this->images($fileName);
+		// Сохранение фото
+		$this->savePhotos($article, $productId);
 
-		$ph = [
-			'product_id' => $id,
-			'photo_name' => "{$article}.jpg", // Вместо алиаса по артиклу
-			'define' => 1,
-		];
-
-		$this->db->insert($this->ph_table, $ph);
-
-		echo json_encode(['err' => $err, 'double' => $double, 'id' => $id]);
+		echo json_encode(['err' => $err, 'double' => $double, 'id' => $productId]);
 		die;
 	}
 
@@ -546,7 +574,7 @@ class BaseParser extends CI_Controller
 		}
 
 		$price_zac = $this->getPriceZac($data['price'], $data['weight']);
-		$price_roz = $this->getPriceRoz($price_zac);
+		$price_roz = $this->getPriceRoz($price_zac, $data);
 		$salle_procent = $this->getSalePercent();
 
 		$price_real = (int)($price_roz * (100 - $salle_procent) / 100);
@@ -674,7 +702,7 @@ class BaseParser extends CI_Controller
 		return (int)($price_zac * 100);
 	}
 
-	protected function getPriceRoz($price_zac)
+	protected function getPriceRoz($price_zac, $data)
 	{
 		return (int)($price_zac * 2.5);
 	}
@@ -882,7 +910,57 @@ class BaseParser extends CI_Controller
 		return $this->getStoneAttribute($name, 'in_case');
 	}
 
-	protected function images($fileName)
+	protected function checkPhoto($article, $data = [], $index = 0)
+	{
+//		$fileName = "{$article}.jpg";
+		$fileName = $this->getImageFileName($article, $index);
+
+		$filePath = "{$this->uploadPath}{$fileName}";
+
+		// загрузка по imageUrl пока только для одного изображения
+		if (!file_exists($filePath) && $this->downloadImages && $data['imageUrl']) {
+			$this->downloadImage($filePath, $data['imageUrl']);
+		}
+
+		return file_exists($filePath);
+	}
+
+	protected function savePhotos($article, $productId)
+	{
+		if ($this->multipleImages) {
+			for ($index = 0; $index < 10; $index++) {
+				if ($this->checkPhoto($article, [], $index)) {
+					$fileName = $this->getImageFileName($article, $index);
+					$this->savePhoto($fileName, $productId);
+				}
+			}
+		} else {
+			if ($this->checkPhoto($article)) {
+				$fileName = $this->getImageFileName($article);
+				$this->savePhoto($fileName, $productId);
+			}
+		}
+	}
+
+	protected function getImageFileName($article, $index = 0)
+	{
+		return str_replace(['{article}', '{index}'], [$article, $index], $this->imageFileNameTemplate);
+	}
+
+	protected function savePhoto($fileName, $productId)
+	{
+		$this->saveImageFiles($fileName);
+
+		$ph = [
+			'product_id' => $productId,
+			'photo_name' => $fileName,
+			'define' => 1,
+		];
+
+		$this->db->insert($this->ph_table, $ph);
+	}
+
+	protected function saveImageFiles($fileName)
 	{
 		if (!file_exists("{$this->uploadPath}{$fileName}")) return;
 
@@ -1083,7 +1161,14 @@ class BaseParser extends CI_Controller
 			$filter['kamen'][] = 'empty';
 		}
 
-		if ($data["type"] == "Серьги детские") {
+		if ($data["gender"] == "Мужской") {
+			$filter['gender'][] = "men";
+		} elseif ($data["gender"] == "Унисекс") {
+			$filter['gender'][] = "woman";
+			$filter['gender'][] = "men";
+		} elseif ($data["gender"] == "Детские") {
+			$filter['gender'][] = "kids";
+		} elseif ($data["type"] == "Серьги детские") {
 			$filter['gender'][] = "kids";
 		} else {
 			$filter['gender'][] = "woman";
