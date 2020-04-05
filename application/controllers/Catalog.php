@@ -310,7 +310,7 @@ class Catalog extends CI_Controller
 //		$getData = $this->getCategoryHome();
 		$getData = $this->getCatData();
 
-		$title = (!isset($getData['setFilters']['category']) ? 'Каталог ювелирных изделий ювелирной группы компаний Монарх, Настоящее золото - цены и фото на золотые украшения со скидкой в Москве' : '') . $getData['filterTitle'];
+		$title = (!isset($getData['setFilters']['category']) ? 'Каталог ювелирных изделий ювелирной группы компаний («Монарх», «Настоящее золото») - цены и фото на золотые украшения со скидкой в Москве' : '') . $getData['filterTitle'];
 		$h1 = (!isset($getData['setFilters']['category']) ? 'Ювелирные изделия в интернет-магазине - каталог украшений' : '') . $getData['filterTitle'];
 		$title = mb_strtoupper(mb_substr($title, 0, 1)) . mb_substr($title, 1);
 
@@ -365,7 +365,8 @@ class Catalog extends CI_Controller
 				], true),
 				'textSearch' => $getData['textSearch'],
 				'sort' => $getData['sort'],
-				'header_title' => $h1,
+				'header_title' => 'Ювелирные изделия в интернет-магазине - каталог украшений с ценами.',
+				'text' => 'Ювелирная группа компаний («Монарх», «Настоящее золото») - это более 50 000 ювелирных украшений, доступных для для покупки онлайн и в сети магазинов золота. Найдите для себя подходящие золотые кольца, серьги браслеты подвески и другие изделия. Широкий выбор классических и дизайнерских украшений для женщин, мужчин и детей. ',
 				'collections' => $this->mdl_tpl->view('pages/catalog/category_view_collections.html', [
 					'items' => $getData['collections'],
 				], true),
@@ -375,6 +376,18 @@ class Catalog extends CI_Controller
 				'pagination' => $getData['products_pag'],
 				'description' => $descr,
 			], true),
+
+            'h1Catalog' => $this->mdl_tpl->view('snipets/h1Catalog.html',array(
+				'h1' => 'Ювелирные изделия в интернет-магазине - каталог украшений с ценами.',
+				'text' => 'Ювелирная группа компаний («Монарх», «Настоящее золото») - это более 50 000 ювелирных украшений, доступных для для покупки онлайн и в сети магазинов золота. Найдите для себя подходящие золотые кольца, серьги браслеты подвески и другие изделия. Широкий выбор классических и дизайнерских украшений для женщин, мужчин и детей. '
+			),true),
+
+            'h2Catalog' => $this->mdl_tpl->view('snipets/h2Catalog.html',array(
+				'h2' => 'Купите золотые украшения со скидкой до 40%!',
+				'text' => 'Изделия с драгоценными камнями по самым доступным ценам. Мы работаем напрямую с производителями, а также даем огромные скидки за счет высоких онлайн-продаж. Подберите украшение для себя или в подарок близкому человеку. Обратитесь к нашему консультанту, и она расскажет вам о действующих акциях и горячих предложениях.',
+				'h2Second' => 'Цены на украшения из золота',
+				'textSecond' => 'Высочайшее качество изделий из драгоценных металлов. На ваш выбор изделия из 585, 750 и 375 пробы с драгоценными и полудрагоценными камнями: бриллианты, фианиты, жемчуг, топазы, сапфиры, рубины, гранаты, изумруды и другие вставки. Для вас доступны классические и дизайнерские кольца и серьги от ведущих брендов ювелирной индустрии. Цены на золотые украшения начинаются от 1500 рублей. Действует система скидок, обращайтесь за подробностями к консультанту.'
+			),true),
 
 			'footer' => $this->mdl_tpl->view('snipets/footer.html', [
 				'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
@@ -1165,11 +1178,11 @@ class Catalog extends CI_Controller
 						'title' => $title,
 						'url' => $this->mdl_helper->PROTOCOL(true) . $_SERVER['SERVER_NAME'] . $data['item']['modules']['linkPath'],
 						'image' => $this->mdl_helper->PROTOCOL(true) . $_SERVER['SERVER_NAME'] . '/uploads/products/100/' . $dataItem['product']['modules']['photos'][0]['photo_name'],
-						'site_name' => 'Ювелирный магазин «IVAN TOPAZOV»',
-						'description' => (!empty($product['description'])) ? mb_substr($dataItem['product']['description'], 0, 250) : $title . " по разумной цене в магазине «IVAN TOPAZOV»: ✔продажа украшений в Москве с доставкой по России ✔привлекательные цены ✔выгодный в кредит ✔пожизненная гарантия. Звоните круглосуточно: ☎ +7 (4 95 ) 230 26 83",
+						'site_name' => 'Ювелирная группа компаний («Монарх», «Настоящее золото»)',
+						'description' => (!empty($product['description'])) ? mb_substr($dataItem['product']['description'], 0, 250) : $title . " по разумной цене в магазине ювелирной группы компаний («Монарх», «Настоящее золото»): ✔продажа украшений в Москве с доставкой по России ✔привлекательные цены ✔выгодный в кредит ✔пожизненная гарантия. Звоните круглосуточно: ☎ +7 (4 95 ) 230 26 83",
 					],
 					'mk' => (!empty($dataItem['product']['seo_keys'])) ? $dataItem['product']['seo_keys'] : "",
-					'md' => (!empty($dataItem['product']['seo_desc'])) ? $dataItem['product']['seo_desc'] : (!empty($dataItem['product']['description'])) ? mb_substr($dataItem['product']['description'], 0, 250) : $title . " по разумной цене в магазине «IVAN TOPAZOV»: ✔продажа украшений в Москве с доставкой по России ✔привлекательные цены ✔выгодный в кредит ✔пожизненная гарантия. Звоните круглосуточно: ☎ +7 (4 95 ) 230 26 83",
+					'md' => (!empty($dataItem['product']['seo_desc'])) ? $dataItem['product']['seo_desc'] : (!empty($dataItem['product']['description'])) ? mb_substr($dataItem['product']['description'], 0, 250) : $title . " по разумной цене в магазине ювелирной группы компаний («Монарх», «Настоящее золото»): ✔продажа украшений в Москве с доставкой по России ✔привлекательные цены ✔выгодный в кредит ✔пожизненная гарантия. Звоните круглосуточно: ☎ +7 (4 95 ) 230 26 83",
 				], true),
 
 				'navTop' => $this->mdl_tpl->view('snipets/navTop.html', [
@@ -1240,6 +1253,95 @@ class Catalog extends CI_Controller
 				], true),
 
 			], false);
+
+			$this->mdl_tpl->view('templates/doctype_test.html', [
+
+				'title' => $title,
+				'addons_folder' => $this->mdl_stores->getСonfigFile('addons_folder'),
+				'config_styles_path' => $this->mdl_stores->getСonfigFile('config_styles_path'),
+				'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
+
+				'seo' => $this->mdl_tpl->view('snipets/seo_tools.html', [
+					'oggMetta' => [
+						'title' => $title,
+						'url' => $this->mdl_helper->PROTOCOL(true) . $_SERVER['SERVER_NAME'] . $data['item']['modules']['linkPath'],
+						'image' => $this->mdl_helper->PROTOCOL(true) . $_SERVER['SERVER_NAME'] . '/uploads/products/100/' . $dataItem['product']['modules']['photos'][0]['photo_name'],
+						'site_name' => 'Ювелирный магазин ювелирной группы компаний («Монарх», «Настоящее золото»)',
+						'description' => (!empty($product['description'])) ? mb_substr($dataItem['product']['description'], 0, 250) : $title . " по разумной цене в магазине ювелирной группы компаний («Монарх», «Настоящее золото»): ✔продажа украшений в Москве с доставкой по России ✔привлекательные цены ✔выгодный в кредит ✔пожизненная гарантия. Звоните круглосуточно: ☎ +7 (4 95 ) 230 26 83",
+					],
+					'mk' => (!empty($dataItem['product']['seo_keys'])) ? $dataItem['product']['seo_keys'] : "",
+					'md' => (!empty($dataItem['product']['seo_desc'])) ? $dataItem['product']['seo_desc'] : (!empty($dataItem['product']['description'])) ? mb_substr($dataItem['product']['description'], 0, 250) : $title . " по разумной цене в магазине ювелирной группы компаний («Монарх», «Настоящее золото»): ✔продажа украшений в Москве с доставкой по России ✔привлекательные цены ✔выгодный в кредит ✔пожизненная гарантия. Звоните круглосуточно: ☎ +7 (4 95 ) 230 26 83",
+				], true),
+
+				'navTop' => $this->mdl_tpl->view('snipets/navTop.html', [
+					'store' => $this->store_info,
+					'active' => 'home',
+					'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
+				], true),
+
+				'header' => $this->mdl_tpl->view('snipets/header.html', [
+
+					'filter' => 1,
+					'title' => $data['item']['cat']['name'],
+					'store' => $this->store_info,
+					'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
+				], true),
+
+				'navMenu' => $this->mdl_tpl->view('snipets/navMenu.html', [
+					'store' => $this->store_info,
+					'active' => 'home',
+					'itemsTree' => $this->mdl_category->getTreeMenu(),
+					'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
+				], true),
+
+				'breadcrumb' => $this->mdl_tpl->view('snipets/breadcrumb.html', [
+					'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
+					'title' => $product['title'],
+					'array' => $data['brb'],
+				], true),
+
+				'content' => $this->mdl_tpl->view('pages/catalog/product_view.html', [
+					'product' => $product,
+					'brand_desc' => $product['postavchik'] ? $this->mdl_tpl->view('pages/catalog/brands_descriptions/' . $product['postavchik'] . '.html', [], true) : '',
+					'brand' => $product['postavchik'] ? $brand[$product['postavchik']] : '',
+					'counter' => $dataItem['timerCount'],
+					'sizes' => isset($dataItem['sizes']) ? $dataItem['sizes'] : [],
+					'otherSizes' => isset($dataItem['otherSizes']) ? $dataItem['otherSizes'] : [],
+					'header_title' => $product['title'],
+					'oneString' => rand(2000, 1000000) . '_' . rand(2000, 1000000),
+					'addons_folder' => $this->mdl_stores->getСonfigFile('addons_folder'),
+					'config_scripts_path' => $this->mdl_stores->getСonfigFile('config_scripts_path'),
+				], true),
+
+				'komplect' => $this->mdl_tpl->view('snipets/komplect.html', [
+					'items' => $this->getKomplect($product['id'], false),
+				], true),
+
+				'VamPonravitsa' => $this->mdl_tpl->view('snipets/VamPonravitsa.html', array(
+					'items' => $this->getVamPonravitsa($product['id'], false),
+				), true),
+
+				'preimushchestva' => $this->mdl_tpl->view('snipets/preimushchestva.html', [
+					'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
+				], true),
+
+				'footer' => $this->mdl_tpl->view('snipets/footer.html', [
+					'config_images_path' => $this->mdl_stores->getСonfigFile('config_images_path'),
+				], true),
+
+				'load' => $this->mdl_tpl->view('snipets/load.html', [
+					'addons_folder' => $this->mdl_stores->getСonfigFile('addons_folder'),
+					'utmLabels' => $this->mdl_tpl->view('snipets/utmLabels.html', $this->mdl_seo->utmLabels($this->get), true),
+				], true),
+
+				'resorses' => $this->mdl_tpl->view('resorses/catalog/product_view_head.html', [
+					'addons_folder' => $this->mdl_stores->getСonfigFile('addons_folder'),
+					'config_styles_path' => $this->mdl_stores->getСonfigFile('config_styles_path'),
+					'config_scripts_path' => $this->mdl_stores->getСonfigFile('config_scripts_path'),
+				], true),
+
+			], false);
+
 
 		} else {
 			redirect('/search?t=' . $data['item']['title']);
