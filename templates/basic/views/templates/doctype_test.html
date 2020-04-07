@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1  , user-scalable=no">
+    <!--meta name="viewport" content="width=device-width, maximum-scale=1.0, user-scalable=no"-->
+    <meta property="og:image" content="/uploads/baners/slides3.jpg">
+
+
+    <link rel="icon" href="/templates/basic/images/favicon_red/favicon.ico">
+    <link rel="apple-touch-icon" sizes="57x57" href="/templates/basic/images/favicon_red/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/templates/basic/images/favicon_red/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/templates/basic/images/favicon_red/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/templates/basic/images/favicon_red/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/templates/basic/images/favicon_red/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/templates/basic/images/favicon_red/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/templates/basic/images/favicon_red/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/templates/basic/images/favicon_red/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/templates/basic/images/favicon_red/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/templates/basic/images/favicon_red/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/templates/basic/images/favicon_red/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/templates/basic/images/favicon_red/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/templates/basic/images/favicon_red/favicon-16x16.png">
+    <link rel="manifest" href="/templates/basic/images/favicon_red/manifest.json">
+    <meta name="msapplication-TileImage" content="/templates/basic/images/favicon_red/ms-icon-144x144.png">
+
+
+    <title>{{title}}</title>
+
+    <link rel="stylesheet" href="/{{addons_folder}}/styles/bootstrap.css" />
+    <link rel="stylesheet" href="/{{addons_folder}}/styles/bootstrap-theme.css" />
+
+    <link rel="stylesheet" href="/{{addons_folder}}/scripts/plugins/slick/slick.css" />
+    <link rel="stylesheet" href="/{{addons_folder}}/scripts/plugins/slick/slick-theme.css" />
+
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="/{{addons_folder}}/assets/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="/{{addons_folder}}/assets/ie-emulation-modes-warning.js"></script>
+
+
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug >
+		<link href="/{{addons_folder}}/assets/ie10-viewport-bug-workaround.css" rel="stylesheet"-->
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+			<script src="/{{addons_folder}}/assets/html5shiv.min.js"></script>
+			<script src="/{{addons_folder}}/assets/respond.min.js"></script>
+		<![endif]-->
+
+    <link rel="stylesheet" href="/{{addons_folder}}/styles/fonts.css" />
+
+    <link rel="stylesheet" href="/{{config_styles_path}}/style.css?c=5" />
+    <link rel="stylesheet" href="/{{config_styles_path}}/bootstrap.mod.css?c=1" /> {{seo}}
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-158298668-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-158298668-1');
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.envybox.io/widget/cbk.css">
+    <script type="text/javascript" src="https://cdn.envybox.io/widget/cbk.js?wcb_code=5275e2f21eedab2bc0008ad31f8187ca" charset="UTF-8" async></script>
+
+</head>
+
+<body>
+    <!— Yandex.Metrika counter —>
+    <script type="text/javascript">
+        (function(m, e, t, r, i, k, a) {
+            m[i] = m[i] || function() {
+                (m[i].a = m[i].a || []).push(arguments)
+            };
+            m[i].l = 1 * new Date();
+            k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+        })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+        ym(45556173, "init", {
+            clickmap: true,
+            trackLinks: true,
+            accurateTrackBounce: true,
+            webvisor: true,
+            trackHash: true,
+            ecommerce: "dataLayer"
+        });
+    </script> <noscript><div><img src="https://mc.yandex.ru/watch/45556173" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!— /Yandex.Metrika counter —>
+
+    {{navTop}} {{header}} {{navMenu}}
+
+    <!--{{breadcrumb}}-->
+    {{h2}} {% content %} {{h2Catalog}} {{komplect}} {{VamPonravitsa}} {{preimushchestva}} {{footer}} {{load}} {{resorses}}
+
+
+
+</body>
+
+</html>
