@@ -105,7 +105,7 @@ $(function () {
 					});
 					$(document).on('click', 'a[href^="#"]', function (e) {
 						e.preventDefault();
-					});
+					}); 
 
 				},
 
@@ -361,6 +361,36 @@ $(function () {
 
 				},
 				
+				view: function (callFnc, onlyIds) {
+
+					callFnc = callFnc || false;
+					onlyIds = !!onlyIds;
+					var response = [];
+
+					var _view = localStorage.getItem('view');
+					if (_view === 'undefined' || !_view) {
+						_view = '[]';
+						localStorage.setItem('view', _view);
+					}
+
+					var favorite = $.parseJSON(_view);
+
+					if (favorite.length > 0) {
+						for (var key in favorite) {
+							var val = favorite[key];
+							var x = (LS.fnc._type_of(val) === 'object') ? val : $.parseJSON(val);
+							response.push(onlyIds ? x.id : x);
+						}
+					}
+
+					if (callFnc) {
+						callFnc(response);
+					} else {
+						return response;
+					}
+
+				},
+				
 				favorite: function (callFnc, onlyIds) {
 
 					callFnc = callFnc || false;
@@ -427,6 +457,36 @@ $(function () {
                     orig : {} /// пользов. значения
 
                 */
+				addView: function (AddItem) {
+					//localStorage.clear();
+					var AddItem = AddItem || false;
+					var callFnc = callFnc || false;
+					if (AddItem != false) {
+						var view = this.view(false);
+
+						var ID = (AddItem['id']) ? AddItem.id : false;
+						var TITLE = (AddItem['title']) ? AddItem.title : false;
+						var PRICE = (AddItem['price']) ? AddItem.price : false;
+						var SALEPRICE = (AddItem['salePrice']) ? AddItem.salePrice : false;
+						var ORIG = (AddItem['orig']) ? AddItem.orig : false;
+						
+						if (view.length > 10) {
+							view.pop();
+						}
+						
+						view.unshift({
+							id: ID,
+							title: TITLE,
+							price: PRICE,
+							salePrice: SALEPRICE,
+							orig: ORIG,
+						});
+						localStorage.setItem('view', LS.fnc._convert_value(view));
+						
+						if (callFnc !== false) callFnc(list);
+					}
+				},
+				
 				addFavorite: function (AddItem) {
 					//localStorage.clear();
 					var AddItem = AddItem || false;

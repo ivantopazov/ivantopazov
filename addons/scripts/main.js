@@ -88,6 +88,12 @@ window.MAIN = {
 		CART.addFavorite(response);
 		$('#modal_cart_favorite').modal();
 		$('.favoriteSumma').html($('.favoriteSumma').html()*1+1);
+	},		
+	
+	//Выполнить после клика на карточку
+	addView: function (response) {
+		CART.addView(response);
+		//localStorage.clear();
 	},	
 
 	speedAddCart: function (item) {
@@ -113,6 +119,34 @@ window.MAIN = {
 			MAIN.setPromocodeInfo(response);
 		});
 	},
+	
+	// Загрузка позиций недавно просмотренного
+	cartPagesWithRefreshView: function () {
+		CART.view(function (response) {
+			$.ajax({
+				type: 'post',
+				url: '/view/refresh',
+				data: {
+					view: response,
+				},
+				dataType: 'json',
+				success: function (data) {
+				
+					if (data.success) {
+						TPL.GET_TPL('pages/view/items', {items: data.view}, function (t) {
+							$('.cartBlock .cartList').html(t);
+						});
+						$('.cartBlock').removeClass('hidden');
+					} else {
+						$('.cartBlock').addClass('hidden');
+					}
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					FNC.errorConnect(errorThrown);
+				},
+			});
+		});
+	},	
 	
 	// Загрузка позиций избранного
 	cartPagesWithRefreshFavorite: function () {
