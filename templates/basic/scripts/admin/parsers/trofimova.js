@@ -18,13 +18,13 @@ $("#get").click(function(){
 });
 
 $("#upload").click(function(){
-   /*var interval = setInterval(function(){
+   var interval = setInterval(function(){
       if(current_str == count - 1 || count == 0) clearInterval(interval);
       if(count == 0) return false;
 
       $.ajax({
          type: 'post',
-         url: '/admin/parser/',
+         url: '/admin/parser/trofimova/parse',
          data: {
             str: current_str
          },
@@ -38,19 +38,5 @@ $("#upload").click(function(){
       });
 
       current_str++;
-   }, 100);*/
-   /*$.ajax({
-      type: 'post',
-      url: '/admin/parser/trafimova/test',
-      data: {
-         str: 1
-      },
-      dataType: 'json',
-      success: function(c){
-         if(c.err == 0) $("#success").html(++success);
-         else $("#err").html(++err);
-
-         if(c.double > 0) $("#double").html(++double);
-      }
-   });*/
+   }, 100);
 });
