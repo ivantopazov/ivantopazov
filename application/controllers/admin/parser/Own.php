@@ -32,7 +32,7 @@ class Own extends BaseParser
 		$data["article"] = trim($val[1]);
 		$data["weight"] = str_replace(",", ".", trim($val[2]));
 		$data["seria"] = trim($val[3]);
-		$data["size"] = str_replace('.0', '', str_replace(',', '.', trim($val[4])));
+		$data["size"] = rtrim(rtrim(str_replace(',', '.', $val[4]), '0'), '.');
 		$data["metal"] = 'Золото';
 		$data["metal_color"] = trim($val[5]);
 		$data["vstavki"] = trim($val[6]);
