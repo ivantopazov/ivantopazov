@@ -14,7 +14,8 @@ class Own extends BaseParser
 	protected $fileName = 'own.csv';
 
 	// потом видимо добавятся и другие поставщики, нужно будет брать их из csv
-	protected $postavchik = 'sokolov';
+//	protected $postavchik = 'sokolov';
+	protected $postavchikInput = true;
 
 	protected $multipleImages = true;
 	protected $imageFileNameTemplate = '{article}-{index}.jpg';

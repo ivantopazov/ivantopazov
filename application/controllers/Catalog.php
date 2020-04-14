@@ -1164,7 +1164,16 @@ class Catalog extends CI_Controller
 				'delta' => 'от «КЮЗ Дельта»',
 				'Estet' => 'от «Ювелирного дома Эстет»',
 				'sokolov' => 'от «Ювелирной компании SOKOLOV»',
+				'aleksandra' => 'от «Ювелирного завода Александра»',
 			);
+
+			$brandDescription = '';
+			if ($product['postavchik']) {
+				try {
+					$brandDescription = $this->mdl_tpl->view('pages/catalog/brands_descriptions/' . $product['postavchik'] . '.html', [], true);
+				}
+				catch (Exception $e) {}
+			}
 
 			$this->mdl_tpl->view('templates/doctype_catalog.html', [
 
@@ -1214,8 +1223,8 @@ class Catalog extends CI_Controller
 
 				'content' => $this->mdl_tpl->view('pages/catalog/product_view.html', [
 					'product' => $product,
-					'brand_desc' => $product['postavchik'] ? $this->mdl_tpl->view('pages/catalog/brands_descriptions/' . $product['postavchik'] . '.html', [], true) : '', 
-					'brand' => $product['postavchik'] ? $brand[$product['postavchik']] : '',
+					'brand_desc' => $brandDescription,
+					'brand' => $product['postavchik'] ? (isset($brand[$product['postavchik']]) ? $brand[$product['postavchik']] : '') : '',
 					'counter' => $dataItem['timerCount'],
 					'sizes' => isset($dataItem['sizes']) ? $dataItem['sizes'] : [],
 					'otherSizes' => isset($dataItem['otherSizes']) ? $dataItem['otherSizes'] : [],
@@ -1302,8 +1311,8 @@ class Catalog extends CI_Controller
 
 				'content' => $this->mdl_tpl->view('pages/catalog/product_view.html', [
 					'product' => $product,
-					'brand_desc' => $product['postavchik'] ? $this->mdl_tpl->view('pages/catalog/brands_descriptions/' . $product['postavchik'] . '.html', [], true) : '',
-					'brand' => $product['postavchik'] ? $brand[$product['postavchik']] : '',
+					'brand_desc' => $brandDescription,
+					'brand' => $product['postavchik'] ? (isset($brand[$product['postavchik']]) ? $brand[$product['postavchik']] : '') : '',
 					'counter' => $dataItem['timerCount'],
 					'sizes' => isset($dataItem['sizes']) ? $dataItem['sizes'] : [],
 					'otherSizes' => isset($dataItem['otherSizes']) ? $dataItem['otherSizes'] : [],

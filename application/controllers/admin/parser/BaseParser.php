@@ -10,6 +10,7 @@ class BaseParser extends CI_Controller
 	protected $fileName = '';
 
 	protected $postavchik = '';
+	protected $postavchikInput = false;
 
 	protected $user_info = [];
 	protected $store_info = [];
@@ -444,6 +445,7 @@ class BaseParser extends CI_Controller
 
 			'content' => $this->mdl_tpl->view("pages/admin/parser/base.html", [
 				'parser' => $this->parserCode,
+				'postavchikInput' => $this->postavchikInput,
 			], true),
 
 			'load' => $this->mdl_tpl->view('snipets/load.html', [
@@ -467,6 +469,19 @@ class BaseParser extends CI_Controller
 
 		// Принимаем номер строки файла для обработки, считаем дубли и ошибки
 		$current_str = $_POST['str'];
+		$postavchik = trim($_POST['postavchik']);
+		if ($postavchik) {
+			$this->postavchik = $postavchik;
+		}
+
+		$err = 0;
+		$double = 0;
+
+		if (!$this->postavchik) {
+			$err++;
+			echo json_encode(['err' => $err, 'double' => $double, 'error' => 'empty postavchik']);
+			die;
+		}
 
 		// Первоначальная прочистка остатков
 		$clear = $current_str == 1;
@@ -475,9 +490,6 @@ class BaseParser extends CI_Controller
 				'qty' => 0,
 			]);
 		}
-
-		$err = 0;
-		$double = 0;
 
 		$data = $this->getDataFromFile($current_str);
 
@@ -709,7 +721,8 @@ class BaseParser extends CI_Controller
 
 	protected function getSalePercent()
 	{
-		return rand(4, 8) * 5;
+//		return rand(4, 8) * 5;
+		return 10;
 	}
 
 	protected function drag($vstavka)

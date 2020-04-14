@@ -204,9 +204,9 @@ class Delta extends BaseParser
 		return (int)($price_zac * 2);
 	}
 
-	protected function getSalePercent()
+	/*protected function getSalePercent()
 	{
 		return 20;
-	}
+	}*/
 
 }
