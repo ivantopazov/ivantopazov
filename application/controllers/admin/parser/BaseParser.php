@@ -525,7 +525,7 @@ class BaseParser extends CI_Controller
 
 		// Проверка наличия фото
 
-		$article = str_replace('/', '_', $data['article']);
+		$article = mb_strtolower(str_replace('/', '_', $data['article']));
 
 		if (!$this->checkPhoto($article, $data)) {
 			$err++;
