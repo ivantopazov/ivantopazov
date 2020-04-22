@@ -310,7 +310,7 @@ class Catalog extends CI_Controller
 //		$getData = $this->getCategoryHome();
 		$getData = $this->getCatData();
 
-		$title = (!isset($getData['setFilters']['category']) ? 'Каталог ювелирных изделий ювелирной группы компаний («Монарх», «Настоящее золото») - цены и фото на золотые украшения со скидкой в Москве' : '') . $getData['filterTitle'];
+		$title = (!isset($getData['setFilters']['category']) ? 'Каталог ювелирных изделий ювелирной группы компаний («Монарх», «Настоящее золото») - цены и фото на золотые украшения со скидкой в Туле и Московской области' : '') . $getData['filterTitle'];
 		$h1 = (!isset($getData['setFilters']['category']) ? 'Ювелирные изделия в интернет-магазине - каталог украшений' : '') . $getData['filterTitle'];
 		$title = mb_strtoupper(mb_substr($title, 0, 1)) . mb_substr($title, 1);
 
@@ -1188,10 +1188,10 @@ class Catalog extends CI_Controller
 						'url' => $this->mdl_helper->PROTOCOL(true) . $_SERVER['SERVER_NAME'] . $data['item']['modules']['linkPath'],
 						'image' => $this->mdl_helper->PROTOCOL(true) . $_SERVER['SERVER_NAME'] . '/uploads/products/100/' . $dataItem['product']['modules']['photos'][0]['photo_name'],
 						'site_name' => 'Ювелирная группа компаний («Монарх», «Настоящее золото»)',
-						'description' => (!empty($product['description'])) ? mb_substr($dataItem['product']['description'], 0, 250) : $title . " по разумной цене в магазине ювелирной группы компаний («Монарх», «Настоящее золото»): ✔продажа украшений в Москве с доставкой по России ✔привлекательные цены ✔выгодный в кредит ✔пожизненная гарантия. Звоните круглосуточно: ☎ +7 (4 95 ) 230 26 83",
+						'description' => (!empty($product['description'])) ? mb_substr($dataItem['product']['description'], 0, 250) : $title . " по разумной цене в магазине ювелирной группы компаний («Монарх», «Настоящее золото»): ✔продажа украшений в Туле и Московской области с доставкой ✔привлекательные цены ✔выгодный в кредит ✔пожизненная гарантия. Звоните круглосуточно: ☎ +7 (4 95 ) 230 26 83",
 					],
 					'mk' => (!empty($dataItem['product']['seo_keys'])) ? $dataItem['product']['seo_keys'] : "",
-					'md' => (!empty($dataItem['product']['seo_desc'])) ? $dataItem['product']['seo_desc'] : (!empty($dataItem['product']['description'])) ? mb_substr($dataItem['product']['description'], 0, 250) : $title . " по разумной цене в магазине ювелирной группы компаний («Монарх», «Настоящее золото»): ✔продажа украшений в Москве с доставкой по России ✔привлекательные цены ✔выгодный в кредит ✔пожизненная гарантия. Звоните круглосуточно: ☎ +7 (4 95 ) 230 26 83",
+					'md' => (!empty($dataItem['product']['seo_desc'])) ? $dataItem['product']['seo_desc'] : (!empty($dataItem['product']['description'])) ? mb_substr($dataItem['product']['description'], 0, 250) : $title . " по разумной цене в магазине ювелирной группы компаний («Монарх», «Настоящее золото»): ✔продажа украшений в Туле и Московской области с доставкой ✔привлекательные цены ✔выгодный в кредит ✔пожизненная гарантия. Звоните круглосуточно: ☎ +7 (4 95 ) 230 26 83",
 				], true),
 
 				'navTop' => $this->mdl_tpl->view('snipets/navTop.html', [
@@ -1276,10 +1276,10 @@ class Catalog extends CI_Controller
 						'url' => $this->mdl_helper->PROTOCOL(true) . $_SERVER['SERVER_NAME'] . $data['item']['modules']['linkPath'],
 						'image' => $this->mdl_helper->PROTOCOL(true) . $_SERVER['SERVER_NAME'] . '/uploads/products/100/' . $dataItem['product']['modules']['photos'][0]['photo_name'],
 						'site_name' => 'Ювелирный магазин ювелирной группы компаний («Монарх», «Настоящее золото»)',
-						'description' => (!empty($product['description'])) ? mb_substr($dataItem['product']['description'], 0, 250) : $title . " по разумной цене в магазине ювелирной группы компаний («Монарх», «Настоящее золото»): ✔продажа украшений в Москве с доставкой по России ✔привлекательные цены ✔выгодный в кредит ✔пожизненная гарантия. Звоните круглосуточно: ☎ +7 (4 95 ) 230 26 83",
+						'description' => (!empty($product['description'])) ? mb_substr($dataItem['product']['description'], 0, 250) : $title . " по разумной цене в магазине ювелирной группы компаний («Монарх», «Настоящее золото»): ✔продажа украшений в Туле и Московской области с доставкой ✔привлекательные цены ✔выгодный в кредит ✔пожизненная гарантия. Звоните круглосуточно: ☎ +7 (4 95 ) 230 26 83",
 					],
 					'mk' => (!empty($dataItem['product']['seo_keys'])) ? $dataItem['product']['seo_keys'] : "",
-					'md' => (!empty($dataItem['product']['seo_desc'])) ? $dataItem['product']['seo_desc'] : (!empty($dataItem['product']['description'])) ? mb_substr($dataItem['product']['description'], 0, 250) : $title . " по разумной цене в магазине ювелирной группы компаний («Монарх», «Настоящее золото»): ✔продажа украшений в Москве с доставкой по России ✔привлекательные цены ✔выгодный в кредит ✔пожизненная гарантия. Звоните круглосуточно: ☎ +7 (4 95 ) 230 26 83",
+					'md' => (!empty($dataItem['product']['seo_desc'])) ? $dataItem['product']['seo_desc'] : (!empty($dataItem['product']['description'])) ? mb_substr($dataItem['product']['description'], 0, 250) : $title . " по разумной цене в магазине ювелирной группы компаний («Монарх», «Настоящее золото»): ✔продажа украшений в Туле и Московской области с доставкой ✔привлекательные цены ✔выгодный в кредит ✔пожизненная гарантия. Звоните круглосуточно: ☎ +7 (4 95 ) 230 26 83",
 				], true),
 
 				'navTop' => $this->mdl_tpl->view('snipets/navTop.html', [

@@ -3,13 +3,15 @@
 
         <div class="carousel-inner" role="listbox">
 		
-			<ol class="carousel-indicators">
-				{% set foo = "active" %}
-				{% for key, item in items %}
-					<li data-target="#carousel-example-generic" data-slide-to="{{key}}" class="{{foo}} hidden-xs hidden-sm "></li>
-					{% set foo = "" %}
-				{% endfor %}
-			</ol>
+			{% if items |length > 1 %}
+				<ol class="carousel-indicators">
+					{% set foo = "active" %}
+					{% for key, item in items %}
+						<li data-target="#carousel-example-generic" data-slide-to="{{key}}" class="{{foo}} hidden-xs hidden-sm "></li>
+						{% set foo = "" %}
+					{% endfor %}
+				</ol>
+			{% endif %}
 		
             {% set foo = "active" %}
             {% for item in items %}
