@@ -317,6 +317,7 @@ $(function () {
 						$('#countPrices').text('0 руб.');
 					}
 
+/*
 					if (items.prices_cop > 700000) {
 						var t = '';
 						t += 'Вы получаете бесплатную доставку';
@@ -329,6 +330,7 @@ $(function () {
 						$('#messageCartSumma').html(t);
 						$('#messageCartSumma').removeClass('hidden');
 					}
+*/
 				},
 
 				list: function (callFnc, onlyIds) {

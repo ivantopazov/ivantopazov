@@ -21,6 +21,7 @@ window.MAIN = {
 		});
 	},
 
+	// сейчас не используется
 	messagesDeliver: function () {
 		CART.list(function (response) {
 			var summaCop = [];
@@ -58,7 +59,7 @@ window.MAIN = {
 		var summaRUB = Number(summaCop / 100);
 		$('.cartSumma').html(count);
 
-		this.messagesDeliver();
+		// this.messagesDeliver();
 	},
 	
 	// Обновить информацию в шапке избранного
@@ -230,7 +231,7 @@ window.MAIN = {
 		}
 
 		//MAIN.cartList();
-		this.messagesDeliver();
+		// this.messagesDeliver();
 	},
 
 	usePromocode: function () {
