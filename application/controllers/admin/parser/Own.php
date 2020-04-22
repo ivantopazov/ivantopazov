@@ -39,9 +39,9 @@ class Own extends BaseParser
 		$data["vstavki"] = trim($val[6]);
 		$data["garniture"] = trim($val[7]);
 		$data["proba"] = trim($val[8]);
-		$data["gender"] = trim($val[9]) ?: 'Унисекс';
-		$data["price"] = trim($val[10]);
-		$data["price_roz"] = trim($val[11]);
+//		$data["gender"] = trim($val[9]) ?: 'Унисекс'; пол пока пропал в выгрузке
+		$data["price"] = trim($val[9]);
+		$data["price_roz"] = trim($val[10]);
 		$data["qty"] = 1;
 
 		if ($data["metal_color"] == 'Белое золото') {

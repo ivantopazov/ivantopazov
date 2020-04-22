@@ -23,7 +23,7 @@ class Delta extends BaseParser
 		$file = file("{$this->uploadPath}{$this->fileName}");
 		$data = [];
 
-		$file[$currentLine] = mb_convert_encoding($file[$currentLine], 'utf8', 'cp1251');
+//		$file[$currentLine] = mb_convert_encoding($file[$currentLine], 'utf8', 'cp1251'); // сейчас в utf8
 //		$val = explode(';', $file[$currentLine]); // Делим данные
 		$val = str_getcsv($file[$currentLine], ';');
 

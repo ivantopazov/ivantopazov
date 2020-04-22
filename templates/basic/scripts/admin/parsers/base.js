@@ -28,7 +28,7 @@ $('#upload').click(function () {
 		alert('Укажите код поставщика!');
 		return false;
 	}
-	postavchik = $postavchikInput.val().trim();
+	postavchik = $postavchikInput.length ? $.trim($postavchikInput.val()) : '';
 	var interval = setInterval(function () {
 		if (current_str === count - 1 || count === 0) clearInterval(interval);
 		if (count === 0) return false;
