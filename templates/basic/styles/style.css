@@ -96,10 +96,11 @@ div.media.bot_border {
     color: rgb(255, 255, 255);
     height: 20px;
     line-height: 10px;
-    margin-left: 33px;
+    /*margin-left: 33px;*/
     padding: 5px;
     position: absolute;
     top: 5px;
+	left: 50%;
     min-width: 20px;
 }
 
