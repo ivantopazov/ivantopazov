@@ -50,11 +50,7 @@ span.line_t {
 
 .text_show-mobile {
 	display: none;
-}
-.text-heart {
-	font-size:36px !important;
-}
-.back-to-catalog_new {
+}  .back-to-catalog_new {
 	font-size:14px;
 	color: #666;
     text-decoration: none;
@@ -95,15 +91,14 @@ span.line_t {
 		display: inline;
 	}
 	
-	.text-heart {
-		font-size:18px !important;
-	}	
-	
 	.btn-cart_default_new {
+		display: flex;
+		width: 100%;
+		justify-content: center;
+		align-items: center;
 		background-color: transparent;
 		border: 1px solid #cbcbcb;
 		color: #282828;
-		font-size: 14px;
 		padding: 8px 20px;
 	}
 

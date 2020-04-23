@@ -32,7 +32,9 @@
 		</div>
 
 		<a href="#" class="btn-cart Conv_CRC55 col-lg-9 col-xs-9 text-center ZAG cart-anim" onclick="yaCounter45556173.reachGoal('cart-catalog');" click="CART.add({ id:{{prod.id}}, title:'{{prod.title}}', price:{% if prod.salle_procent > 0 %}{{prod.modules.salePrice.COP.salePrice}}{% else %}{{prod.modules.price_actual.cop}}{% endif %}, qty:{type:'plus', value:1}, orig: { image:'{{prod.modules.photos[0].photo_name}}', articul:'{{prod.articul}}', link:'{{prod.modules.linkPath}}'}}, MAIN.addCartCallback );" >В корзину</a>
-		<a href="#" class="btn-cart Conv_CRC55 col-lg-3 col-xs-3 text-center ZAG cart-anim" style="border-left:1px solid #fff;border-right:1px solid #63a9d6;padding-left: 15px;" click="MAIN.addFavorite({ id:{{prod.id}}, title:'{{prod.title}}', price:'{{prod.modules.salePrice.VAL_00.orig}}', salePrice:'{{prod.modules.price_actual.format}}', orig: { image:'{{prod.modules.photos[0].photo_name}}', articul:'{{prod.articul}}', link:'{{prod.modules.linkPath}}'}});">&#10084;</a>
+		<a href="#" class="btn-cart Conv_CRC55 col-lg-3 col-xs-3 text-center ZAG cart-anim" style="border-left:1px solid #fff;border-right:1px solid #63a9d6;padding: 8px;font-size: 0;" click="MAIN.addFavorite({ id:{{prod.id}}, title:'{{prod.title}}', price:'{{prod.modules.salePrice.VAL_00.orig}}', salePrice:'{{prod.modules.price_actual.format}}', orig: { image:'{{prod.modules.photos[0].photo_name}}', articul:'{{prod.articul}}', link:'{{prod.modules.linkPath}}'}});">
+			<div class="cart-icon cart-icon--white cart-icon--teaser"></div>
+		</a>
 
     </div>
 </div>
